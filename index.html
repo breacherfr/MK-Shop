@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V34 FULL RESTORE</title>
+    <title>MK SHOP - V36 ULTIMATE CLOUD</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -22,12 +23,10 @@
         .netflix-bg { background: #050505; }
         .btn-black { background: #111827; color: white; transition: all 0.3s; }
         .btn-black:hover { background: #1f2937; transform: translateY(-2px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .chat-bubble-me { background: #111827; color: white; border-radius: 18px 18px 0 18px; }
         .chat-bubble-other { background: #f1f5f9; border-radius: 18px 18px 18px 0; }
         .dark .chat-bubble-other { background: #334155; color: white; }
-        .chat-bubble-me { background: #111827; color: white; border-radius: 18px 18px 0 18px; }
-        .dark .chat-bubble-me { background: #00d2ff; color: #000; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .ep-card:hover img { transform: scale(1.05); }
     </style>
 </head>
 <body class="font-sans text-slate-800 bg-[#f8fafc] dark:bg-[#0f172a] dark:text-white transition-colors duration-300">
@@ -38,19 +37,14 @@
             <h1 class="text-2xl font-black italic tracking-tighter text-slate-900 dark:text-white uppercase">MK <span class="text-mkBlue">SHOP</span></h1>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="startChat('Support')" class="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-full text-[10px] font-bold uppercase hover:bg-mkBlue hover:text-white transition">
-                <span>🎧</span> Support 24/7
-            </button>
-            <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full hover:scale-110 transition text-xl">
-                <span id="theme-icon">🌙</span>
-            </button>
+            <button onclick="startChat('Support')" class="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-full text-[10px] font-bold uppercase hover:bg-mkBlue hover:text-white transition">🎧 Support</button>
+            <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full text-xl">🌙</button>
             <div id="user-display" class="hidden flex items-center gap-3">
-                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20"></span>
+                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20 uppercase"></span>
                 <button onclick="logout()" class="text-[10px] font-black text-mkRed uppercase hover:underline">Déconnexion</button>
             </div>
             <div id="auth-btns" class="flex gap-3">
-                <button onclick="openModal('auth-modal')" class="text-xs font-bold px-4 hover:text-mkBlue transition uppercase">Connexion</button>
-                <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full shadow-xl uppercase">S'inscrire</button>
+                <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full shadow-xl uppercase">Connexion / Inscription</button>
             </div>
         </div>
     </nav>
@@ -58,28 +52,25 @@
     <div id="main-shop">
         <header class="text-center py-20">
             <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Catalogue Officiel</h2>
-            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Qualité Premium • V34</p>
+            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">MK CLOUD V36</p>
         </header>
 
         <main class="max-w-7xl mx-auto px-6 pb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col">
                     <div class="text-6xl mb-8">🎮</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Roblox</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Comptes Optimisés</p>
-                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
-                        <li>• 0 - 1000 Robux aléatoire</li>
-                        <li>• Compte Full (Blox Fruits, Da Hood)</li>
-                        <li>• Voice Chat / Age Verified (+13)</li>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Roblox</h3>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium mt-4">
+                        <li>• Robux Aléatoires</li>
+                        <li>• Blox Fruits & Da Hood</li>
                     </ul>
                     <button onclick="startChat('Achat Compte Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
 
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col">
                     <div class="text-6xl mb-8">📺</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">TV & Animés</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Streaming Illimité</p>
-                    <div class="bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-2xl p-5 mb-8">
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">TV & Animés</h3>
+                    <div class="bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-2xl p-5 mt-8 mb-8">
                         <input id="tv-code-field" type="text" placeholder="CODE-ACHETÉ-..." class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold">
                     </div>
                     <button id="tv-main-btn" onclick="checkTvCode()" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Vérifier</button>
@@ -88,21 +79,19 @@
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkRed flex flex-col">
                     <div class="text-6xl mb-8">🎯</div>
                     <h3 class="text-3xl font-black mb-1 italic text-mkRed uppercase tracking-tighter">Cheat Roblox</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Scripts & Tools</p>
-                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
-                        <li>• Roblox Executors (PC/Mobile)</li>
-                        <li>• Scripts Privés Indétectables</li>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium mt-4">
+                        <li>• Executors PC/Mobile</li>
+                        <li>• Scripts Privés</li>
                     </ul>
                     <button onclick="startChat('Achat Cheat')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
 
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col">
                     <div class="text-6xl mb-8">⭐</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Premium</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Abonnements</p>
-                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
-                        <li>• Spotify & Deezer à vie</li>
-                        <li>• Netflix / Disney+ / Crunchyroll</li>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Premium</h3>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium mt-4">
+                        <li>• Spotify / Netflix / Disney</li>
+                        <li>• Comptes à Vie</li>
                     </ul>
                     <button onclick="startChat('Premium')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
@@ -111,9 +100,9 @@
                     <div class="text-8xl">✨</div>
                     <div class="flex-1">
                         <h3 class="text-3xl font-black mb-2 text-mkPurple uppercase italic tracking-tighter">Demande Spéciale</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 italic">Un service précis ? Contacte-nous.</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 italic">Un besoin précis ? Contacte le support.</p>
                     </div>
-                    <button onclick="startChat('Demande Perso')" class="bg-mkPurple text-white px-12 py-5 rounded-full font-black text-xs uppercase italic shadow-xl">Contacter</button>
+                    <button onclick="startChat('Demande Perso')" class="bg-mkPurple text-white px-12 py-5 rounded-full font-black text-xs uppercase italic">Contacter</button>
                 </div>
             </div>
         </main>
@@ -128,12 +117,16 @@
             <h2 class="text-3xl font-black italic text-mkBlue uppercase tracking-tighter">MK <span class="text-white">STREAM</span></h2>
             <button onclick="closeTv()" class="text-white bg-mkRed px-8 py-3 rounded-full text-xs font-black uppercase italic">Quitter</button>
         </nav>
-        
         <div id="catalog-view" class="p-10 space-y-20 pb-40">
-            <section><h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-mkBlue uppercase italic">Mangas & Animés</h3><div id="row-shonen" class="flex gap-6 overflow-x-auto no-scrollbar"></div></section>
-            <section><h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-yellow-500 uppercase italic">Dessins Animés</h3><div id="row-cartoons" class="flex gap-6 overflow-x-auto no-scrollbar"></div></section>
+            <section>
+                <h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-mkBlue uppercase italic">Mangas & Animés</h3>
+                <div id="row-shonen" class="flex gap-6 overflow-x-auto no-scrollbar"></div>
+            </section>
+            <section>
+                <h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-yellow-500 uppercase italic">Dessins Animés</h3>
+                <div id="row-cartoons" class="flex gap-6 overflow-x-auto no-scrollbar"></div>
+            </section>
         </div>
-
         <div id="episode-view" class="hidden p-10 max-w-7xl mx-auto">
             <button onclick="backToCatalog()" class="text-mkBlue font-black mb-10 uppercase text-xs tracking-widest">← Retour</button>
             <h2 id="ep-title" class="text-6xl font-black text-white uppercase italic mb-10">---</h2>
@@ -142,27 +135,17 @@
     </div>
 
     <div id="player-overlay" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
-        <div class="p-5 flex justify-between bg-black text-white items-center border-b border-white/10">
-            <span class="font-black text-xs uppercase text-mkBlue italic">Lecture HD</span>
-            <button onclick="stopVideo()" class="bg-white/10 w-10 h-10 rounded-full flex items-center justify-center font-bold">✕</button>
+        <div class="p-5 flex justify-between bg-black text-white items-center">
+            <span id="player-title" class="font-black text-xs uppercase text-mkBlue italic">Lecture HD</span>
+            <button onclick="stopVideo()" class="bg-white/10 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
         </div>
         <div class="flex-1 bg-black"><iframe id="ifr-player" class="w-full h-full" allow="autoplay; fullscreen" frameborder="0"></iframe></div>
-    </div>
-
-    <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
-            <h3 class="text-3xl font-black mb-10 italic uppercase text-slate-900 dark:text-white">Accès MK SHOP</h3>
-            <input id="in-user" type="text" placeholder="Utilisateur" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
-            <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
-            <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic">Valider</button>
-            <button onclick="closeModal('auth-modal')" class="mt-6 text-[10px] font-black text-slate-300 uppercase">Fermer</button>
-        </div>
     </div>
 
     <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#1e293b] w-full max-w-lg h-[650px] rounded-[3rem] flex flex-col overflow-hidden">
             <div class="bg-slate-900 p-7 text-white flex justify-between items-center font-black italic uppercase text-sm">
-                <span>Support MK</span> <button onclick="closeModal('chat-modal')">✕</button>
+                <span>Support MK SHOP</span> <button onclick="closeModal('chat-modal')">✕</button>
             </div>
             <div id="chat-body" class="flex-1 p-8 overflow-y-auto space-y-6"></div>
             <div class="p-6 flex gap-4 border-t border-white/5">
@@ -172,88 +155,91 @@
         </div>
     </div>
 
-    <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-sm text-center">
-            <h3 class="text-2xl font-black mb-8 italic text-mkRed uppercase">Admin Panel</h3>
-            <input id="admin-pass-input" type="password" placeholder="Code Secret" class="w-full bg-slate-100 dark:bg-black/40 p-5 rounded-2xl mb-6 outline-none font-bold text-center">
-            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-5 rounded-full uppercase italic transition">Entrer</button>
-            <button onclick="closeModal('admin-auth-modal')" class="mt-4 text-[10px] text-slate-400 uppercase">Annuler</button>
-        </div>
-    </div>
-
     <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-[#0f172a] text-white p-6 md:p-12 overflow-y-auto">
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
-                <h2 class="text-mkBlue font-black italic text-3xl uppercase tracking-tighter">MK_SYSTEM_ROOT</h2>
+                <h2 class="text-mkBlue font-black italic text-3xl uppercase tracking-tighter">MK_CLOUD_MANAGER</h2>
                 <button onclick="closeModal('admin-panel')" class="bg-mkRed px-6 py-2 rounded-full font-black text-[10px] uppercase">Fermer</button>
             </div>
             <div id="admin-user-list" class="space-y-4"></div>
         </div>
     </div>
 
-    <script>
-        const TV_CODE = "ACCES-ACHETER-0001";
-        const ADMIN_PASS = "admin123";
+    <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
+            <h3 class="text-3xl font-black mb-10 italic uppercase">Accès MK SHOP</h3>
+            <input id="in-user" type="text" placeholder="Pseudo" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
+            <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
+            <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic">Valider</button>
+            <button onclick="closeModal('auth-modal')" class="mt-4 text-[10px] font-black opacity-50 uppercase">Fermer</button>
+        </div>
+    </div>
 
+    <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-sm text-center">
+            <h3 class="text-2xl font-black mb-8 italic text-mkRed uppercase">Code Admin</h3>
+            <input id="admin-pass-input" type="password" placeholder="••••" class="w-full bg-black/40 p-5 rounded-2xl mb-6 outline-none font-bold text-center text-white">
+            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-5 rounded-full uppercase italic">Accéder</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Mets ta clé complète ici
+        const supabase = (typeof supabase !== 'undefined') ? supabase.createClient(SB_URL, SB_KEY) : null;
+        const ADMIN_PASS = "admin123";
+        const TV_CODE = "ACCES-ACHETER-0001";
+
+        // DONNÉES VIDÉO
         const content = [
             { id: 0, category: "shonen", title: "One Piece", poster: "https://image.animationdigitalnetwork.fr/license/onepiece/arc5/web/affiche_350x500.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
-            { id: 1, category: "shonen", title: "Naruto", poster: "https://zqwqz.org/img/naruto-classic-1622930404.jpg", episodes: [
-                {t:"Épisode 1", u:"FoVvpkMlTqM"}, {t:"Épisode 2", u:"_4QyggTP16U"}, {t:"Épisode 3", u:"hbxJQVOHzZU"}, {t:"Épisode 4", u:"gArjTI16pjc"},
-                {t:"Épisode 5", u:"4c0CGatLKAc"}, {t:"Épisode 6", u:"u3X6b101irw"}, {t:"Épisode 7", u:"RCeW_mlNcm0"}, {t:"Épisode 8", u:"iLur5aSGNbw"},
-                {t:"Épisode 9", u:"7v430m5HwiE"}, {t:"Épisode 10", u:"ajSrH4LWmy0"}
-            ]},
-            { id: 2, category: "shonen", title: "Dragon Ball Z", poster: "https://s-media-cache-ak0.pinimg.com/736x/ed/08/3f/ed083f9a7fa6a588e31324260801eed7--dbz-gt-dragonball-z.jpg", episodes: [{t:"Épisode 1", u:"vtj-9j2Pgzw"}] },
-            { id: 3, category: "shonen", title: "HunterXHunter", poster: "https://static1.srcdn.com/wordpress/wp-content/uploads/2024/04/hunter-x-hunter-2011.jpg", episodes: [
-                {t:"Épisode 1", u:"6dEPCqfGKWA"}, {t:"Épisode 2", u:"aOGnEgn5lpk"}, {t:"Épisode 3", u:"AuX0wf6tgfQ"}, {t:"Épisode 4", u:"mIm-wRXSgWE"},
-                {t:"Épisode 5", u:"_I1bFVlZnrQ"}, {t:"Épisode 6", u:"C3c9IozSsMg"}, {t:"Épisode 7", u:"_NzbL7iLrAg"}, {t:"Épisode 8", u:"JmjRym2offY"},
-                {t:"Épisode 9", u:"1faDKF6IXCg"}, {t:"Épisode 10", u:"fD-oH86iOOY"}
-            ]},
-            { id: 4, category: "shonen", title: "Jujutsu Kaisen", poster: "https://tse2.mm.bing.net/th/id/OIP.B307_rJrUNCA7Fb8mc9S8gHaLH?rs=1&pid=ImgDetMain&o=7&rm=3", episodes: [{t:"Épisode 1", u:"cqTN1AQ09Yg"}] },
-            { id: 6, category: "cartoons", title: "Bob l'Éponge", poster: "https://www.topkool.com/fr/wp-content/uploads/2013/04/bob-l-eponge-022.jpg", episodes: [
-                {t:"Épisode 1", u:"dhJtWThO5kw"}, {t:"Épisode 2", u:"0iLmzIPVspE"}, {t:"Épisode 3", u:"UqRogpOSLs8"}, {t:"Épisode 4", u:"sgz21E-RjhM"},
-                {t:"Épisode 5", u:"q__NQc6kDks"}, {t:"Épisode 6", u:"5NrJPyNI9GE"}, {t:"Épisode 7", u:"SzqqEB8S4Yo"}, {t:"Épisode 8", u:"IAJ1JUCm79g"},
-                {t:"Épisode 9", u:"kDt1YQUSU2s"}, {t:"Épisode 10", u:"us8WlC6UoKc"}, {t:"Format Long HD", u:"Z_PQGJpS0N4"}
-            ]},
+            { id: 1, category: "shonen", title: "Naruto", poster: "https://zqwqz.org/img/naruto-classic-1622930404.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"FoVvpkMlTqM"})) },
+            { id: 6, category: "cartoons", title: "Bob l'Éponge", poster: "https://www.topkool.com/fr/wp-content/uploads/2013/04/bob-l-eponge-022.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"dhJtWThO5kw"})) },
             { id: 7, category: "cartoons", title: "Gumball", isComingSoon: true, poster: "https://quotecatalog.imgix.net/assets/title-sbTftntUdiZ67GmtaPYjAjyX/original.jpg?w=400&h=600&fit=crop", episodes: [] }
         ];
 
-        let db = JSON.parse(localStorage.getItem('mk_db')) || [];
         let user = JSON.parse(localStorage.getItem('mk_session')) || null;
+        let db = JSON.parse(localStorage.getItem('mk_db_cloud')) || []; // Sync cloud simulée tant que la table Supabase n'est pas configurée
 
-        window.onload = () => { if(user) applySession(); renderCatalog(); if(localStorage.getItem('theme') === 'dark') toggleTheme(true); };
+        window.onload = () => {
+            if(user) applySession();
+            renderCatalog();
+        };
 
-        function toggleTheme(forceDark = false) {
-            const isDark = forceDark || document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
+        // AUTH & SESSION
+        function handleAuth() {
+            const u = document.getElementById('in-user').value.trim();
+            const p = document.getElementById('in-pass').value;
+            if(!u || !p) return;
+            let found = db.find(x => x.u === u);
+            if(found) {
+                if(found.p === p) user = found;
+                else return alert("Mauvais mot de passe");
+            } else {
+                user = { u, p, hasTv: false, messages: [], id: Date.now() };
+                db.push(user);
+            }
+            localStorage.setItem('mk_db_cloud', JSON.stringify(db));
+            localStorage.setItem('mk_session', JSON.stringify(user));
+            location.reload();
         }
 
         function applySession() {
-            if(!user) return;
             document.getElementById('auth-btns').classList.add('hidden');
-            const ud = document.getElementById('user-display'); ud.classList.remove('hidden'); 
-            document.getElementById('user-name').innerText = user.u.toUpperCase();
-            if(user.hasTv) { document.getElementById('tv-main-btn').innerText = "ACCÉDER"; document.getElementById('tv-main-btn').onclick = openTv; }
+            document.getElementById('user-display').classList.remove('hidden');
+            document.getElementById('user-name').innerText = user.u;
+            if(user.hasTv) document.getElementById('tv-main-btn').innerText = "ACCÉDER";
         }
 
-        function logout() { user = null; localStorage.removeItem('mk_session'); location.reload(); }
+        function logout() { localStorage.removeItem('mk_session'); location.reload(); }
 
-        function handleAuth() {
-            const u = document.getElementById('in-user').value.trim(), p = document.getElementById('in-pass').value;
-            if(!u || !p) return alert("Remplis tout !");
-            let f = db.find(x => x.u === u);
-            if(f) { if(f.p === p) user = f; else return alert("Mauvais mot de passe"); }
-            else { user = { u, p, hasTv: false, messages: [] }; db.push(user); }
-            save(); applySession(); closeModal('auth-modal');
-        }
-
+        // TV & VIDÉOS
         function renderCatalog() {
-            document.getElementById('row-shonen').innerHTML = "";
-            document.getElementById('row-cartoons').innerHTML = "";
             content.forEach(item => {
-                const label = item.isComingSoon ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-[2rem]"><span class="bg-mkRed text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Coming Soon</span></div>' : '';
-                const clickAction = item.isComingSoon ? '' : `onclick="showEpisodes(${item.id})"`;
-                const html = `<div ${clickAction} class="relative min-w-[220px] h-[320px] bg-slate-800 rounded-[2rem] bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl border-2 border-transparent hover:border-mkBlue" style="background-image: url('${item.poster}')">${label}</div>`;
+                const html = `<div onclick="${item.isComingSoon ? '' : `showEpisodes(${item.id})`}" class="relative min-w-[220px] h-[320px] rounded-[2rem] bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl" style="background-image: url('${item.poster}')">
+                    ${item.isComingSoon ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-[2rem]"><span class="bg-mkRed text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Bientôt</span></div>' : ''}
+                </div>`;
                 document.getElementById(`row-${item.category}`).innerHTML += html;
             });
         }
@@ -264,80 +250,72 @@
             document.getElementById('episode-view').classList.remove('hidden');
             document.getElementById('ep-title').innerText = item.title;
             const list = document.getElementById('ep-list'); list.innerHTML = "";
-            item.episodes.forEach((ep) => {
-                const thumb = `https://img.youtube.com/vi/${ep.u}/mqdefault.jpg`;
-                list.innerHTML += `<div onclick="playVideo('${ep.u}')" class="ep-card cursor-pointer group"><div class="relative overflow-hidden rounded-2xl mb-3 border-2 border-white/5 group-hover:border-mkBlue transition"><img src="${thumb}" class="w-full h-40 object-cover transition duration-300"><div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"><span class="text-white text-3xl">▶</span></div></div><h4 class="text-white font-bold text-sm uppercase italic">${ep.t}</h4></div>`;
+            item.episodes.forEach(ep => {
+                list.innerHTML += `<div onclick="playVideo('${ep.u}')" class="cursor-pointer group"><div class="relative overflow-hidden rounded-2xl mb-2"><img src="https://img.youtube.com/vi/${ep.u}/mqdefault.jpg" class="w-full"></div><h4 class="text-white font-bold text-xs uppercase">${ep.t}</h4></div>`;
             });
         }
 
-        function startChat(p) {
-            if(!user) return openModal('auth-modal');
-            if(!user.messages) user.messages = [];
-            if(user.messages.length === 0) user.messages.push({from:'support', txt:`Bonjour ${user.u} ! Comment puis-je t'aider pour : ${p} ?`});
-            openModal('chat-modal'); renderMessages();
-        }
+        function playVideo(u) { document.getElementById('player-overlay').classList.remove('hidden'); document.getElementById('ifr-player').src = `https://www.youtube.com/embed/${u}?autoplay=1`; }
+        function stopVideo() { document.getElementById('player-overlay').classList.add('hidden'); document.getElementById('ifr-player').src = ""; }
+        function checkTvCode() { if(document.getElementById('tv-code-field').value === TV_CODE || (user && user.hasTv)) { document.getElementById('tv-section').classList.remove('hidden'); } else alert("Code invalide"); }
+        function closeTv() { document.getElementById('tv-section').classList.add('hidden'); }
+        function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-view').classList.remove('hidden'); }
 
+        // CHAT & ADMIN
+        function startChat() { if(!user) return openModal('auth-modal'); openModal('chat-modal'); renderMessages(); }
         function renderMessages() {
             const b = document.getElementById('chat-body');
-            b.innerHTML = (user.messages || []).map(m => `<div class="flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}"><div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} p-4 text-xs max-w-[85%]">${m.txt}</div></div>`).join('');
+            b.innerHTML = (user.messages || []).map(m => `<div class="flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}"><div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} p-4 text-xs">${m.txt}</div></div>`).join('');
             b.scrollTop = b.scrollHeight;
         }
 
         function sendMessage() {
             const i = document.getElementById('chat-input'); if(!i.value) return;
-            user.messages.push({ from: 'me', txt: i.value }); i.value = "";
-            renderMessages(); save();
+            user.messages.push({ from: 'me', txt: i.value });
+            i.value = ""; renderMessages(); saveCloud();
         }
 
-        function verifyAdmin() { if(document.getElementById('admin-pass-input').value === ADMIN_PASS) { closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); } else alert("Accès refusé"); }
-
+        function verifyAdmin() { if(document.getElementById('admin-pass-input').value === ADMIN_PASS) { closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); } }
         function renderAdmin() {
             const list = document.getElementById('admin-user-list');
             list.innerHTML = db.map((u, i) => `
-                <div class="bg-[#1e293b] p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row justify-between gap-6">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <span class="bg-mkBlue text-black font-black px-2 py-0.5 rounded text-[9px] uppercase">Compte</span>
-                            <h4 class="text-lg font-bold">${u.u}</h4>
-                        </div>
-                        <p class="text-slate-400 text-xs font-mono mb-4">MOT DE PASSE: <span class="text-white">${u.p}</span></p>
-                        <div class="p-3 bg-black/30 rounded-xl max-h-32 overflow-y-auto">
-                            ${(u.messages || []).map(m => `<p class="text-[10px] ${m.from === 'me' ? 'text-white' : 'text-mkYellow'} mb-1"><b>${m.from === 'me' ? u.u : 'MK'}:</b> ${m.txt}</p>`).join('') || '<p class="text-[10px] opacity-30 italic">Aucun message</p>'}
+                <div class="bg-[#1e293b] p-6 rounded-2xl border border-white/5 flex flex-col gap-4">
+                    <div class="flex justify-between">
+                        <div><h4 class="font-bold text-mkBlue">${u.u}</h4><p class="text-[10px] opacity-50">PASS: ${u.p}</p></div>
+                        <div class="flex gap-2">
+                            <button onclick="adminBan(${i})" class="bg-mkRed text-white px-3 py-1 rounded text-[10px]">BANNIR</button>
+                            <button onclick="adminToggleTv(${i})" class="bg-slate-700 px-3 py-1 rounded text-[10px]">${u.hasTv ? 'TV OK' : 'OFF'}</button>
                         </div>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <input id="reply-${i}" type="text" placeholder="Répondre..." class="bg-black/50 p-3 rounded-full text-[10px] outline-none border border-white/10 w-40 text-white">
-                        <button onclick="adminReply(${i})" class="bg-mkYellow text-black font-black px-4 py-3 rounded-full text-[10px] uppercase">Répondre</button>
-                        <button onclick="adminToggleTv(${i})" class="px-4 py-3 rounded-full text-[10px] font-black uppercase ${u.hasTv ? 'bg-green-500' : 'bg-slate-600'}">TV: ${u.hasTv ? 'OUI' : 'NON'}</button>
-                        <button onclick="adminBan(${i})" class="bg-mkRed px-4 py-3 rounded-full text-[10px] font-black uppercase">Bannir</button>
+                    <div class="bg-black/20 p-3 rounded text-[10px]">
+                        ${(u.messages || []).map(m => `<p>${m.from==='me'?'Client':'Moi'}: ${m.txt}</p>`).join('')}
+                    </div>
+                    <div class="flex gap-2">
+                        <input id="rep-${i}" type="text" placeholder="Réponse..." class="flex-1 bg-black/40 p-2 rounded text-xs outline-none">
+                        <button onclick="adminReply(${i})" class="bg-mkYellow text-black px-4 font-bold rounded text-[10px]">ENVOYER</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function adminReply(i) {
-            const txt = document.getElementById(`reply-${i}`).value; if(!txt) return;
-            if(!db[i].messages) db[i].messages = [];
+            const txt = document.getElementById(`rep-${i}`).value; if(!txt) return;
             db[i].messages.push({ from: 'support', txt: txt });
-            document.getElementById(`reply-${i}`).value = ""; save(); renderAdmin();
+            if(user && user.u === db[i].u) user = db[i];
+            saveCloud(); renderAdmin();
         }
 
-        function adminBan(i) { if(confirm(`Bannir ${db[i].u} ?`)) { if(user && db[i].u === user.u) logout(); db.splice(i, 1); save(); renderAdmin(); } }
-        function adminToggleTv(i) { db[i].hasTv = !db[i].hasTv; if(user && db[i].u === user.u) user.hasTv = db[i].hasTv; save(); renderAdmin(); applySession(); }
-        
-        function save() { 
-            localStorage.setItem('mk_db', JSON.stringify(db)); 
-            if(user) { const f = db.find(x => x.u === user.u); if(f) localStorage.setItem('mk_session', JSON.stringify(f)); }
+        function adminBan(i) { if(confirm("Supprimer ?")) { db.splice(i, 1); saveCloud(); renderAdmin(); } }
+        function adminToggleTv(i) { db[i].hasTv = !db[i].hasTv; saveCloud(); renderAdmin(); }
+
+        function saveCloud() { 
+            localStorage.setItem('mk_db_cloud', JSON.stringify(db)); 
+            if(user) localStorage.setItem('mk_session', JSON.stringify(user));
         }
 
-        function playVideo(u) { document.getElementById('player-overlay').classList.remove('hidden'); document.getElementById('ifr-player').src = `https://www.youtube.com/embed/${u}?autoplay=1&rel=0`; }
-        function stopVideo() { document.getElementById('player-overlay').classList.add('hidden'); document.getElementById('ifr-player').src = ""; }
-        function openTv() { document.getElementById('tv-section').classList.remove('hidden'); document.body.style.overflow="hidden"; }
-        function closeTv() { document.getElementById('tv-section').classList.add('hidden'); document.body.style.overflow="auto"; }
-        function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-view').classList.remove('hidden'); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function checkTvCode() { if(document.getElementById('tv-code-field').value === TV_CODE || (user && user.hasTv)) openTv(); else alert("Code invalide"); }
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
     </script>
 </body>
 </html>
