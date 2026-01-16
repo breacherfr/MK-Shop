@@ -3,138 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V10 Ultimate</title>
+    <title>MK SHOP - V12 Full Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         .hidden { display: none !important; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .anime-card { transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(6, 182, 212, 0.2); }
+        .anime-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4); }
+        .chat-container { height: 300px; overflow-y: auto; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 1rem; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #06b6d4; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .chat-container { height: 300px; overflow-y: auto; scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
 
-    <nav class="border-b border-gray-200 dark:border-gray-800 p-6 flex justify-between items-center sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md">
+    <nav class="border-b border-gray-200 dark:border-gray-800 p-5 flex justify-between items-center sticky top-0 z-50 bg-white/90 dark:bg-black/90 backdrop-blur-md">
         <div class="flex items-center gap-2">
             <span class="text-2xl">🛍️</span>
-            <h1 class="text-2xl font-black italic">MK <span class="text-cyan-500">SHOP</span></h1>
+            <h1 class="text-2xl font-black italic tracking-tighter">MK <span class="text-cyan-500">SHOP</span></h1>
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 transition">
-                <span id="mode-icon">🌙</span>
-            </button>
+        <div class="flex items-center gap-4">
+            <button onclick="showPage('home-page')" class="text-[10px] font-bold uppercase hover:text-cyan-500 transition">Boutique</button>
+            <button onclick="showPage('anime-page')" class="text-[10px] font-bold uppercase text-cyan-500 bg-cyan-500/10 px-3 py-1 rounded-full">Anime Sana</button>
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">🌙</button>
             <div id="nav-auth-btns" class="flex gap-2">
-                <button onclick="openAuth('login')" class="text-xs font-bold text-gray-400 hover:text-cyan-500 transition">Se connecter</button>
-                <button onclick="openAuth('signup')" class="text-xs font-bold bg-cyan-500 text-white px-3 py-1 rounded-lg">S'inscrire</button>
+                <button onclick="openAuth('login')" class="text-[10px] font-bold text-gray-400">Login</button>
+                <button onclick="openAuth('signup')" class="text-[10px] font-bold bg-cyan-500 text-white px-2 py-1 rounded shadow-lg shadow-cyan-500/20">Sign Up</button>
             </div>
-            <div id="nav-user-info" class="hidden text-xs font-bold text-cyan-500 italic uppercase tracking-tighter"></div>
+            <div id="nav-user-info" class="hidden text-[10px] font-black text-cyan-500 italic uppercase"></div>
         </div>
     </nav>
 
-    <main id="home-page" class="max-w-7xl mx-auto p-8">
+    <main id="home-page" class="max-w-7xl mx-auto p-6">
         <h2 class="text-xl font-bold mb-8 italic text-cyan-500 uppercase tracking-widest">Catalogue Officiel</h2>
         <div class="card-grid">
             
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm border-t-4 border-t-cyan-500">
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between border-t-4 border-t-cyan-500">
                 <div>
-                    <div class="text-4xl mb-4">📺</div>
-                    <h3 class="text-2xl font-bold mb-2">Chaîne de Télé</h3>
-                    <p class="text-xs text-gray-400 mb-6 uppercase">TF1, M6, CANAL+, FRANCE 2...</p>
-                    <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-700 mb-6">
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2 italic">Code d'accès :</label>
-                        <div class="flex gap-2">
-                            <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-sm outline-none border-b dark:border-gray-700 focus:border-cyan-500 transition">
-                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">→</button>
-                        </div>
+                    <div class="text-3xl mb-4">📺</div>
+                    <h3 class="text-xl font-bold mb-1">Chaîne de Télé</h3>
+                    <p class="text-[10px] text-gray-400 mb-6 uppercase tracking-widest">TF1, M6, CANAL+, FRANCE 2...</p>
+                    <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-800 mb-6">
+                        <input id="tv-code" type="text" placeholder="CODE ACCÈS..." class="w-full bg-transparent text-xs outline-none border-b dark:border-gray-800 focus:border-cyan-500 pb-2">
+                        <button onclick="checkTvCode()" class="w-full mt-4 bg-cyan-500 text-white py-2 rounded-lg font-bold text-[10px] uppercase">Ouvrir le flux</button>
                     </div>
                 </div>
                 <div>
-                    <p class="text-cyan-500 font-bold text-xl mb-4">4€/mois</p>
-                    <button onclick="startChat('Abonnement TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase tracking-widest">Acheter</button>
+                    <p class="text-cyan-500 font-bold text-lg mb-4">4€/mois</p>
+                    <button onclick="startChat('Abonnement TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-3 rounded-2xl transition uppercase text-xs">Acheter</button>
                 </div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div><div class="text-4xl mb-4">🎮</div><h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3><p class="text-xs text-gray-400 mb-6 uppercase">(SUR DEMANDE)</p></div>
-                <div><p class="text-cyan-500 font-bold text-xl mb-4">5€ - 30€</p><button onclick="startChat('Compte Roblox')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+                <div><div class="text-3xl mb-4">🎮</div><h3 class="text-xl font-bold mb-1">Comptes Roblox</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">(SUR DEMANDE)</p></div>
+                <div><p class="text-cyan-500 font-bold text-lg mb-4">5€ - 30€</p><button onclick="startChat('Roblox')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div><div class="text-4xl mb-4">⭐</div><h3 class="text-2xl font-bold mb-2">Comptes Premium</h3><p class="text-xs text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX, ETC...)</p></div>
-                <div><p class="text-cyan-500 font-bold text-xl mb-4">3€ - 20€</p><button onclick="startChat('Compte Premium')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+                <div><div class="text-3xl mb-4">⭐</div><h3 class="text-xl font-bold mb-1">Comptes Premium</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX, ETC...)</p></div>
+                <div><p class="text-cyan-500 font-bold text-lg mb-4">3€ - 20€</p><button onclick="startChat('Premium')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div><div class="text-4xl mb-4">🎯</div><h3 class="text-2xl font-bold mb-2">Cheat pour Jeux</h3><p class="text-xs text-gray-400 mb-6 uppercase">FORTNITE, ROBLOX, ETC...</p></div>
-                <div><p class="text-cyan-500 font-bold text-xl mb-4">6€ - 10€</p><button onclick="startChat('Cheat')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+                <div><div class="text-3xl mb-4">🎯</div><h3 class="text-xl font-bold mb-1">Cheat pour Jeux</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">FORTNITE, ROBLOX, ETC...</p></div>
+                <div><p class="text-cyan-500 font-bold text-lg mb-4">6€ - 10€</p><button onclick="startChat('Cheat')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
+
         </div>
     </main>
 
-    <div id="chat-modal" class="hidden fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl">
-            <div class="bg-cyan-500 p-6 text-white flex justify-between items-center">
-                <h3 class="font-black italic uppercase">Support MK SHOP</h3>
-                <button onclick="closeChat()" class="text-2xl">✕</button>
-            </div>
-            <div id="chat-box" class="chat-container p-6 space-y-4 bg-gray-50 dark:bg-black/50"></div>
-            <div class="p-4 bg-white dark:bg-gray-900 border-t dark:border-gray-800 flex gap-2">
-                <input id="chat-input" type="text" placeholder="Écrire..." class="flex-1 bg-gray-100 dark:bg-black border dark:border-gray-700 p-3 rounded-xl outline-none text-sm">
-                <button onclick="sendMessage()" class="bg-cyan-500 text-white px-6 rounded-xl font-bold">OK</button>
+    <div id="anime-page" class="hidden max-w-7xl mx-auto p-6">
+        <h2 class="text-3xl font-black italic uppercase text-cyan-500 mb-2">Anime Sana <span class="text-gray-400">& Toons</span></h2>
+        <p class="text-[10px] font-bold text-gray-500 tracking-widest mb-10 border-b border-gray-800 pb-4">CATALOGUE VIDÉO STABLE 100%</p>
+
+        <h3 class="text-sm font-bold mb-4 text-cyan-400 uppercase italic">🎬 Dessins Animés</h3>
+        <div id="grid-toons" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10"></div>
+
+        <h3 class="text-sm font-bold mb-4 text-red-500 uppercase italic">⚔️ Animés VF</h3>
+        <div id="grid-manga" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
+    </div>
+
+    <div id="video-modal" class="hidden fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4">
+        <div class="w-full max-w-4xl">
+            <div class="flex justify-between mb-4"><h3 id="modal-title" class="text-xs font-bold uppercase italic text-cyan-500">Lecture...</h3><button onclick="closeVideo()" class="text-white text-xs bg-red-600 px-4 py-1 rounded-full">FERMER</button></div>
+            <div class="video-container"><iframe id="main-iframe" src="" frameborder="0" allowfullscreen></iframe></div>
+        </div>
+    </div>
+
+    <div id="chat-modal" class="hidden fixed inset-0 z-[130] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden border dark:border-gray-800">
+            <div class="bg-cyan-500 p-5 text-white flex justify-between items-center"><h3 class="font-black italic text-sm">MK SUPPORT</h3><button onclick="closeChat()">✕</button></div>
+            <div id="chat-box" class="chat-container p-6 space-y-4 bg-gray-50 dark:bg-black/40 text-[11px]"></div>
+            <div class="p-4 flex gap-2 border-t dark:border-gray-800">
+                <input id="chat-input" type="text" placeholder="Ton message..." class="flex-1 bg-gray-100 dark:bg-black p-3 rounded-xl outline-none text-xs">
+                <button onclick="sendMessage()" class="bg-cyan-500 text-white px-4 rounded-xl font-bold text-xs">ENVOYER</button>
             </div>
         </div>
     </div>
 
-    <div id="tv-player" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
-        <div class="p-4 bg-gray-900 flex justify-between items-center border-b border-gray-800">
-            <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded outline-none w-2/3">
-                <optgroup label="🇫🇷 FRANCE (STABLE)">
-                    <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24 HD</option>
-                    <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV</option>
-                </optgroup>
-                <optgroup label="⚽ SPORT & ACTION">
-                    <option value="https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8">Red Bull TV</option>
-                    <option value="https://edge.p-p-p.it/L7/HLS/playlist.m3u8">Sport Italia (Live)</option>
-                </optgroup>
-                <optgroup label="🎵 MUSIQUE">
-                    <option value="https://deluxemusic.mdn.akamaized.net/hls/live/2012051/deluxemusic/index.m3u8">Deluxe Music</option>
-                    <option value="https://clubbingtv-fast.amagi.tv/playlist.m3u8">Clubbing TV</option>
-                </optgroup>
+    <div id="tv-player" class="hidden fixed inset-0 z-[110] bg-black flex flex-col">
+        <div class="p-4 bg-gray-900 flex justify-between items-center">
+            <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-1 rounded outline-none w-1/2">
+                <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
+                <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV</option>
+                <option value="https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8">Red Bull TV</option>
             </select>
-            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black">QUITTER</button>
+            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded text-xs">QUITTER</button>
         </div>
-        <div class="flex-1 bg-black flex items-center justify-center relative">
-            <div id="video-overlay" class="absolute z-10 flex flex-col items-center gap-4 text-center">
-                <div id="video-loader" class="loader"></div>
-                <button onclick="forcePlay()" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-black text-sm">LANCER LE FLUX</button>
-            </div>
+        <div class="flex-1 flex items-center justify-center relative">
+            <div id="video-overlay" class="absolute z-10 text-center"><button onclick="forcePlay()" class="bg-cyan-500 text-white px-6 py-2 rounded-full font-bold text-xs">LANCER LE FLUX</button></div>
             <video id="video" class="w-full h-full" controls playsinline></video>
         </div>
     </div>
 
-    <div id="admin-page" class="hidden p-8 min-h-screen bg-black">
-        <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-            <h2 class="text-3xl font-black text-cyan-500 italic uppercase">MK Admin</h2>
-            <button onclick="showPage('home-page')" class="bg-red-600 text-white px-4 py-1 rounded">SORTIR</button>
-        </div>
-        <div id="admin-user-list" class="space-y-2 max-w-xl mx-auto"></div>
+    <div id="admin-page" class="hidden p-8 bg-black min-h-screen">
+        <h2 class="text-cyan-500 font-black italic mb-6">ADMIN PANEL</h2>
+        <div id="admin-user-list" class="space-y-2"></div>
+        <button onclick="showPage('home-page')" class="mt-8 text-xs text-gray-500 underline">Retour boutique</button>
     </div>
 
-    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl w-full max-w-md border dark:border-gray-800">
-            <div class="flex justify-center gap-8 mb-8">
-                <button id="tab-login" onclick="toggleAuthTab('login')" class="font-black uppercase italic text-cyan-500">Connexion</button>
-                <button id="tab-signup" onclick="toggleAuthTab('signup')" class="font-black uppercase italic text-gray-400">Inscription</button>
+    <div id="auth-page" class="hidden fixed inset-0 z-[140] bg-black/95 flex items-center justify-center p-4">
+        <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-sm border border-gray-800">
+            <div class="flex justify-center gap-6 mb-8 text-xs font-bold">
+                <button id="tab-login" onclick="toggleAuthTab('login')" class="text-cyan-500">CONNEXION</button>
+                <button id="tab-signup" onclick="toggleAuthTab('signup')" class="text-gray-500">INSCRIPTION</button>
             </div>
-            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-gray-100 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-4 outline-none dark:text-white focus:border-cyan-500">
-            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-100 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-6 outline-none dark:text-white focus:border-cyan-500">
-            <button onclick="handleAuth()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl">VALIDER</button>
-            <button onclick="showPage('home-page')" class="w-full text-gray-400 mt-4 text-xs">Annuler</button>
+            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-black border border-gray-800 p-3 rounded-xl mb-4 text-xs outline-none focus:border-cyan-500">
+            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-black border border-gray-800 p-3 rounded-xl mb-6 text-xs outline-none focus:border-cyan-500">
+            <button onclick="handleAuth()" class="w-full bg-cyan-500 text-white py-3 rounded-xl font-bold text-xs uppercase">Confirmer</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-600 mt-4 text-[10px]">Annuler</button>
         </div>
     </div>
 
@@ -144,83 +145,100 @@
         let currentUser = null;
         let authMode = 'login';
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            document.getElementById('mode-icon').innerText = document.documentElement.classList.contains('dark') ? "☀️" : "🌙";
+        // DONNÉES ANIME SANA
+        const toons = [
+            { id: "P6iSoaAbCeY", title: "Bluey", img: "https://img.youtube.com/vi/P6iSoaAbCeY/mqdefault.jpg" },
+            { id: "55neqT8Ztqc", title: "Garfield", img: "https://img.youtube.com/vi/55neqT8Ztqc/mqdefault.jpg" },
+            { id: "QfEv8Af3Mtk", title: "Pat' Patrouille", img: "https://img.youtube.com/vi/QfEv8Af3Mtk/mqdefault.jpg" },
+            { id: "T3vVjfFmLSQ", title: "Masha & Michka", img: "https://img.youtube.com/vi/T3vVjfFmLSQ/mqdefault.jpg" },
+            { id: "R3xT9C2b2Lc", title: "Tom Sawyer", img: "https://img.youtube.com/vi/R3xT9C2b2Lc/mqdefault.jpg" }
+        ];
+        const mangas = [
+            { id: "WSdYAUdqzPA", title: "Aristocrate VF", img: "https://img.youtube.com/vi/WSdYAUdqzPA/mqdefault.jpg" },
+            { id: "jstz2R8GHWU", title: "Paladin Lointain", img: "https://img.youtube.com/vi/jstz2R8GHWU/mqdefault.jpg" },
+            { id: "bmrZAvNDdS8", title: "Pokémon", img: "https://img.youtube.com/vi/bmrZAvNDdS8/mqdefault.jpg" },
+            { id: "x8WB2GYEB5Y", title: "Dead Mount Play", img: "https://img.youtube.com/vi/x8WB2GYEB5Y/mqdefault.jpg" }
+        ];
+
+        function initAnime() {
+            const tGrid = document.getElementById('grid-toons');
+            const mGrid = document.getElementById('grid-manga');
+            toons.forEach(i => tGrid.innerHTML += `<div class="anime-card bg-gray-900 overflow-hidden" onclick="playVideo('${i.id}', '${i.title}')"><img src="${i.img}" class="w-full h-24 object-cover opacity-60"><div class="p-2 text-[9px] font-bold text-cyan-400 uppercase">${i.title}</div></div>`);
+            mangas.forEach(i => mGrid.innerHTML += `<div class="anime-card bg-gray-900 overflow-hidden" onclick="playVideo('${i.id}', '${i.title}')"><img src="${i.img}" class="w-full h-24 object-cover opacity-60"><div class="p-2 text-[9px] font-bold text-red-500 uppercase">${i.title}</div></div>`);
         }
+
+        function playVideo(id, title) {
+            document.getElementById('video-modal').classList.remove('hidden');
+            document.getElementById('main-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            document.getElementById('modal-title').innerText = title;
+        }
+
+        function closeVideo() { document.getElementById('video-modal').classList.add('hidden'); document.getElementById('main-iframe').src = ""; }
 
         function showPage(id) {
             document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
 
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+
         function openAuth(mode) { authMode = mode; showPage('auth-page'); toggleAuthTab(mode); }
 
         function toggleAuthTab(mode) {
             authMode = mode;
-            document.getElementById('tab-login').className = mode === 'login' ? "font-black uppercase italic text-cyan-500" : "font-black uppercase italic text-gray-400";
-            document.getElementById('tab-signup').className = mode === 'signup' ? "font-black uppercase italic text-cyan-500" : "font-black uppercase italic text-gray-400";
+            document.getElementById('tab-login').className = mode === 'login' ? "text-cyan-500" : "text-gray-500";
+            document.getElementById('tab-signup').className = mode === 'signup' ? "text-cyan-500" : "text-gray-500";
         }
 
         function handleAuth() {
-            const user = document.getElementById('auth-user').value;
-            const pass = document.getElementById('auth-pass').value;
-            if(!user || !pass) return;
+            const u = document.getElementById('auth-user').value;
+            const p = document.getElementById('auth-pass').value;
+            if(!u || !p) return;
             if(authMode === 'signup') {
-                dbUsers.push({ user, pass });
-                alert("Compte créé !");
+                dbUsers.push({ user: u, pass: p });
+                alert("Compte OK !");
                 toggleAuthTab('login');
             } else {
-                const found = dbUsers.find(u => u.user === user && u.pass === pass);
-                if(found) {
-                    currentUser = user;
+                const f = dbUsers.find(x => x.user === u && x.pass === p);
+                if(f) {
+                    currentUser = u;
                     document.getElementById('nav-auth-btns').classList.add('hidden');
                     document.getElementById('nav-user-info').classList.remove('hidden');
-                    document.getElementById('nav-user-info').innerText = "Salut, " + user;
+                    document.getElementById('nav-user-info').innerText = u;
                     showPage('home-page');
-                    updateAdmin();
                 } else { alert("Erreur"); }
             }
         }
 
         function checkTvCode() {
-            const code = document.getElementById('tv-code').value;
-            if (code === "StreamingCode-CodeStreaming-fr/en2" || code === "ACCES-ACHETER-0001") {
+            const c = document.getElementById('tv-code').value;
+            if(c === "StreamingCode-CodeStreaming-fr/en2" || c === "ACCES-ACHETER-0001") {
                 launchStream(document.getElementById('channel-select').value);
-            } else if (code === "AdminCode-CodeAdmin-fr/en2") {
-                showPage('admin-page');
-            } else { alert("Code invalide"); }
+            } else if(c === "AdminCode-CodeAdmin-fr/en2") { showPage('admin-page'); updateAdmin(); }
+            else { alert("Code invalide"); }
         }
 
         function launchStream(url) {
             showPage('tv-player');
-            document.getElementById('video-overlay').classList.remove('hidden');
-            const video = document.getElementById('video');
+            const v = document.getElementById('video');
             if (Hls.isSupported()) {
                 if(hls) hls.destroy();
-                hls = new Hls({ xhrSetup: xhr => xhr.withCredentials = false });
+                hls = new Hls();
                 hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().then(() => document.getElementById('video-overlay').classList.add('hidden')).catch(() => {});
-                });
+                hls.attachMedia(v);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => v.play());
             }
         }
 
         function forcePlay() { document.getElementById('video-overlay').classList.add('hidden'); document.getElementById('video').play(); }
-        function changeChannel(url) { launchStream(url); }
-        function closeTv() { document.getElementById('video').pause(); if(hls) hls.destroy(); showPage('home-page'); }
+        function closeTv() { document.getElementById('video').pause(); showPage('home-page'); }
 
-        // CHAT
-        function startChat(product) {
+        function startChat(prod) {
             if(!currentUser) return openAuth('login');
             document.getElementById('chat-modal').classList.remove('hidden');
-            const box = document.getElementById('chat-box');
-            box.innerHTML = `
-                <div class="flex flex-col gap-2">
-                    <div class="bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 p-4 rounded-2xl text-xs font-bold border border-cyan-500/20">
-                        Salut, pour pouvoir acheter il faut qu'un admin répond sinon tu peut ajouter "mkdevlopper" sur discord pour une réponse plus rapide!
-                    </div>
+            document.getElementById('chat-box').innerHTML = `
+                <div class="bg-cyan-500/10 text-cyan-500 p-4 rounded-2xl border border-cyan-500/20">
+                    Salut, pour pouvoir acheter il faut qu'un admin répond sinon tu peut ajouter "mkdevlopper" sur discord pour une réponse plus rapide!
                 </div>
             `;
         }
@@ -228,19 +246,17 @@
         function closeChat() { document.getElementById('chat-modal').classList.add('hidden'); }
 
         function sendMessage() {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            document.getElementById('chat-box').innerHTML += `<div class="flex justify-end"><div class="bg-cyan-500 text-white p-3 rounded-2xl text-xs font-bold">${input.value}</div></div>`;
-            input.value = "";
+            const i = document.getElementById('chat-input');
+            if(!i.value) return;
+            document.getElementById('chat-box').innerHTML += `<div class="flex justify-end"><div class="bg-cyan-500 text-white p-2 rounded-xl">${i.value}</div></div>`;
+            i.value = "";
         }
 
         function updateAdmin() {
-            document.getElementById('admin-user-list').innerHTML = dbUsers.map(u => 
-                `<div class="p-3 bg-gray-900 border border-gray-800 rounded-xl flex justify-between">
-                    <span class="text-white">👤 ${u.user}</span> <span class="text-cyan-500">🔑 ${u.pass}</span>
-                </div>`
-            ).join('');
+            document.getElementById('admin-user-list').innerHTML = dbUsers.map(u => `<div class="text-[10px] text-gray-400 bg-gray-900 p-2 rounded border border-gray-800">👤 ${u.user} | 🔑 ${u.pass}</div>`).join('');
         }
+
+        initAnime();
     </script>
 </body>
 </html>
