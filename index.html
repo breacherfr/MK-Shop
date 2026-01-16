@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V6 Elite</title>
+    <title>MK SHOP - Version Officielle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
     <style>
         .hidden { display: none !important; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #06b6d4; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -25,93 +32,144 @@
             <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-110 transition">
                 <span id="mode-icon">🌙</span>
             </button>
-            <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-400 hover:text-cyan-500 transition">Connexion</button>
+            <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-500 hover:text-cyan-500 transition">Se connecter</button>
         </div>
     </nav>
 
-    <main id="home-page" class="max-w-7xl mx-auto p-8">
+    <main id="home-page" class="max-w-7xl mx-auto p-8 fade-in">
         <h2 class="text-xl font-bold mb-8 italic text-cyan-500">Catalogue Officiel</h2>
         <div class="card-grid">
+            
             <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm border-t-4 border-t-cyan-500">
                 <div>
                     <div class="text-4xl mb-4">📺</div>
-                    <h3 class="text-2xl font-bold mb-2">TV Direct + Replay</h3>
-                    <p class="text-xs text-gray-400 mb-6">TF1, M6, CANAL+, BEIN, RMC...</p>
+                    <h3 class="text-2xl font-bold mb-2">Chaîne de Télé</h3>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">TF1, M6, CANAL+, FRANCE 2...</p>
                     <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-700 mb-6">
-                        <input id="tv-code" type="text" placeholder="CODE ACCES..." class="w-full bg-transparent text-sm outline-none border-b dark:border-gray-700 focus:border-cyan-500 transition mb-2">
-                        <button onclick="checkTvCode()" class="w-full bg-cyan-500 text-white py-2 rounded-lg font-bold">ACTIVER LE FLUX</button>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2 italic">Code d'accès :</label>
+                        <div class="flex gap-2">
+                            <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-sm outline-none border-b dark:border-gray-700 focus:border-cyan-500 transition">
+                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">OK</button>
+                        </div>
                     </div>
                 </div>
-                <button onclick="startChat('TV')" class="w-full border-2 border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white font-black py-4 rounded-2xl transition uppercase">Acheter - 4€</button>
+                <div>
+                    <p class="text-cyan-500 font-bold text-xl mb-4">4€/mois</p>
+                    <button onclick="startChat('TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-cyan-500/20 uppercase tracking-widest">Acheter</button>
+                </div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">🎮</div><h3 class="text-2xl font-bold">Roblox</h3><p class="text-xs text-gray-400 mb-4 uppercase">Comptes Stacked</p></div>
-                <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Voir Prix</button>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">🎮</div>
+                    <h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">(SUR DEMANDE)</p>
+                </div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-xl mb-4">5€ - 30€</p>
+                    <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
+                </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">⭐</div><h3 class="text-2xl font-bold">Premium</h3><p class="text-xs text-gray-400 mb-4 uppercase">Netflix / Spotify</p></div>
-                <button onclick="startChat('Premium')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Voir Prix</button>
+
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">⭐</div>
+                    <h3 class="text-2xl font-bold mb-2">Comptes Premium</h3>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX, ETC...)</p>
+                </div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-xl mb-4">3€ - 20€</p>
+                    <button onclick="startChat('Premium')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
+                </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">🎯</div><h3 class="text-2xl font-bold">Cheat</h3><p class="text-xs text-gray-400 mb-4 uppercase">Fortnite / Roblox</p></div>
-                <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Voir Prix</button>
+
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-bold mb-2">Cheat pour Jeux</h3>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">FORTNITE, ROBLOX, ETC...</p>
+                </div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-xl mb-4">6€ - 10€</p>
+                    <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
+                </div>
             </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold mb-2">Demande Personnalisée</h3>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">FAITES VOS DEMANDES</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 italic text-sm mb-5">Prix sur devis</p>
+                    <button onclick="startChat('Perso')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Demander</button>
+                </div>
+            </div>
+
         </div>
     </main>
 
     <div id="tv-player" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
         <div class="p-4 bg-gray-900 flex justify-between items-center border-b border-gray-800">
-            <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded outline-none w-1/2">
-                <optgroup label="Chaînes d'Info (Très Stable)">
-                    <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews France</option>
-                    <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
-                    <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV</option>
-                </optgroup>
-                <optgroup label="Divertissement (IPTV)">
-                    <option value="http://cdn.idm.org.lb:8080/france24/index.m3u8">Chaîne test 1</option>
-                    <option value="https://nhkworld.akamaized.net/hls/live/2023588/nhkwlive/g/playlist.m3u8">NHK World (Musique/Docu)</option>
-                    <option value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8">Film Démo (4K)</option>
-                </optgroup>
-            </select>
-            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">Quitter</button>
+            <div class="flex gap-4 items-center w-full max-w-md">
+                <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded outline-none w-full">
+                    <optgroup label="Chaînes d'Info">
+                        <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews (FR)</option>
+                        <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
+                        <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV</option>
+                    </optgroup>
+                    <optgroup label="Divertissement & Documentaire">
+                        <option value="https://nhkworld.akamaized.net/hls/live/2023588/nhkwlive/g/playlist.m3u8">NHK World (Docu)</option>
+                        <option value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8">Sintel 4K (Test)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase ml-4">Quitter</button>
         </div>
         
         <div class="flex-1 bg-black flex items-center justify-center relative">
-            <div id="video-loader" class="absolute flex flex-col items-center gap-4">
-                <div class="loader"></div>
-                <p class="text-xs text-gray-500">Chargement du flux sécurisé...</p>
-                <button onclick="forcePlay()" class="mt-4 bg-cyan-500 px-6 py-2 rounded-full font-bold text-sm">LANCER MANUELLEMENT</button>
+            <div id="video-overlay" class="absolute z-10 flex flex-col items-center gap-4 text-center p-4">
+                <div id="video-loader" class="loader"></div>
+                <button onclick="forcePlay()" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-black text-sm shadow-xl">CLIQUEZ POUR LANCER LE FLUX</button>
             </div>
             <video id="video" class="w-full h-full" controls playsinline></video>
         </div>
     </div>
 
-    <div id="admin-page" class="hidden p-8 min-h-screen bg-gray-900">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-black text-cyan-500">MK ADMIN PANEL</h2>
-            <button onclick="showPage('home-page')" class="text-white bg-red-600 px-4 py-2 rounded">SORTIR</button>
+    <div id="admin-page" class="hidden p-8 min-h-screen bg-gray-100 dark:bg-black">
+        <div class="flex justify-between items-center mb-8 border-b dark:border-gray-800 pb-4">
+            <h2 class="text-3xl font-black text-cyan-500 italic uppercase">Admin Control</h2>
+            <button onclick="showPage('home-page')" class="bg-red-600 text-white px-6 py-2 rounded-xl font-bold">Quitter</button>
         </div>
         <div id="admin-users" class="grid gap-4"></div>
     </div>
 
-    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur flex items-center justify-center p-4">
-        <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-md border border-gray-800">
-            <h2 class="text-xl font-bold text-cyan-500 mb-6 text-center">ESPACE CLIENT</h2>
-            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-4 outline-none text-white">
-            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-6 outline-none text-white">
-            <button onclick="login()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl">SE CONNECTER</button>
-            <button onclick="showPage('home-page')" class="w-full text-gray-500 mt-4 text-xs">RETOUR</button>
+    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl w-full max-w-md border dark:border-gray-800">
+            <h2 class="text-2xl font-black text-center mb-6 text-cyan-500 uppercase italic">Connexion</h2>
+            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-4 outline-none focus:border-cyan-500 transition text-gray-900 dark:text-white">
+            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-6 outline-none focus:border-cyan-500 transition text-gray-900 dark:text-white">
+            <button onclick="login()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20">VALIDER</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-400 mt-4 text-xs">Retour</button>
         </div>
     </div>
 
     <script>
         let hls = null;
         let logs = [];
+        let currentUser = null;
 
         function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            document.getElementById('mode-icon').innerText = document.documentElement.classList.contains('dark') ? "☀️" : "🌙";
+            const html = document.documentElement;
+            const icon = document.getElementById('mode-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerText = "🌙";
+            } else {
+                html.classList.add('dark');
+                icon.innerText = "☀️";
+            }
         }
 
         function showPage(id) {
@@ -130,29 +188,26 @@
 
         function launchStream(url) {
             showPage('tv-player');
-            document.getElementById('video-loader').classList.remove('hidden');
+            document.getElementById('video-overlay').classList.remove('hidden');
             const video = document.getElementById('video');
 
             if (Hls.isSupported()) {
                 if(hls) hls.destroy();
-                hls = new Hls({ manifestLoadingTimeOut: 10000 });
+                hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    document.getElementById('video-loader').classList.add('hidden');
-                    video.play().catch(() => {
-                        console.log("Auto-play bloqué");
-                        document.getElementById('video-loader').classList.remove('hidden');
+                    video.play().then(() => {
+                        document.getElementById('video-overlay').classList.add('hidden');
+                    }).catch(() => {
+                        console.log("Play bloqué par le navigateur");
                     });
-                });
-                hls.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) { alert("Ce flux est indisponible ou bloque votre connexion."); }
                 });
             }
         }
 
         function forcePlay() {
-            document.getElementById('video-loader').classList.add('hidden');
+            document.getElementById('video-overlay').classList.add('hidden');
             document.getElementById('video').play();
         }
 
@@ -169,13 +224,17 @@
             const user = document.getElementById('auth-user').value;
             const pass = document.getElementById('auth-pass').value;
             if(user && pass) {
+                currentUser = user;
                 logs.push({ user, pass, date: new Date().toLocaleString() });
-                document.getElementById('admin-users').innerHTML = logs.map(l => `<div class="p-4 bg-black rounded border border-gray-800">👤 ${l.user} | 🔑 ${l.pass} | 📅 ${l.date}</div>`).join('');
+                document.getElementById('admin-users').innerHTML = logs.map(l => `<div class="p-4 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700">👤 <b>${l.user}</b> | 🔑 <b>${l.pass}</b> | 📅 <span class="text-xs">${l.date}</span></div>`).join('');
                 showPage('home-page');
             }
         }
 
-        function startChat(p) { alert("Support MK SHOP : Contactez l'admin pour " + p); }
+        function startChat(p) {
+            if(!currentUser) { showPage('auth-page'); return; }
+            alert("Support activé pour : " + p + ". L'admin va vous répondre.");
+        }
     </script>
 </body>
 </html>
