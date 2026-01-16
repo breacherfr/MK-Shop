@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V32 FULL UPDATE</title>
+    <title>MK SHOP - V34 FULL RESTORE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <script>
@@ -44,7 +44,10 @@
             <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full hover:scale-110 transition text-xl">
                 <span id="theme-icon">🌙</span>
             </button>
-            <div id="user-display" class="hidden text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20"></div>
+            <div id="user-display" class="hidden flex items-center gap-3">
+                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20"></span>
+                <button onclick="logout()" class="text-[10px] font-black text-mkRed uppercase hover:underline">Déconnexion</button>
+            </div>
             <div id="auth-btns" class="flex gap-3">
                 <button onclick="openModal('auth-modal')" class="text-xs font-bold px-4 hover:text-mkBlue transition uppercase">Connexion</button>
                 <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full shadow-xl uppercase">S'inscrire</button>
@@ -55,26 +58,26 @@
     <div id="main-shop">
         <header class="text-center py-20">
             <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Catalogue Officiel</h2>
-            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Qualité Premium • V32</p>
+            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Qualité Premium • V34</p>
         </header>
 
         <main class="max-w-7xl mx-auto px-6 pb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col relative">
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col">
                     <div class="text-6xl mb-8">🎮</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Roblox</h3>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Roblox</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Comptes Optimisés</p>
                     <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
                         <li>• 0 - 1000 Robux aléatoire</li>
                         <li>• Compte Full (Blox Fruits, Da Hood)</li>
                         <li>• Voice Chat / Age Verified (+13)</li>
                     </ul>
-                    <button onclick="startChat('Compte Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                    <button onclick="startChat('Achat Compte Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col relative">
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col">
                     <div class="text-6xl mb-8">📺</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">TV & Animés</h3>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">TV & Animés</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Streaming Illimité</p>
                     <div class="bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-2xl p-5 mb-8">
                         <input id="tv-code-field" type="text" placeholder="CODE-ACHETÉ-..." class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold">
@@ -82,7 +85,7 @@
                     <button id="tv-main-btn" onclick="checkTvCode()" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Vérifier</button>
                 </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkRed flex flex-col relative">
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkRed flex flex-col">
                     <div class="text-6xl mb-8">🎯</div>
                     <h3 class="text-3xl font-black mb-1 italic text-mkRed uppercase tracking-tighter">Cheat Roblox</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Scripts & Tools</p>
@@ -90,12 +93,12 @@
                         <li>• Roblox Executors (PC/Mobile)</li>
                         <li>• Scripts Privés Indétectables</li>
                     </ul>
-                    <button onclick="startChat('Cheat')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                    <button onclick="startChat('Achat Cheat')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col relative">
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col">
                     <div class="text-6xl mb-8">⭐</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Premium</h3>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Premium</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Abonnements</p>
                     <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
                         <li>• Spotify & Deezer à vie</li>
@@ -148,7 +151,7 @@
 
     <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
-            <h3 class="text-3xl font-black mb-10 italic uppercase">Accès MK SHOP</h3>
+            <h3 class="text-3xl font-black mb-10 italic uppercase text-slate-900 dark:text-white">Accès MK SHOP</h3>
             <input id="in-user" type="text" placeholder="Utilisateur" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
             <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
             <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic">Valider</button>
@@ -163,7 +166,7 @@
             </div>
             <div id="chat-body" class="flex-1 p-8 overflow-y-auto space-y-6"></div>
             <div class="p-6 flex gap-4 border-t border-white/5">
-                <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-8 outline-none">
+                <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-8 outline-none text-sm">
                 <button onclick="sendMessage()" class="bg-mkBlue text-white w-14 h-14 rounded-full font-black">➤</button>
             </div>
         </div>
@@ -174,14 +177,15 @@
             <h3 class="text-2xl font-black mb-8 italic text-mkRed uppercase">Admin Panel</h3>
             <input id="admin-pass-input" type="password" placeholder="Code Secret" class="w-full bg-slate-100 dark:bg-black/40 p-5 rounded-2xl mb-6 outline-none font-bold text-center">
             <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-5 rounded-full uppercase italic transition">Entrer</button>
+            <button onclick="closeModal('admin-auth-modal')" class="mt-4 text-[10px] text-slate-400 uppercase">Annuler</button>
         </div>
     </div>
 
-    <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-slate-900 text-white font-mono p-12 overflow-y-auto">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
-                <h2 class="text-mkBlue font-black italic text-2xl">MK_ADMIN_CONTROL</h2>
-                <button onclick="closeModal('admin-panel')" class="text-red-500 font-bold">[QUITTER]</button>
+    <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-[#0f172a] text-white p-6 md:p-12 overflow-y-auto">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+                <h2 class="text-mkBlue font-black italic text-3xl uppercase tracking-tighter">MK_SYSTEM_ROOT</h2>
+                <button onclick="closeModal('admin-panel')" class="bg-mkRed px-6 py-2 rounded-full font-black text-[10px] uppercase">Fermer</button>
             </div>
             <div id="admin-user-list" class="space-y-4"></div>
         </div>
@@ -227,8 +231,20 @@
         function applySession() {
             if(!user) return;
             document.getElementById('auth-btns').classList.add('hidden');
-            const ud = document.getElementById('user-display'); ud.classList.remove('hidden'); ud.innerText = user.u.toUpperCase();
+            const ud = document.getElementById('user-display'); ud.classList.remove('hidden'); 
+            document.getElementById('user-name').innerText = user.u.toUpperCase();
             if(user.hasTv) { document.getElementById('tv-main-btn').innerText = "ACCÉDER"; document.getElementById('tv-main-btn').onclick = openTv; }
+        }
+
+        function logout() { user = null; localStorage.removeItem('mk_session'); location.reload(); }
+
+        function handleAuth() {
+            const u = document.getElementById('in-user').value.trim(), p = document.getElementById('in-pass').value;
+            if(!u || !p) return alert("Remplis tout !");
+            let f = db.find(x => x.u === u);
+            if(f) { if(f.p === p) user = f; else return alert("Mauvais mot de passe"); }
+            else { user = { u, p, hasTv: false, messages: [] }; db.push(user); }
+            save(); applySession(); closeModal('auth-modal');
         }
 
         function renderCatalog() {
@@ -237,18 +253,13 @@
             content.forEach(item => {
                 const label = item.isComingSoon ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-[2rem]"><span class="bg-mkRed text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Coming Soon</span></div>' : '';
                 const clickAction = item.isComingSoon ? '' : `onclick="showEpisodes(${item.id})"`;
-                
-                const html = `
-                    <div ${clickAction} class="relative min-w-[220px] h-[320px] bg-slate-800 rounded-[2rem] bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl border-2 border-transparent hover:border-mkBlue" style="background-image: url('${item.poster}')">
-                        ${label}
-                    </div>`;
+                const html = `<div ${clickAction} class="relative min-w-[220px] h-[320px] bg-slate-800 rounded-[2rem] bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl border-2 border-transparent hover:border-mkBlue" style="background-image: url('${item.poster}')">${label}</div>`;
                 document.getElementById(`row-${item.category}`).innerHTML += html;
             });
         }
 
         function showEpisodes(id) {
             const item = content.find(x => x.id === id);
-            if(!item || item.isComingSoon) return;
             document.getElementById('catalog-view').classList.add('hidden');
             document.getElementById('episode-view').classList.remove('hidden');
             document.getElementById('ep-title').innerText = item.title;
@@ -259,6 +270,66 @@
             });
         }
 
+        function startChat(p) {
+            if(!user) return openModal('auth-modal');
+            if(!user.messages) user.messages = [];
+            if(user.messages.length === 0) user.messages.push({from:'support', txt:`Bonjour ${user.u} ! Comment puis-je t'aider pour : ${p} ?`});
+            openModal('chat-modal'); renderMessages();
+        }
+
+        function renderMessages() {
+            const b = document.getElementById('chat-body');
+            b.innerHTML = (user.messages || []).map(m => `<div class="flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}"><div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} p-4 text-xs max-w-[85%]">${m.txt}</div></div>`).join('');
+            b.scrollTop = b.scrollHeight;
+        }
+
+        function sendMessage() {
+            const i = document.getElementById('chat-input'); if(!i.value) return;
+            user.messages.push({ from: 'me', txt: i.value }); i.value = "";
+            renderMessages(); save();
+        }
+
+        function verifyAdmin() { if(document.getElementById('admin-pass-input').value === ADMIN_PASS) { closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); } else alert("Accès refusé"); }
+
+        function renderAdmin() {
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = db.map((u, i) => `
+                <div class="bg-[#1e293b] p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row justify-between gap-6">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-mkBlue text-black font-black px-2 py-0.5 rounded text-[9px] uppercase">Compte</span>
+                            <h4 class="text-lg font-bold">${u.u}</h4>
+                        </div>
+                        <p class="text-slate-400 text-xs font-mono mb-4">MOT DE PASSE: <span class="text-white">${u.p}</span></p>
+                        <div class="p-3 bg-black/30 rounded-xl max-h-32 overflow-y-auto">
+                            ${(u.messages || []).map(m => `<p class="text-[10px] ${m.from === 'me' ? 'text-white' : 'text-mkYellow'} mb-1"><b>${m.from === 'me' ? u.u : 'MK'}:</b> ${m.txt}</p>`).join('') || '<p class="text-[10px] opacity-30 italic">Aucun message</p>'}
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <input id="reply-${i}" type="text" placeholder="Répondre..." class="bg-black/50 p-3 rounded-full text-[10px] outline-none border border-white/10 w-40 text-white">
+                        <button onclick="adminReply(${i})" class="bg-mkYellow text-black font-black px-4 py-3 rounded-full text-[10px] uppercase">Répondre</button>
+                        <button onclick="adminToggleTv(${i})" class="px-4 py-3 rounded-full text-[10px] font-black uppercase ${u.hasTv ? 'bg-green-500' : 'bg-slate-600'}">TV: ${u.hasTv ? 'OUI' : 'NON'}</button>
+                        <button onclick="adminBan(${i})" class="bg-mkRed px-4 py-3 rounded-full text-[10px] font-black uppercase">Bannir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function adminReply(i) {
+            const txt = document.getElementById(`reply-${i}`).value; if(!txt) return;
+            if(!db[i].messages) db[i].messages = [];
+            db[i].messages.push({ from: 'support', txt: txt });
+            document.getElementById(`reply-${i}`).value = ""; save(); renderAdmin();
+        }
+
+        function adminBan(i) { if(confirm(`Bannir ${db[i].u} ?`)) { if(user && db[i].u === user.u) logout(); db.splice(i, 1); save(); renderAdmin(); } }
+        function adminToggleTv(i) { db[i].hasTv = !db[i].hasTv; if(user && db[i].u === user.u) user.hasTv = db[i].hasTv; save(); renderAdmin(); applySession(); }
+        
+        function save() { 
+            localStorage.setItem('mk_db', JSON.stringify(db)); 
+            if(user) { const f = db.find(x => x.u === user.u); if(f) localStorage.setItem('mk_session', JSON.stringify(f)); }
+        }
+
         function playVideo(u) { document.getElementById('player-overlay').classList.remove('hidden'); document.getElementById('ifr-player').src = `https://www.youtube.com/embed/${u}?autoplay=1&rel=0`; }
         function stopVideo() { document.getElementById('player-overlay').classList.add('hidden'); document.getElementById('ifr-player').src = ""; }
         function openTv() { document.getElementById('tv-section').classList.remove('hidden'); document.body.style.overflow="hidden"; }
@@ -267,27 +338,6 @@
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
         function checkTvCode() { if(document.getElementById('tv-code-field').value === TV_CODE || (user && user.hasTv)) openTv(); else alert("Code invalide"); }
-        
-        function handleAuth() {
-            const u = document.getElementById('in-user').value, p = document.getElementById('in-pass').value; if(!u || !p) return;
-            let f = db.find(x => x.u === u); if(f) user = f; else { user = { u, p, hasTv: false }; db.push(user); }
-            save(); applySession(); closeModal('auth-modal');
-        }
-
-        function startChat(p) { if(!user) return openModal('auth-modal'); openModal('chat-modal'); document.getElementById('chat-body').innerHTML = `<div class="chat-bubble-other p-5 text-sm">Bonjour ${user.u} ! Contact support pour : <b>${p}</b>.</div>`; }
-        function sendMessage() {
-            const i = document.getElementById('chat-input'), b = document.getElementById('chat-body'); if(!i.value) return;
-            b.innerHTML += `<div class="flex justify-end"><div class="chat-bubble-me p-5 text-sm">${i.value}</div></div>`;
-            setTimeout(() => { b.innerHTML += `<div class="chat-bubble-other p-5 text-sm italic opacity-70">Support hors-ligne. Contactez mkdevlopper sur Discord.</div>`; b.scrollTop = b.scrollHeight; }, 800);
-            i.value = ""; b.scrollTop = b.scrollHeight;
-        }
-
-        function verifyAdmin() { if(document.getElementById('admin-pass-input').value === ADMIN_PASS) { closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); } else alert("Accès refusé"); }
-        function renderAdmin() {
-            document.getElementById('admin-user-list').innerHTML = db.map((u, i) => `<div class="flex justify-between items-center bg-white/5 p-4 rounded-xl"><div>${u.u} (${u.p})</div><button onclick="adminToggleTv(${i})" class="${u.hasTv ? 'text-green-500' : 'text-red-500'}">[TV: ${u.hasTv ? 'OUI' : 'NON'}]</button></div>`).join('');
-        }
-        function adminToggleTv(i) { db[i].hasTv = !db[i].hasTv; if(user && db[i].u === user.u) user.hasTv = db[i].hasTv; save(); renderAdmin(); applySession(); }
-        function save() { localStorage.setItem('mk_db', JSON.stringify(db)); localStorage.setItem('mk_session', JSON.stringify(user)); }
     </script>
 </body>
 </html>
