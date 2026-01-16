@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V34 OFFICIAL DESIGN</title>
+    <title>MK SHOP - V36 FULL OPTIONS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <script>
@@ -18,217 +18,203 @@
         }
     </script>
     <style>
-        .card-shop { background: white; border-radius: 2.5rem; padding: 2.5rem; box-shadow: 0 15px 40px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; display: flex; flex-direction: column; height: 100%; }
-        .dark .card-shop { background: #1e293b; border-color: rgba(255,255,255,0.05); }
-        .btn-buy { background: #111827; color: white; border-radius: 999px; padding: 0.7rem 1.8rem; font-weight: 900; font-size: 0.75rem; text-transform: uppercase; font-style: italic; transition: 0.2s; }
-        .btn-buy:hover { transform: scale(1.05); background: #000; }
-        .stream-bg { background: #050505; color: white; }
-        .manga-card { aspect-ratio: 2/3; border-radius: 1.5rem; background-color: #1a2235; background-size: cover; background-position: center; transition: 0.3s; border: 2px solid transparent; }
-        .manga-card:hover { border-color: #00d2ff; transform: translateY(-5px); }
+        .card-mk { background: white; border-radius: 2rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f1f5f9; min-width: 250px; display: flex; flex-direction: column; }
+        .card-mk:hover { transform: translateY(-5px); border-color: #00d2ff; }
+        .dark .card-mk { background: #1e293b; border-color: rgba(255,255,255,0.05); }
+        .btn-action { background: #111827; color: white; border-radius: 999px; padding: 0.6rem 1.5rem; font-weight: 900; font-size: 0.7rem; text-transform: uppercase; font-style: italic; transition: 0.2s; }
+        .btn-action:hover { background: #000; transform: scale(1.05); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .stream-bg { background: #050505; color: white; }
+        .manga-poster { aspect-ratio: 2/3; border-radius: 1rem; background-size: cover; background-position: center; transition: 0.3s; cursor: pointer; border: 2px solid transparent; }
+        .manga-poster:hover { border-color: #00d2ff; transform: scale(1.03); }
     </style>
 </head>
-<body class="font-sans bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-white transition-all">
+<body class="font-sans bg-[#f3f4f6] dark:bg-[#0f172a] text-slate-900 dark:text-white transition-all">
 
-    <nav class="bg-white/80 dark:bg-[#1e293b]/80 backdrop-blur-md px-8 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-gray-100 dark:border-white/5">
+    <nav class="bg-white/80 dark:bg-[#1e293b]/80 backdrop-blur-md px-8 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-2">
-            <h1 class="text-xl font-[900] italic uppercase tracking-tighter">MK <span class="text-mkBlue">SHOP</span></h1>
+            <h1 class="text-2xl font-[900] italic tracking-tighter uppercase">MK <span class="text-mkBlue">STREAM</span></h1>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="toggleTheme()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-full">☀️</button>
-            <div id="user-tag" class="hidden text-[10px] font-black bg-mkBlue/10 text-mkBlue px-4 py-2 rounded-full border border-mkBlue/20">TESTDUMMY</div>
-            <button onclick="openModal('auth-modal')" class="border border-mkBlue text-mkBlue px-5 py-2 rounded-lg text-[10px] font-black uppercase">Connexion</button>
-            <button onclick="openModal('admin-auth-modal')" class="text-[9px] text-slate-300 font-bold uppercase">Admin</button>
+        <div class="flex items-center gap-6">
+            <button onclick="startChat('Général')" class="text-mkBlue text-2xl">💬</button>
+            <div id="user-display" class="hidden text-[10px] font-bold opacity-70">user: <span id="user-id-name">TESTDUMMY</span></div>
+            <button onclick="toggleTheme()" class="text-xl">☀️</button>
+            <button onclick="openModal('auth-modal')" class="bg-[#111827] text-white px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest">Connexion</button>
         </div>
     </nav>
 
-    <div id="shop-view">
-        <header class="text-center py-20">
-            <h2 class="text-6xl font-[900] italic uppercase tracking-tighter mb-2">CATALOGUE OFFICIEL</h2>
-            <p class="text-mkBlue font-bold text-[10px] tracking-[0.4em] uppercase opacity-70">QUALITÉ PREMIUM • SUPPORT 24/7</p>
+    <div id="main-shop">
+        <header class="max-w-7xl mx-auto px-8 pt-16 pb-12">
+            <div class="border-l-4 border-mkBlue pl-6 mb-4">
+                <span class="text-4xl font-black opacity-20">36</span>
+                <h2 class="text-6xl font-[900] italic uppercase tracking-tighter leading-tight">Catalogue Officiel</h2>
+                <p class="text-mkBlue font-bold text-[10px] tracking-[0.4em] uppercase opacity-80">Qualité Premium • Support 24/7</p>
+            </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-8 pb-24">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div class="card-shop relative overflow-hidden">
-                    <div class="absolute top-5 right-5 bg-mkBlue text-white text-[8px] font-black px-3 py-1 rounded-md uppercase italic">BEST SELLER</div>
-                    <img src="https://cdn-icons-png.flaticon.com/512/3418/3418886.png" class="w-12 h-12 mb-6" alt="icon">
-                    <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-1">Comptes Roblox</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-6 tracking-wider">Comptes Optimisés</p>
-                    <ul class="text-[11px] space-y-3 text-slate-500 mb-10 flex-1">
-                        <li>• 0 - 1000 Robux aléatoire</li>
-                        <li>• Compte Full (Blox Fruits, Da Hood)</li>
-                        <li>• Voice Chat / Age Verified (+13)</li>
-                    </ul>
+        <main class="max-w-7xl mx-auto px-8 pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                
+                <div class="card-mk">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3418/3418886.png" class="w-10 h-10 mb-4" alt="icon">
+                    <h3 class="font-black italic uppercase text-lg mb-1">Comptes Roblox</h3>
+                    <p class="text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-tighter">Accès Da Hood, Blox Fruits</p>
+                    <div class="flex-1 text-[10px] text-slate-500 space-y-2 mb-6">
+                        <p>• Robux Aléatoires</p>
+                        <p>• Voice Chat Enabled</p>
+                    </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-mkBlue font-black text-xl italic">5€ - 30€</span>
-                        <button onclick="startChat('Roblox')" class="btn-buy">Acheter</button>
+                        <span class="font-black text-mkBlue italic">5€</span>
+                        <button onclick="startChat('Roblox')" class="btn-action">Acheter</button>
                     </div>
                 </div>
 
-                <div class="card-shop">
-                    <img src="https://cdn-icons-png.flaticon.com/512/716/716429.png" class="w-12 h-12 mb-6" alt="icon">
-                    <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-1">TV & Animés</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-6 tracking-wider">Streaming Illimité</p>
-                    <div class="bg-slate-50 dark:bg-black/20 p-4 rounded-2xl mb-6 border border-slate-100 dark:border-white/5 flex items-center justify-between">
-                        <input id="tv-code" type="text" placeholder="CODE-ACHETÉ-..." class="bg-transparent text-[10px] font-mono outline-none w-full font-bold text-mkBlue uppercase">
-                        <button onclick="checkTvCode()" class="text-mkBlue">➔</button>
-                    </div>
+                <div class="card-mk border-mkBlue bg-blue-50/30">
+                    <img src="https://cdn-icons-png.flaticon.com/512/716/716429.png" class="w-10 h-10 mb-4" alt="icon">
+                    <h3 class="font-black italic uppercase text-lg mb-1">TV & Animés</h3>
+                    <p class="text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-tighter italic text-mkBlue">Code Requis</p>
+                    <input id="tv-code-input" type="text" placeholder="CODE-..." class="bg-slate-100 dark:bg-black/20 p-2 rounded-lg text-[10px] mb-4 outline-none font-bold uppercase">
                     <div class="flex justify-between items-center mt-auto">
-                        <span class="text-mkBlue font-black text-xl italic">4€<span class="text-[10px] opacity-40 font-normal italic">/mois</span></span>
-                        <button onclick="openTv()" class="btn-buy">Acheter</button>
+                        <span class="font-black text-mkBlue italic">4€</span>
+                        <button onclick="checkCode()" class="btn-action">Entrer</button>
                     </div>
                 </div>
 
-                <div class="card-shop">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1042/1042304.png" class="w-12 h-12 mb-6" alt="icon">
-                    <h3 class="text-2xl font-black italic text-mkRed uppercase tracking-tighter mb-1">Cheat Roblox/Jeux</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-6 tracking-wider">Mode Menu & Scripts</p>
-                    <ul class="text-[11px] space-y-3 text-slate-500 mb-10 flex-1">
-                        <li>• Roblox Executors (PC/Mobile)</li>
-                        <li>• Fortnite Softaim & ESP</li>
-                        <li>• Indétectable & Mis à jour</li>
-                    </ul>
+                <div class="card-mk">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1042/1042304.png" class="w-10 h-10 mb-4" alt="icon">
+                    <h3 class="font-black italic uppercase text-lg mb-1">Cheat Roblox</h3>
+                    <p class="text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-tighter">Executors & Scripts</p>
+                    <div class="flex-1 text-[10px] text-slate-500 space-y-2 mb-6">
+                        <p>• Bypass Anti-Cheat</p>
+                        <p>• PC & Mobile</p>
+                    </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-mkRed font-black text-xl italic">6€ - 15€</span>
-                        <button onclick="startChat('Cheat')" class="btn-buy">Acheter</button>
+                        <span class="font-black text-mkRed italic">10€</span>
+                        <button onclick="startChat('Cheats')" class="btn-action">Acheter</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div class="md:col-span-4 card-shop">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="w-12 h-12 mb-6" alt="icon">
-                    <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-1">Comptes Premium</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mb-6 tracking-wider">Musique & Séries</p>
-                    <button onclick="startChat('Premium')" class="btn-buy w-full py-4">Voir les offres</button>
-                </div>
-                <div class="md:col-span-8 card-shop flex-row items-center gap-8 bg-[#f3f0ff] border-[#e9e3ff] dark:bg-[#2e264d]">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1164/1164917.png" class="w-16 h-16" alt="icon">
-                    <div class="flex-1">
-                        <h3 class="text-2xl font-black italic text-mkPurple uppercase tracking-tighter mb-1">Demande Personnalisée</h3>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 max-w-md">Un compte rare ? Un script spécifique ? Discutez avec nous pour un devis sur mesure.</p>
+                <div class="card-mk">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="w-10 h-10 mb-4" alt="icon">
+                    <h3 class="font-black italic uppercase text-lg mb-1">Premium</h3>
+                    <p class="text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-tighter">Spotify, Netflix</p>
+                    <div class="flex-1 text-[10px] text-slate-500 space-y-2 mb-6">
+                        <p>• Comptes Garantis</p>
+                        <p>• Remplacement Rapide</p>
                     </div>
-                    <button onclick="startChat('Demande Perso')" class="btn-buy bg-mkPurple">Discuter</button>
+                    <div class="flex justify-between items-center">
+                        <span class="font-black text-mkBlue italic">3€</span>
+                        <button onclick="startChat('Premium')" class="btn-action">Acheter</button>
+                    </div>
                 </div>
+
+                <div class="card-mk">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1164/1164917.png" class="w-10 h-10 mb-4" alt="icon">
+                    <h3 class="font-black italic uppercase text-lg mb-1">Sur Mesure</h3>
+                    <p class="text-[9px] font-bold text-slate-400 mb-4 uppercase tracking-tighter">Demande Spéciale</p>
+                    <button onclick="startChat('Perso')" class="btn-action mt-auto w-full">Discuter</button>
+                </div>
+
             </div>
         </main>
+
+        <footer class="text-center py-10 opacity-30">
+            <button onclick="openModal('admin-modal')" class="text-[10px] font-bold uppercase tracking-widest">Admin Panel</button>
+        </footer>
     </div>
 
-    <div id="tv-view" class="hidden fixed inset-0 z-[60] stream-bg overflow-y-auto">
-        <nav class="p-8 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-xl border-b border-white/5">
+    <div id="stream-view" class="hidden fixed inset-0 z-[60] stream-bg overflow-y-auto">
+        <nav class="p-8 flex justify-between items-center sticky top-0 bg-black/90 backdrop-blur-xl border-b border-white/5">
             <h1 class="text-2xl font-[900] italic uppercase tracking-tighter">MK <span class="text-mkBlue">STREAM</span></h1>
-            <button onclick="closeTv()" class="bg-mkRed text-white px-6 py-2 rounded-full text-[10px] font-black uppercase">Quitter</button>
+            <button onclick="closeStream()" class="text-[10px] font-black uppercase bg-mkRed px-6 py-2 rounded-full">Quitter</button>
         </nav>
 
-        <div id="catalog-stream" class="p-10 max-w-7xl mx-auto">
-            <div class="flex items-center gap-3 mb-12">
-                <div class="w-1 h-8 bg-mkBlue"></div>
-                <h2 class="text-2xl font-black italic uppercase tracking-tight">MANGAS & ANIMÉS</h2>
-            </div>
-            
-            <div id="manga-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+        <div id="manga-catalog" class="p-10 max-w-7xl mx-auto">
+            <h2 class="text-xl font-black italic uppercase mb-10 border-l-4 border-mkBlue pl-4">Mangas & Animés</h2>
+            <div id="manga-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
                 </div>
         </div>
 
-        <div id="episode-view" class="hidden p-10 max-w-5xl mx-auto">
-            <button onclick="backToCatalog()" class="text-mkBlue font-black mb-10 text-[10px] uppercase tracking-[0.2em]">← Retour au catalogue</button>
-            <h2 id="current-title" class="text-5xl font-black italic uppercase mb-10">...</h2>
-            <div id="ep-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        <div id="episode-list" class="hidden p-10 max-w-4xl mx-auto">
+            <button onclick="backToMangas()" class="text-mkBlue font-bold mb-8 text-[10px] uppercase tracking-widest">← Retour</button>
+            <h2 id="manga-title" class="text-5xl font-black italic uppercase mb-12">...</h2>
+            <div id="ep-grid" class="grid grid-cols-1 gap-4 pb-20"></div>
         </div>
     </div>
 
     <div id="chat-box" class="hidden fixed bottom-6 right-6 z-[100] w-80 h-96 bg-white dark:bg-[#1e293b] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-gray-100">
         <div class="bg-mkBlue p-4 text-white font-black italic uppercase text-[10px] flex justify-between">
-            <span>Support MK SHOP</span>
+            <span>Agent MK SHOP</span>
             <button onclick="closeModal('chat-box')">✕</button>
         </div>
         <div id="chat-content" class="flex-1 p-4 overflow-y-auto text-[11px] space-y-3"></div>
         <div class="p-3 border-t flex gap-2">
             <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-slate-50 dark:bg-slate-800 rounded-lg px-3 text-xs outline-none">
-            <button onclick="sendMsg()" class="text-mkBlue font-bold">➔</button>
+            <button onclick="sendMsg()" class="text-mkBlue font-bold italic">Envoyer</button>
         </div>
     </div>
 
-    <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1e293b] p-8 rounded-3xl w-full max-w-xs text-center">
-            <h3 class="text-xl font-black italic uppercase mb-6">Admin Access</h3>
-            <input id="admin-pass" type="password" placeholder="Password" class="w-full bg-slate-100 dark:bg-black/20 p-4 rounded-xl mb-4 text-center outline-none">
-            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-4 rounded-xl uppercase italic">Enter</button>
+    <div id="admin-modal" class="hidden fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center">
+        <div class="bg-white dark:bg-[#1e293b] p-10 rounded-3xl w-full max-w-xs text-center">
+            <h3 class="text-xl font-black italic uppercase mb-6 tracking-tighter">Accès Restreint</h3>
+            <input id="admin-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-100 dark:bg-black/20 p-4 rounded-xl mb-4 text-center outline-none font-bold">
+            <button onclick="loginAdmin()" class="w-full bg-mkRed text-white font-black py-4 rounded-xl uppercase italic">Connexion</button>
         </div>
-    </div>
-
-    <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-slate-900 text-white p-10 overflow-y-auto">
-        <div class="max-w-4xl mx-auto flex justify-between items-center mb-10">
-            <h2 class="text-2xl font-black italic uppercase">Admin Control Panel</h2>
-            <button onclick="closeModal('admin-panel')" class="text-red-500 font-bold">QUITTER</button>
-        </div>
-        <div id="admin-users" class="space-y-4"></div>
     </div>
 
     <script>
-        const ADMIN_PASS = "admin123";
+        const ADMIN_CODE = "admin123";
+        const TV_CODE = "ACCES-ACHETER-0001";
+
         const content = [
-            { id: 0, title: "ONE PIECE", poster: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTItMDdmZC00MjA1LWEyMzYtMTY2MzM1Y2IzMDGuXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
-            { id: 1, title: "NARUTO", poster: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00YzcwLWIyMzctOTU3MmU4MTZkZGU2XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", episodes: [{t:"Épisode 1", u:"FoVvpkMlTqM"}, {t:"Épisode 2", u:"_4QyggTP16U"}] },
-            { id: 2, title: "DBZ", poster: "https://m.media-amazon.com/images/M/MV5BMGMyOThiMGUtYmFmZi00YTUyLThhOTctZmdhZDJiMjEwNzBkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vtj-9j2Pgzw"}] },
-            { id: 3, title: "HUNTER X HUNTER", poster: "https://m.media-amazon.com/images/M/MV5BZjNmZjkzMzktOTM0MS00N2Y4LWI3ZmYtY2U3YTA4ODhkY2YxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [{t:"Épisode 1", u:"6dEPCqfGKWA"}] }
+            { id: 0, title: "One Piece", poster: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTItMDdmZC00MjA1LWEyMzYtMTY2MzM1Y2IzMDGuXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", eps: [{n: "Épisode 1", u: "BxuMkEvNagQ"}] },
+            { id: 1, title: "Naruto", poster: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00YzcwLWIyMzctOTU3MmU4MTZkZGU2XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", eps: [{n: "Épisode 1", u: "FoVvpkMlTqM"}] },
+            { id: 2, title: "Dragon Ball Z", poster: "https://m.media-amazon.com/images/M/MV5BMGMyOThiMGUtYmFmZi00YTUyLThhOTctZmdhZDJiMjEwNzBkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", eps: [{n: "Épisode 1", u: "vtj-9j2Pgzw"}] },
+            { id: 3, title: "Hunter X Hunter", poster: "https://m.media-amazon.com/images/M/MV5BZjNmZjkzMzktOTM0MS00N2Y4LWI3ZmYtY2U3YTA4ODhkY2YxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", eps: [{n: "Épisode 1", u: "6dEPCqfGKWA"}] },
+            { id: 4, title: "Jujutsu Kaisen", poster: "https://m.media-amazon.com/images/M/MV5BNGYyZGM5MGMtYTY2Ni00M2Y1LWIzNjQtYWUxM2FjN2I5YTM2XkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg", eps: [{n: "Épisode 1", u: "cqTN1AQ09Yg"}] }
         ];
 
-        let db = JSON.parse(localStorage.getItem('mk_db')) || [];
-        let user = JSON.parse(localStorage.getItem('mk_session')) || null;
+        window.onload = () => { renderMangas(); };
 
-        window.onload = () => { if(user) document.getElementById('user-tag').classList.remove('hidden'); renderCatalog(); };
-
-        function renderCatalog() {
-            document.getElementById('manga-list').innerHTML = content.map(item => `
-                <div onclick="showEpisodes(${item.id})" class="cursor-pointer group">
-                    <div class="manga-card mb-3 shadow-2xl" style="background-image: url('${item.poster}')"></div>
-                    <p class="text-center font-bold text-xs uppercase tracking-tighter group-hover:text-mkBlue transition">${item.title}</p>
+        function renderMangas() {
+            document.getElementById('manga-grid').innerHTML = content.map(item => `
+                <div onclick="openEpisodes(${item.id})" class="text-center group">
+                    <div class="manga-poster shadow-2xl mb-3" style="background-image: url('${item.poster}')"></div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter opacity-80 group-hover:text-mkBlue">${item.title}</p>
                 </div>
             `).join('');
         }
 
-        function showEpisodes(id) {
+        function openEpisodes(id) {
             const item = content.find(x => x.id === id);
-            document.getElementById('catalog-stream').classList.add('hidden');
-            document.getElementById('episode-view').classList.remove('hidden');
-            document.getElementById('current-title').innerText = item.title;
-            document.getElementById('ep-grid').innerHTML = item.episodes.map(ep => `
-                <div onclick="playVideo('${ep.u}')" class="bg-white/5 p-4 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/10 transition">
-                    <div class="w-20 h-12 bg-cover rounded-lg" style="background-image: url('https://img.youtube.com/vi/${ep.u}/mqdefault.jpg')"></div>
-                    <span class="font-bold text-sm italic">${ep.t}</span>
+            document.getElementById('manga-catalog').classList.add('hidden');
+            document.getElementById('episode-list').classList.remove('hidden');
+            document.getElementById('manga-title').innerText = item.title;
+            document.getElementById('ep-grid').innerHTML = item.eps.map(ep => `
+                <div onclick="window.open('https://www.youtube.com/embed/${ep.u}?autoplay=1')" class="bg-white/5 p-4 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-white/10 transition">
+                    <span class="font-bold text-sm italic">${ep.n}</span>
+                    <span class="text-mkBlue text-xs font-black uppercase italic">Lecture ➔</span>
                 </div>
             `).join('');
         }
 
-        function playVideo(u) { window.open(`https://www.youtube.com/embed/${u}?autoplay=1`, '_blank'); }
+        function checkCode() {
+            if(document.getElementById('tv-code-input').value === TV_CODE) {
+                document.getElementById('stream-view').classList.remove('hidden');
+            } else alert("Code Invalide");
+        }
+
+        function backToMangas() { document.getElementById('episode-list').classList.add('hidden'); document.getElementById('manga-catalog').classList.remove('hidden'); }
+        function closeStream() { document.getElementById('stream-view').classList.add('hidden'); }
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
-        function openTv() { document.getElementById('tv-view').classList.remove('hidden'); document.body.style.overflow="hidden"; }
-        function closeTv() { document.getElementById('tv-view').classList.add('hidden'); document.body.style.overflow="auto"; }
-        function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-stream').classList.remove('hidden'); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function checkTvCode() { if(document.getElementById('tv-code').value === "ACCES-ACHETER-0001") openTv(); else alert("Code erroné"); }
-        
-        function verifyAdmin() { 
-            if(document.getElementById('admin-pass').value === ADMIN_PASS) { 
-                closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); 
-            } else alert("Non");
-        }
-        function renderAdmin() {
-            document.getElementById('admin-users').innerHTML = db.map((u, i) => `
-                <div class="bg-white/5 p-4 rounded-xl flex justify-between">
-                    <span>${u.u} (${u.p})</span>
-                    <button class="text-mkBlue" onclick="alert('Access toggled')">Gérer Accès TV</button>
-                </div>
-            `).join('');
-        }
-        function startChat(p) { openModal('chat-box'); document.getElementById('chat-content').innerHTML = `<p class="bg-slate-100 dark:bg-slate-800 p-3 rounded-2xl">Besoin d'aide pour : <b>${p}</b> ?</p>`; }
+        function loginAdmin() { if(document.getElementById('admin-pass').value === ADMIN_CODE) alert("Panel Admin OK"); else alert("Refusé"); }
+        function startChat(p) { openModal('chat-box'); document.getElementById('chat-content').innerHTML = `<p class="bg-slate-100 dark:bg-slate-800 p-3 rounded-xl italic">Bonjour, un agent est disponible pour votre demande : <b>${p}</b>.</p>`; }
         function sendMsg() {
             const i = document.getElementById('chat-input'), c = document.getElementById('chat-content');
             if(!i.value) return;
-            c.innerHTML += `<p class="bg-mkBlue text-white p-3 rounded-2xl text-right ml-10">${i.value}</p>`;
+            c.innerHTML += `<div class="flex justify-end"><p class="bg-mkBlue text-white p-2 rounded-xl font-bold">${i.value}</p></div>`;
             i.value = "";
         }
     </script>
