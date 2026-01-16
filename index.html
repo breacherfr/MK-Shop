@@ -3,105 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V13 Private</title>
+    <title>MK SHOP - V14 Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         .hidden { display: none !important; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .anime-card { transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(6, 182, 212, 0.2); }
-        .anime-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px -5px rgba(6, 182, 212, 0.4); }
-        .chat-container { height: 300px; overflow-y: auto; }
+        .anime-card { transition: all 0.3s ease; cursor: pointer; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(6, 182, 212, 0.2); background: #000; }
+        .anime-card:hover { transform: scale(1.03); border-color: #06b6d4; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 1rem; }
     </style>
 </head>
-<body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+<body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
 
     <nav class="border-b border-gray-200 dark:border-gray-800 p-5 flex justify-between items-center sticky top-0 z-50 bg-white/90 dark:bg-black/90 backdrop-blur-md">
         <div class="flex items-center gap-2">
             <span class="text-2xl">🛍️</span>
-            <h1 class="text-2xl font-black italic tracking-tighter">MK <span class="text-cyan-500">SHOP</span></h1>
+            <h1 class="text-2xl font-black italic">MK <span class="text-cyan-500">SHOP</span></h1>
         </div>
         <div class="flex items-center gap-4">
             <button onclick="showPage('home-page')" class="text-[10px] font-bold uppercase hover:text-cyan-500">Boutique</button>
-            <button onclick="checkTvCode(true)" class="text-[10px] font-bold uppercase text-cyan-500 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">Anime Sana (🔒)</button>
             <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">🌙</button>
             <div id="nav-auth-btns" class="flex gap-2">
-                <button onclick="openAuth('login')" class="text-[10px] font-bold text-gray-400">Login</button>
-                <button onclick="openAuth('signup')" class="text-[10px] font-bold bg-cyan-500 text-white px-2 py-1 rounded">Sign Up</button>
+                <button onclick="openAuth('login')" class="text-[10px] font-bold text-gray-500">Connexion</button>
+                <button onclick="openAuth('signup')" class="text-[10px] font-bold bg-cyan-500 text-white px-3 py-1 rounded">S'inscrire</button>
             </div>
             <div id="nav-user-info" class="hidden text-[10px] font-black text-cyan-500 italic uppercase"></div>
         </div>
     </nav>
 
     <main id="home-page" class="max-w-7xl mx-auto p-6">
-        <h2 class="text-xl font-bold mb-8 italic text-cyan-500 uppercase tracking-widest">Catalogue Officiel</h2>
+        <h2 class="text-xl font-bold mb-8 italic text-cyan-500 uppercase">Catalogue MK</h2>
         <div class="card-grid">
-            
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between border-t-4 border-t-cyan-500">
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between border-t-4 border-t-cyan-500">
                 <div>
                     <div class="text-3xl mb-4">📺</div>
-                    <h3 class="text-xl font-bold mb-1">Chaîne de Télé</h3>
-                    <p class="text-[10px] text-gray-400 mb-6 uppercase tracking-widest">TF1, M6, CANAL+, ANIME SANA...</p>
+                    <h3 class="text-xl font-bold mb-1">Espace TV & Animés</h3>
+                    <p class="text-[10px] text-gray-400 mb-6 uppercase">TF1, M6, ANIME SANA, DESSINS ANIMÉS...</p>
                     <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-800 mb-6">
-                        <input id="tv-code" type="text" placeholder="CODE D'ACCÈS..." class="w-full bg-transparent text-xs outline-none border-b dark:border-gray-800 focus:border-cyan-500 pb-2">
-                        <button onclick="checkTvCode()" class="w-full mt-4 bg-cyan-500 text-white py-2 rounded-lg font-bold text-[10px] uppercase">Débloquer le contenu</button>
+                        <input id="tv-code" type="text" placeholder="CODE..." class="w-full bg-transparent text-xs outline-none border-b dark:border-gray-800 focus:border-cyan-500 pb-2 mb-4">
+                        <button onclick="checkTvCode()" class="w-full bg-cyan-500 text-white py-2 rounded-lg font-bold text-[10px] uppercase">Se connecter à l'espace</button>
                     </div>
                 </div>
-                <div>
-                    <p class="text-cyan-500 font-bold text-lg mb-4">4€/mois</p>
-                    <button onclick="startChat('Abonnement TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button>
-                </div>
+                <div><p class="text-cyan-500 font-bold text-lg mb-4">4€/mois</p><button onclick="startChat('Abonnement TV')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between">
                 <div><div class="text-3xl mb-4">🎮</div><h3 class="text-xl font-bold mb-1">Comptes Roblox</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">(SUR DEMANDE)</p></div>
                 <div><p class="text-cyan-500 font-bold text-lg mb-4">5€ - 30€</p><button onclick="startChat('Roblox')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between shadow-sm">
-                <div><div class="text-3xl mb-4">⭐</div><h3 class="text-xl font-bold mb-1">Comptes Premium</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX...)</p></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between">
+                <div><div class="text-3xl mb-4">⭐</div><h3 class="text-xl font-bold mb-1">Comptes Premium</h3><p class="text-[10px] text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX, ETC...)</p></div>
                 <div><p class="text-cyan-500 font-bold text-lg mb-4">3€ - 20€</p><button onclick="startChat('Premium')" class="w-full bg-cyan-500 text-white font-black py-3 rounded-2xl text-xs uppercase">Acheter</button></div>
             </div>
         </div>
     </main>
 
-    <div id="anime-page" class="hidden max-w-7xl mx-auto p-6">
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h2 class="text-3xl font-black italic uppercase text-cyan-500">Anime Sana <span class="text-gray-400">Premium</span></h2>
-                <p class="text-[10px] font-bold text-cyan-500/50">CONTENU DÉBLOQUÉ ✅</p>
+    <div id="private-page" class="hidden max-w-7xl mx-auto p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black italic text-cyan-500 uppercase">Espace Premium</h2>
+            <div class="flex gap-2">
+                <button onclick="showSubSection('tv')" class="bg-cyan-500 text-white px-4 py-2 rounded-lg text-[10px] font-bold">TV DIRECT</button>
+                <button onclick="showSubSection('anime')" class="bg-white/5 border border-cyan-500 text-cyan-500 px-4 py-2 rounded-lg text-[10px] font-bold">ANIME SANA</button>
             </div>
-            <button onclick="showPage('tv-player-ui')" class="bg-cyan-500 text-white px-4 py-2 rounded-full font-bold text-[10px]">RETOUR TV DIRECT</button>
         </div>
 
-        <h3 class="text-sm font-bold mb-4 text-cyan-400 uppercase italic">🎬 Dessins Animés</h3>
-        <div id="grid-toons" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10"></div>
-
-        <h3 class="text-sm font-bold mb-4 text-red-500 uppercase italic">⚔️ Animés VF</h3>
-        <div id="grid-manga" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
-    </div>
-
-    <div id="tv-player-ui" class="hidden max-w-7xl mx-auto p-6">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-black italic text-cyan-500">TV DIRECT</h2>
-            <button onclick="showPage('anime-page')" class="bg-white/5 border border-cyan-500/30 text-cyan-500 px-6 py-2 rounded-full font-bold text-[10px]">VOIR ANIME SANA</button>
+        <div id="sub-tv" class="bg-black rounded-3xl p-4 aspect-video flex flex-col">
+            <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black text-cyan-500 border border-cyan-500 text-xs p-2 mb-4 rounded outline-none">
+                <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24 HD</option>
+                <option value="https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8">Red Bull TV</option>
+            </select>
+            <video id="video" class="w-full h-full bg-black rounded-xl" controls></video>
         </div>
-        <div class="bg-gray-900 rounded-3xl p-4 aspect-video flex flex-col">
-            <div class="flex gap-2 mb-4">
-                <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded w-full">
-                    <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24 HD</option>
-                    <option value="https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8">Red Bull TV</option>
-                </select>
-            </div>
-            <div class="flex-1 bg-black rounded-2xl overflow-hidden relative group">
-                <video id="video" class="w-full h-full" controls></video>
-                <div id="video-overlay" class="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <button onclick="forcePlay()" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-black">LANCER LE DIRECT</button>
-                </div>
-            </div>
+
+        <div id="sub-anime" class="hidden">
+            <h3 class="text-sm font-bold mb-4 text-cyan-400 uppercase italic">🎬 Dessins Animés & Mangas</h3>
+            <div id="grid-anime" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
         </div>
     </div>
 
@@ -113,47 +93,103 @@
     </div>
 
     <div id="chat-modal" class="hidden fixed inset-0 z-[130] bg-black/80 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden border dark:border-gray-800">
-            <div class="bg-cyan-500 p-5 text-white flex justify-between items-center"><h3 class="font-black italic text-sm">MK SUPPORT</h3><button onclick="closeChat()">✕</button></div>
+        <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
+            <div class="bg-cyan-500 p-5 text-white flex justify-between items-center"><h3 class="font-black italic text-sm uppercase">Support MK</h3><button onclick="closeChat()">✕</button></div>
             <div id="chat-box" class="chat-container p-6 space-y-4 text-[11px]"></div>
             <div class="p-4 flex gap-2 border-t dark:border-gray-800">
-                <input id="chat-input" type="text" placeholder="Ton message..." class="flex-1 bg-gray-100 dark:bg-black p-3 rounded-xl outline-none text-xs">
-                <button onclick="sendMessage()" class="bg-cyan-500 text-white px-4 rounded-xl font-bold text-xs">OK</button>
+                <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-gray-100 dark:bg-black p-3 rounded-xl outline-none text-xs">
+                <button onclick="sendMessage()" class="bg-cyan-500 text-white px-4 rounded-xl font-bold text-xs uppercase">OK</button>
             </div>
+        </div>
+    </div>
+
+    <div id="auth-page" class="hidden fixed inset-0 z-[140] bg-black/95 flex items-center justify-center p-4">
+        <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-sm border border-gray-800 shadow-2xl">
+            <div class="flex justify-center gap-6 mb-8">
+                <button id="tab-login" onclick="toggleAuthTab('login')" class="text-xs font-black text-cyan-500 italic">CONNEXION</button>
+                <button id="tab-signup" onclick="toggleAuthTab('signup')" class="text-xs font-black text-gray-600 italic">INSCRIPTION</button>
+            </div>
+            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-4 text-xs outline-none text-white focus:border-cyan-500">
+            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-6 text-xs outline-none text-white focus:border-cyan-500">
+            <button onclick="handleAuth()" class="w-full bg-cyan-500 text-white py-4 rounded-xl font-black text-xs uppercase">Valider</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-600 mt-4 text-[10px]">Annuler</button>
         </div>
     </div>
 
     <script>
         let hls = null;
-        let dbUsers = [];
-        let currentUser = null;
-        let isTvUnlocked = false;
+        let currentUser = localStorage.getItem('mk_user') || null;
+        let isUnlocked = localStorage.getItem('mk_tv_unlocked') === 'true';
+        let authMode = 'login';
+        let accounts = JSON.parse(localStorage.getItem('mk_accounts')) || [];
 
-        const toons = [
-            { id: "P6iSoaAbCeY", title: "Bluey", img: "https://img.youtube.com/vi/P6iSoaAbCeY/mqdefault.jpg" },
-            { id: "55neqT8Ztqc", title: "Garfield", img: "https://img.youtube.com/vi/55neqT8Ztqc/mqdefault.jpg" },
-            { id: "QfEv8Af3Mtk", title: "Pat' Patrouille", img: "https://img.youtube.com/vi/QfEv8Af3Mtk/mqdefault.jpg" },
-            { id: "T3vVjfFmLSQ", title: "Masha & Michka", img: "https://img.youtube.com/vi/T3vVjfFmLSQ/mqdefault.jpg" }
-        ];
-        const mangas = [
-            { id: "WSdYAUdqzPA", title: "Aristocrate VF", img: "https://img.youtube.com/vi/WSdYAUdqzPA/mqdefault.jpg" },
-            { id: "jstz2R8GHWU", title: "Paladin Lointain", img: "https://img.youtube.com/vi/jstz2R8GHWU/mqdefault.jpg" }
-        ];
-
-        function checkTvCode(fromNav = false) {
-            const c = document.getElementById('tv-code').value;
-            if(isTvUnlocked || c === "StreamingCode-CodeStreaming-fr/en2" || c === "ACCES-ACHETER-0001") {
-                isTvUnlocked = true;
-                showPage('tv-player-ui');
-                launchStream(document.getElementById('channel-select').value);
-            } else {
-                if(fromNav) {
-                    alert("Ce contenu est privé. Entre le code dans la section 'Chaîne de Télé' !");
-                    showPage('home-page');
-                } else {
-                    alert("Code invalide !");
-                }
+        // INIT AU CHARGEMENT
+        window.onload = () => {
+            if(currentUser) {
+                updateUserInfo();
             }
+            if(isUnlocked) {
+                document.getElementById('tv-code').value = "DÉJÀ DÉBLOQUÉ";
+            }
+            initAnimeGrid();
+        };
+
+        function showPage(id) {
+            document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function showSubSection(type) {
+            document.getElementById('sub-tv').classList.add('hidden');
+            document.getElementById('sub-anime').classList.add('hidden');
+            document.getElementById('sub-' + type).classList.remove('hidden');
+        }
+
+        function openAuth(mode) { authMode = mode; toggleAuthTab(mode); showPage('auth-page'); }
+        
+        function toggleAuthTab(mode) {
+            authMode = mode;
+            document.getElementById('tab-login').className = mode === 'login' ? "text-xs font-black text-cyan-500 italic" : "text-xs font-black text-gray-600 italic";
+            document.getElementById('tab-signup').className = mode === 'signup' ? "text-xs font-black text-cyan-500 italic" : "text-xs font-black text-gray-600 italic";
+        }
+
+        function handleAuth() {
+            const u = document.getElementById('auth-user').value;
+            const p = document.getElementById('auth-pass').value;
+            if(!u || !p) return alert("Remplis tout !");
+
+            if(authMode === 'signup') {
+                accounts.push({u, p});
+                localStorage.setItem('mk_accounts', JSON.stringify(accounts));
+                alert("Compte créé ! Connecte-toi.");
+                toggleAuthTab('login');
+            } else {
+                const acc = accounts.find(x => x.u === u && x.p === p);
+                if(acc || (u === "admin" && p === "admin")) {
+                    currentUser = u;
+                    localStorage.setItem('mk_user', u);
+                    updateUserInfo();
+                    showPage('home-page');
+                } else { alert("Identifiants incorrects"); }
+            }
+        }
+
+        function updateUserInfo() {
+            document.getElementById('nav-auth-btns').classList.add('hidden');
+            const info = document.getElementById('nav-user-info');
+            info.classList.remove('hidden');
+            info.innerText = "Utilisateur : " + currentUser;
+        }
+
+        function checkTvCode() {
+            const c = document.getElementById('tv-code').value;
+            const codes = ["StreamingCode-CodeStreaming-fr/en2", "ACCES-ACHETER-0001"];
+            if(isUnlocked || codes.includes(c)) {
+                isUnlocked = true;
+                localStorage.setItem('mk_tv_unlocked', 'true');
+                showPage('private-page');
+                launchStream(document.getElementById('channel-select').value);
+            } else { alert("Code invalide ou expiré"); }
         }
 
         function launchStream(url) {
@@ -163,60 +199,48 @@
                 hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(v);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => v.play());
             }
-        }
-
-        function forcePlay() { 
-            document.getElementById('video-overlay').classList.add('hidden'); 
-            document.getElementById('video').play(); 
         }
 
         function changeChannel(url) { launchStream(url); }
 
-        function playVideo(id, title) {
+        function initAnimeGrid() {
+            const list = [
+                {id:"P6iSoaAbCeY", t:"Bluey"}, {id:"55neqT8Ztqc", t:"Garfield"}, 
+                {id:"QfEv8Af3Mtk", t:"Pat' Patrouille"}, {id:"T3vVjfFmLSQ", t:"Masha & Michka"},
+                {id:"WSdYAUdqzPA", t:"Aristocrate VF"}, {id:"jstz2R8GHWU", t:"Paladin Lointain"}
+            ];
+            const g = document.getElementById('grid-anime');
+            list.forEach(i => {
+                g.innerHTML += `<div class="anime-card" onclick="playVideo('${i.id}','${i.t}')">
+                    <img src="https://img.youtube.com/vi/${i.id}/mqdefault.jpg" class="w-full h-24 object-cover opacity-60">
+                    <div class="p-2 text-[9px] font-bold text-cyan-400 uppercase">${i.t}</div>
+                </div>`;
+            });
+        }
+
+        function playVideo(id, t) {
             document.getElementById('video-modal').classList.remove('hidden');
             document.getElementById('main-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-title').innerText = t;
         }
 
-        function closeVideo() { document.getElementById('video-modal').classList.add('hidden'); document.getElementById('main-iframe').src = ""; }
+        function closeVideo() { document.getElementById('video-modal').classList.add('hidden'); document.getElementById('main-iframe').src=""; }
 
-        function showPage(id) {
-            document.querySelectorAll('main, div[id$="-page"], div[id$="-ui"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-
-        function startChat(prod) {
+        function startChat(p) {
             if(!currentUser) return openAuth('login');
             document.getElementById('chat-modal').classList.remove('hidden');
-            document.getElementById('chat-box').innerHTML = `<div class="bg-cyan-500/10 text-cyan-500 p-4 rounded-2xl border border-cyan-500/20">Salut, pour pouvoir acheter il faut qu'un admin répond sinon tu peut ajouter "mkdevlopper" sur discord pour une réponse plus rapide!</div>`;
+            document.getElementById('chat-box').innerHTML = `<div class="bg-cyan-500/10 text-cyan-500 p-4 rounded-2xl border border-cyan-500/20 shadow-sm font-bold">Salut, pour pouvoir acheter il faut qu'un admin répond sinon tu peut ajouter "mkdevlopper" sur discord pour une réponse plus rapide!</div>`;
         }
-
         function closeChat() { document.getElementById('chat-modal').classList.add('hidden'); }
-
         function sendMessage() {
             const i = document.getElementById('chat-input');
             if(!i.value) return;
-            document.getElementById('chat-box').innerHTML += `<div class="flex justify-end"><div class="bg-cyan-500 text-white p-2 rounded-xl">${i.value}</div></div>`;
+            document.getElementById('chat-box').innerHTML += `<div class="flex justify-end"><div class="bg-cyan-500 text-white p-2 px-4 rounded-xl shadow-md">${i.value}</div></div>`;
             i.value = "";
         }
-
-        function openAuth(mode) { showPage('auth-page'); }
-        function handleAuth() {
-            currentUser = document.getElementById('auth-user').value;
-            document.getElementById('nav-auth-btns').classList.add('hidden');
-            document.getElementById('nav-user-info').classList.remove('hidden');
-            document.getElementById('nav-user-info').innerText = currentUser;
-            showPage('home-page');
-        }
-
-        // Init Grids
-        const tGrid = document.getElementById('grid-toons');
-        const mGrid = document.getElementById('grid-manga');
-        toons.forEach(i => tGrid.innerHTML += `<div class="anime-card bg-gray-900" onclick="playVideo('${i.id}', '${i.title}')"><img src="${i.img}" class="w-full h-24 object-cover opacity-60"><div class="p-2 text-[9px] font-bold text-cyan-400 uppercase">${i.title}</div></div>`);
-        mangas.forEach(i => mGrid.innerHTML += `<div class="anime-card bg-gray-900" onclick="playVideo('${i.id}', '${i.title}')"><img src="${i.img}" class="w-full h-24 object-cover opacity-60"><div class="p-2 text-[9px] font-bold text-red-500 uppercase">${i.title}</div></div>`);
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
     </script>
 </body>
 </html>
