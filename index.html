@@ -1,488 +1,266 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - Ultimate V2</title>
+    <title>MK SHOP - V17 Elite Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: {
-                        mk: { bg: '#0f172a', card: '#1e293b', accent: '#06b6d4', dark: '#020617' }
-                    }
-                }
-            }
-        }
-    </script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
-        body { background-color: #0f172a; color: white; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .card-hover { transition: all 0.3s; }
-        .card-hover:hover { transform: translateY(-5px); border-color: #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.2); }
+        .hidden { display: none !important; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+        .anime-card { transition: 0.3s; cursor: pointer; border-radius: 15px; overflow: hidden; background: #111; border: 1px solid #222; }
+        .anime-card:hover { transform: scale(1.05); border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
         
-        /* Chat Styles */
-        .chat-bubble-me { background: #06b6d4; color: white; border-radius: 15px 15px 0 15px; }
-        .chat-bubble-other { background: #334155; color: white; border-radius: 15px 15px 15px 0; }
-        
-        /* Hide Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .btn-buy { transition: all 0.3s ease; border: 2px solid transparent; }
+        .btn-buy:hover { 
+            background-color: transparent !important; 
+            color: #06b6d4 !important; 
+            border-color: #06b6d4; 
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 15px; }
+        .chat-box { height: 300px; overflow-y: auto; }
+        .badge-best { background: linear-gradient(90deg, #06b6d4, #3b82f6); color: white; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
 
-    <nav class="glass sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+    <nav class="border-b border-gray-200 dark:border-gray-800 p-6 flex justify-between items-center sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md">
+        <div class="flex items-center gap-2">
             <span class="text-2xl">🛍️</span>
-            <h1 class="text-xl font-black italic tracking-widest">MK <span class="text-mk-accent">SHOP</span></h1>
+            <h1 class="text-2xl font-black italic tracking-tighter">MK <span class="text-cyan-500">SHOP</span></h1>
         </div>
-        
-        <div class="flex items-center gap-4">
-            <div id="user-display" class="hidden text-xs font-bold text-mk-accent border border-mk-accent px-3 py-1 rounded-full"></div>
-            
-            <button onclick="toggleAuth('login')" id="btn-login" class="text-xs font-bold hover:text-mk-accent transition">CONNEXION</button>
-            <button onclick="toggleAuth('signup')" id="btn-signup" class="text-xs font-bold bg-mk-accent text-black px-4 py-2 rounded-lg hover:bg-white transition">S'INSCRIRE</button>
-            
-            <button onclick="openAdminAuth()" class="text-[10px] text-gray-600 hover:text-red-500 font-mono">ADMIN</button>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800">🌙</button>
+            <div id="nav-auth-btns" class="flex gap-2">
+                <button onclick="openAuth('login')" class="text-xs font-bold text-gray-400 hover:text-cyan-500">Se connecter</button>
+                <button onclick="openAuth('signup')" class="text-xs font-bold bg-cyan-500 text-white px-3 py-1 rounded-lg shadow-lg shadow-cyan-500/20">S'inscrire</button>
+            </div>
+            <div id="nav-user-info" class="hidden text-xs font-black text-cyan-500 italic uppercase"></div>
         </div>
     </nav>
 
-    <main id="shop-page" class="max-w-7xl mx-auto p-6 md:p-10 pb-24">
+    <main id="home-page" class="max-w-7xl mx-auto p-8">
+        <h2 class="text-xl font-bold mb-10 italic text-cyan-500 uppercase tracking-widest border-l-4 border-cyan-500 pl-4">Catalogue Officiel</h2>
         
-        <div class="mb-12 text-center space-y-4">
-            <h2 class="text-4xl md:text-6xl font-black italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Catalogue Officiel</h2>
-            <p class="text-mk-accent uppercase tracking-[0.3em] text-xs font-bold">Qualité Premium • Support 24/7 • Livraison Rapide</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <div class="glass rounded-3xl p-6 flex flex-col justify-between card-hover relative overflow-hidden group">
-                <div class="absolute top-0 right-0 bg-mk-accent text-black text-[10px] font-bold px-3 py-1 rounded-bl-xl z-10">BEST SELLER</div>
+        <div class="card-grid">
+            
+            <div class="bg-gray-50 dark:bg-gray-900 border-2 border-cyan-500/50 rounded-3xl p-8 flex flex-col justify-between shadow-xl relative scale-105 z-10">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 badge-best shadow-lg">⭐ Best Seller ⭐</div>
                 <div>
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition duration-300">📺</div>
-                    <h3 class="text-2xl font-bold mb-2">TV & Animés</h3>
-                    <p class="text-xs text-gray-400 mb-4 uppercase font-bold tracking-wide">LE PACK DIVERTISSEMENT ULTIME</p>
-                    <ul class="text-sm text-gray-300 space-y-2 mb-6 border-l-2 border-mk-accent pl-4">
-                        <li>• Canal+, Netflix, Prime, Disney+</li>
-                        <li>• Chaines Sport & PPV Incluses</li>
-                        <li>• Accès illimité Anime Sana</li>
+                    <div class="text-4xl mb-4">🎮</div>
+                    <h3 class="text-2xl font-black mb-2 uppercase italic">Compte Roblox</h3>
+                    <ul class="text-[11px] text-gray-500 dark:text-gray-400 space-y-2 mb-6 font-bold uppercase tracking-tight">
+                        <li class="flex items-center gap-2"><span class="text-cyan-500">✔</span> 0 - 1000 Robux</li>
+                        <li class="flex items-center gap-2"><span class="text-cyan-500">✔</span> Compte full sur certains jeux</li>
+                        <li class="flex items-center gap-2"><span class="text-cyan-500">✔</span> Vérification d'âge incluse</li>
                     </ul>
                 </div>
-                <div class="mt-auto">
-                    <div class="bg-black/50 p-3 rounded-xl mb-4 border border-gray-700">
-                        <label class="text-[10px] text-gray-500 block mb-1">DÉJÀ ABONNÉ ? CODE D'ACCÈS :</label>
+                <div>
+                    <p class="text-cyan-500 font-black text-2xl mb-4 italic">5€ - 30€</p>
+                    <button onclick="startChat('Compte Roblox Best Seller')" class="btn-buy w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Acheter</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">📺</div>
+                    <h3 class="text-2xl font-black mb-2 uppercase italic">Espace Vidéo</h3>
+                    <p class="text-[10px] text-gray-400 mb-6 uppercase font-bold leading-relaxed">Dessins animés, animés,<br>chaine de télé française...</p>
+                    <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-800 mb-6 shadow-inner">
                         <div class="flex gap-2">
-                            <input id="tv-code-input" type="text" placeholder="Entrez votre code..." class="w-full bg-transparent text-sm outline-none text-white font-mono">
-                            <button onclick="checkStreamingCode()" class="text-mk-accent font-bold">→</button>
+                            <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-sm outline-none border-b dark:border-gray-800 focus:border-cyan-500 transition">
+                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">→</button>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-2xl font-black text-mk-accent">4€<span class="text-xs text-gray-400 font-normal">/mois</span></span>
-                        <button onclick="openChat('Abonnement TV', '4€')" class="bg-white text-black font-bold px-6 py-2 rounded-full hover:bg-mk-accent transition">ACHETER</button>
-                    </div>
                 </div>
-            </div>
-
-            <div class="glass rounded-3xl p-6 flex flex-col justify-between card-hover">
                 <div>
-                    <div class="text-5xl mb-4">🎮</div>
-                    <h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3>
-                    <p class="text-xs text-gray-400 mb-4 uppercase font-bold tracking-wide">COMPTES RICHES & RARES</p>
-                    <ul class="text-sm text-gray-300 space-y-2 mb-6 border-l-2 border-mk-accent pl-4">
-                        <li>• Comptes avec Robux (1k - 50k)</li>
-                        <li>• Items Limited & Legacy</li>
-                        <li>• Année 2010-2016 Disponibles</li>
-                    </ul>
-                </div>
-                <div class="mt-auto flex justify-between items-center">
-                    <span class="text-2xl font-black text-mk-accent">5€ - 30€</span>
-                    <button onclick="openChat('Compte Roblox', 'Variable')" class="bg-white text-black font-bold px-6 py-2 rounded-full hover:bg-mk-accent transition">ACHETER</button>
+                    <p class="text-cyan-500 font-black text-2xl mb-4 italic">4€/mois</p>
+                    <button onclick="startChat('Abonnement IPTV')" class="btn-buy w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Acheter</button>
                 </div>
             </div>
 
-            <div class="glass rounded-3xl p-6 flex flex-col justify-between card-hover">
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
                 <div>
-                    <div class="text-5xl mb-4">⭐</div>
-                    <h3 class="text-2xl font-bold mb-2">Comptes Premium</h3>
-                    <p class="text-xs text-gray-400 mb-4 uppercase font-bold tracking-wide">ABONNEMENTS À VIE</p>
-                    <ul class="text-sm text-gray-300 space-y-2 mb-6 border-l-2 border-mk-accent pl-4">
-                        <li>• Spotify / Deezer / Apple Music</li>
-                        <li>• Crunchyroll / ADN Premium</li>
-                        <li>• NordVPN / ExpressVPN</li>
-                    </ul>
+                    <div class="text-4xl mb-4">⭐</div>
+                    <h3 class="text-2xl font-black mb-2 uppercase italic">Comptes Premium</h3>
+                    <p class="text-[10px] text-gray-400 mb-6 uppercase font-bold">Netflix, Spotify, Disney+, Crunchyroll...</p>
                 </div>
-                <div class="mt-auto flex justify-between items-center">
-                    <span class="text-2xl font-black text-mk-accent">3€ - 20€</span>
-                    <button onclick="openChat('Compte Premium', 'Variable')" class="bg-white text-black font-bold px-6 py-2 rounded-full hover:bg-mk-accent transition">ACHETER</button>
-                </div>
-            </div>
-
-            <div class="glass rounded-3xl p-6 flex flex-col justify-between card-hover border border-red-900/30">
                 <div>
-                    <div class="text-5xl mb-4">🎯</div>
-                    <h3 class="text-2xl font-bold mb-2 text-red-500">Cheat & Tools</h3>
-                    <p class="text-xs text-gray-400 mb-4 uppercase font-bold tracking-wide">DOMINEZ VOS JEUX PRÉFÉRÉS</p>
-                    <ul class="text-sm text-gray-300 space-y-2 mb-6 border-l-2 border-red-500 pl-4">
-                        <li>• Fortnite (Aimbot, ESP, Softaim)</li>
-                        <li>• Roblox Scripts (Hubs, executors)</li>
-                        <li>• GTA V Mod Menus (Indétectable)</li>
-                    </ul>
-                </div>
-                <div class="mt-auto flex justify-between items-center">
-                    <span class="text-2xl font-black text-red-500">6€ - 10€</span>
-                    <button onclick="openChat('Cheat Gaming', 'Variable')" class="bg-white text-black font-bold px-6 py-2 rounded-full hover:bg-red-500 hover:text-white transition">ACHETER</button>
+                    <p class="text-cyan-500 font-black text-2xl mb-4 italic">3€ - 20€</p>
+                    <button onclick="startChat('Compte Premium')" class="btn-buy w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Acheter</button>
                 </div>
             </div>
 
-            <div class="glass rounded-3xl p-6 flex flex-col justify-between card-hover border border-purple-500/30 md:col-span-2 lg:col-span-2">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="text-5xl">✨</div>
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2 text-purple-400">Demande Personnalisée</h3>
-                        <p class="text-xs text-gray-400 mb-2 uppercase font-bold tracking-wide">VOUS CHERCHEZ QUELQUE CHOSE DE SPÉCIFIQUE ?</p>
-                        <p class="text-sm text-gray-300 mb-4">Un compte rare ? Un script spécifique ? Un abonnement introuvable ? Discutez directement avec nous pour un devis sur mesure.</p>
-                    </div>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-black mb-2 uppercase italic">Cheats & Logiciels</h3>
+                    <p class="text-[10px] text-gray-400 mb-6 uppercase font-bold">Roblox, Fortnite, GTA V, CoD...</p>
                 </div>
-                <div class="mt-auto flex justify-end">
-                    <button onclick="openChat('Demande Perso', 'Sur Devis')" class="bg-purple-500 text-white font-bold px-8 py-3 rounded-full hover:bg-purple-400 transition shadow-lg shadow-purple-500/20">CONTACTER LE VENDEUR</button>
+                <div>
+                    <p class="text-cyan-500 font-black text-2xl mb-4 italic">6€ - 10€</p>
+                    <button onclick="startChat('Cheat')" class="btn-buy w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase tracking-widest">Acheter</button>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <div id="streaming-page" class="hidden min-h-screen bg-black absolute inset-0 z-50 overflow-y-auto">
-        <div class="p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-black text-mk-accent italic">MK STREAM <span class="text-white text-xs not-italic border border-white px-2 rounded">PREMIUM</span></h2>
-                <button onclick="logoutStream()" class="text-red-500 text-xs font-bold border border-red-500 px-4 py-2 rounded hover:bg-red-500 hover:text-white">QUITTER</button>
+    <div id="private-page" class="hidden max-w-7xl mx-auto p-8">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+            <h2 class="text-3xl font-black italic uppercase text-cyan-500 border-b-4 border-cyan-500 pb-2">Espace Premium</h2>
+            <div class="flex gap-4">
+                <button onclick="switchTab('tv-direct')" class="bg-cyan-500 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-tighter">📺 TV DIRECT</button>
+                <button onclick="switchTab('anime-sana')" class="bg-gray-900 text-cyan-500 border border-cyan-500 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-tighter">⚔️ ANIME SANA</button>
+                <button onclick="showPage('home-page')" class="bg-red-600 text-white px-6 py-3 rounded-xl font-black text-xs">RETOUR</button>
             </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2">
-                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 relative">
-                        <video id="stream-player" class="w-full h-full" controls></video>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="font-bold text-xl text-white">TV DIRECT</h3>
-                        <div class="flex gap-2 mt-2 overflow-x-auto pb-2">
-                            <button onclick="playStream('https://static.france24.com/live/f24_fr.video/playlist.m3u8')" class="bg-gray-800 px-4 py-2 rounded text-xs hover:bg-mk-accent hover:text-black">France 24</button>
-                            <button onclick="playStream('https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8')" class="bg-gray-800 px-4 py-2 rounded text-xs hover:bg-mk-accent hover:text-black">Red Bull TV</button>
-                            <button onclick="playStream('https://nasa-i.akamaihd.net/hls/live/253565/NASA-NTV1-Public/master.m3u8')" class="bg-gray-800 px-4 py-2 rounded text-xs hover:bg-mk-accent hover:text-black">NASA TV</button>
-                        </div>
-                    </div>
+        </div>
+
+        <div id="tv-direct" class="bg-black rounded-3xl p-8 border border-gray-800 shadow-2xl">
+            <label class="text-xs font-black text-cyan-500 uppercase mb-2 block italic">Sélectionner une chaîne :</label>
+            <select id="channel-select" onchange="changeChannel(this.value)" class="w-full mb-8 bg-gray-900 border border-gray-800 text-white p-4 rounded-2xl outline-none focus:border-cyan-500 transition">
+                <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">🇫🇷 France 24 HD</option>
+                <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">🇫🇷 BFM TV</option>
+                <option value="https://euronews-fra-p7-dash.hexaglobe.net/e80628e9329744169720b0808b29f794/default.m3u8">🇪🇺 Euronews FR</option>
+                <option value="https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8">🎥 Red Bull TV</option>
+                <option value="https://ntv-news-live.akamaized.net/hls/live/2023533/ntv_live/index.m3u8">🚀 NASA TV (Space)</option>
+            </select>
+            <div class="aspect-video bg-black rounded-3xl overflow-hidden relative shadow-2xl border border-gray-900">
+                <video id="video" class="w-full h-full" controls></video>
+                <div id="video-overlay" class="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+                    <button onclick="forcePlay()" class="bg-cyan-500 text-white px-12 py-5 rounded-full font-black uppercase tracking-widest shadow-2xl shadow-cyan-500/50">Lancer le flux direct</button>
                 </div>
-                
-                <div class="bg-gray-900/50 p-4 rounded-2xl h-full border border-gray-800">
-                    <h3 class="font-bold text-mk-accent mb-4">ANIMÉS DISPONIBLES</h3>
-                    <div class="space-y-3" id="anime-list">
-                        </div>
-                </div>
+            </div>
+        </div>
+
+        <div id="anime-sana" class="hidden">
+            <h3 class="text-2xl font-black mb-8 text-cyan-400 italic uppercase">Catalogue Animés & Toons</h3>
+            <div id="grid-anime" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        </div>
+    </div>
+
+    <div id="video-modal" class="hidden fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-lg">
+        <div class="w-full max-w-5xl">
+            <div class="flex justify-between items-center mb-4 text-white">
+                <h3 id="modal-title" class="font-black italic uppercase tracking-widest text-cyan-500">Lecture...</h3>
+                <button onclick="closeVideo()" class="bg-red-600 px-8 py-2 rounded-full font-black text-xs uppercase">Fermer</button>
+            </div>
+            <div class="video-container shadow-2xl shadow-cyan-500/20"><iframe id="main-iframe" src="" frameborder="0" allowfullscreen></iframe></div>
+        </div>
+    </div>
+
+    <div id="chat-modal" class="hidden fixed inset-0 z-[110] bg-black/80 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border dark:border-gray-800">
+            <div class="bg-cyan-500 p-6 text-white flex justify-between items-center"><h3 class="font-black italic uppercase">Support MK SHOP</h3><button onclick="closeChat()">✕</button></div>
+            <div id="chat-box" class="chat-box p-6 space-y-4 dark:bg-black/30"></div>
+            <div class="p-6 border-t dark:border-gray-800 flex gap-3 bg-gray-50 dark:bg-gray-900">
+                <input id="chat-input" type="text" placeholder="Écris ici..." class="flex-1 bg-white dark:bg-black border dark:border-gray-800 p-4 rounded-2xl outline-none text-sm">
+                <button onclick="sendMessage()" class="bg-cyan-500 text-white px-8 rounded-2xl font-black">OK</button>
             </div>
         </div>
     </div>
 
-    <div id="auth-modal" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-mk-card border border-gray-700 p-8 rounded-3xl w-full max-w-sm relative">
-            <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
-            <h3 id="auth-title" class="text-2xl font-black text-mk-accent mb-6 uppercase italic">Connexion</h3>
-            <div class="space-y-4">
-                <input id="auth-user" type="text" placeholder="Nom d'utilisateur" class="w-full bg-mk-bg border border-gray-600 p-3 rounded-xl outline-none focus:border-mk-accent text-white">
-                <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-mk-bg border border-gray-600 p-3 rounded-xl outline-none focus:border-mk-accent text-white">
-                <button onclick="handleAuthSubmit()" class="w-full bg-mk-accent text-black font-bold py-3 rounded-xl hover:bg-white transition uppercase">Valider</button>
+    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 p-10 rounded-[40px] w-full max-w-md border dark:border-gray-800 shadow-2xl">
+            <div class="flex justify-center gap-10 mb-10">
+                <button onclick="toggleAuthTab('login')" id="tab-login" class="font-black uppercase italic text-cyan-500 text-lg">Login</button>
+                <button onclick="toggleAuthTab('signup')" id="tab-signup" class="font-black uppercase italic text-gray-500 text-lg">Signup</button>
             </div>
-        </div>
-    </div>
-
-    <div id="chat-modal" class="hidden fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-mk-card w-full max-w-md h-[500px] rounded-2xl overflow-hidden flex flex-col border border-gray-600 shadow-2xl">
-            <div class="bg-mk-bg p-4 border-b border-gray-700 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-xl">👤</div>
-                    <div>
-                        <h4 class="font-bold text-sm text-white" id="chat-product-title">Produit...</h4>
-                        <p class="text-[10px] text-green-400">● En ligne</p>
-                    </div>
-                </div>
-                <button onclick="closeModal('chat-modal')" class="text-gray-400 hover:text-white text-xl">✕</button>
-            </div>
-            
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-[#0b1120]">
-                <div class="flex justify-start">
-                    <div class="chat-bubble-other p-3 text-sm max-w-[80%]">
-                        Bonjour ! Cet article vous intéresse ? Je suis disponible pour l'achat.
-                        <span class="block text-[9px] text-gray-400 text-right mt-1">MK Support</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-mk-bg border-t border-gray-700 flex gap-2">
-                <input id="chat-input" type="text" placeholder="Écrivez votre message..." class="flex-1 bg-gray-800 rounded-full px-4 text-sm text-white outline-none focus:ring-1 focus:ring-mk-accent" onkeypress="handleEnter(event)">
-                <button onclick="sendMessage()" class="bg-mk-accent text-black w-10 h-10 rounded-full flex items-center justify-center font-bold hover:bg-white">➤</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="admin-login-modal" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center">
-        <div class="text-center">
-            <h3 class="text-red-500 font-mono font-bold text-xl mb-4">ACCÈS ADMINISTRATEUR</h3>
-            <input id="admin-pass-input" type="password" placeholder="Code secret" class="bg-gray-900 border border-red-900 text-red-500 p-2 text-center rounded mb-4 outline-none w-48">
-            <br>
-            <button onclick="checkAdminCode()" class="bg-red-900/50 text-red-500 border border-red-500 px-4 py-1 rounded hover:bg-red-500 hover:text-white transition">ENTRER</button>
-            <button onclick="closeModal('admin-login-modal')" class="block mx-auto mt-4 text-gray-600 text-xs">Annuler</button>
-        </div>
-    </div>
-
-    <div id="admin-dashboard" class="hidden fixed inset-0 z-[90] bg-[#050505] p-6 overflow-y-auto">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-                <h2 class="text-3xl font-mono text-green-500">ADMIN TERMINAL V1.0</h2>
-                <button onclick="closeModal('admin-dashboard')" class="text-red-500 border border-red-500 px-4 py-2 rounded hover:bg-red-900">FERMER SESSION</button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl">
-                    <h3 class="text-mk-accent font-bold mb-4 uppercase">👤 Base de Données Utilisateurs</h3>
-                    <div class="space-y-2" id="admin-users-list">
-                        <div class="text-gray-500 text-sm italic">Aucune donnée capturée pour l'instant...</div>
-                    </div>
-                </div>
-
-                <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl">
-                    <h3 class="text-yellow-500 font-bold mb-4 uppercase">💬 Interceptions Chat</h3>
-                    <div class="space-y-2 max-h-[400px] overflow-y-auto" id="admin-chat-log">
-                        <div class="text-gray-500 text-sm italic">En attente de messages...</div>
-                    </div>
-                </div>
-            </div>
+            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-gray-100 dark:bg-black border dark:border-gray-800 p-5 rounded-2xl mb-4 outline-none dark:text-white font-bold">
+            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-100 dark:bg-black border dark:border-gray-800 p-5 rounded-2xl mb-8 outline-none dark:text-white font-bold">
+            <button onclick="handleAuth()" class="w-full bg-cyan-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-cyan-500/20">CONFIRMER</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-500 mt-6 text-xs font-bold uppercase">Annuler</button>
         </div>
     </div>
 
     <script>
-        // ================= DONNÉES & VARIABLES =================
+        let hls = null;
         let currentUser = localStorage.getItem('mk_user') || null;
-        let dbUsers = JSON.parse(localStorage.getItem('mk_db_users')) || [];
-        let chatLogs = JSON.parse(localStorage.getItem('mk_chat_logs')) || [];
-        
-        const STREAM_CODE = "MK-STREAM-2026";
-        const ADMIN_CODE = "ADMIN123";
+        let isUnlocked = localStorage.getItem('mk_unlocked') === 'true';
 
-        // ================= INITIALISATION =================
+        const animeList = [
+            { id: "P6iSoaAbCeY", title: "Bluey" },
+            { id: "55neqT8Ztqc", title: "Garfield" },
+            { id: "QfEv8Af3Mtk", title: "Pat' Patrouille" },
+            { id: "T3vVjfFmLSQ", title: "Masha & Michka" },
+            { id: "R3xT9C2b2Lc", title: "Tom Sawyer" },
+            { id: "WSdYAUdqzPA", title: "Aristocrate VF" },
+            { id: "jstz2R8GHWU", title: "Paladin Lointain" },
+            { id: "bmrZAvNDdS8", title: "Pokémon" }
+        ];
+
         window.onload = () => {
-            updateUI();
-            
-            // Populate Anime List in Stream Page
-            const animeList = [
-                {id: 'M7lc1UVf-VE', t: 'Action Movie'}, 
-                {id: 'QfEv8Af3Mtk', t: 'Pat Patrouille'},
-                {id: 'Fp9pNPdNwjI', t: 'Dragon Ball'}
-            ];
-            const listDiv = document.getElementById('anime-list');
+            if(currentUser) updateNav();
+            const grid = document.getElementById('grid-anime');
             animeList.forEach(a => {
-                listDiv.innerHTML += `
-                    <div onclick="openYT('${a.id}')" class="flex items-center gap-3 p-2 bg-black rounded cursor-pointer hover:bg-gray-700">
-                        <img src="https://img.youtube.com/vi/${a.id}/mqdefault.jpg" class="w-16 h-10 object-cover rounded">
-                        <span class="text-xs font-bold text-gray-300">${a.t}</span>
-                    </div>`;
+                grid.innerHTML += `<div class="anime-card" onclick="playVideo('${a.id}', '${a.title}')"><img src="https://img.youtube.com/vi/${a.id}/mqdefault.jpg" class="w-full h-36 object-cover opacity-60"><div class="p-3 text-[10px] font-black text-cyan-500 uppercase italic">${a.title}</div></div>`;
             });
         };
 
-        // ================= AUTHENTIFICATION =================
-        let authMode = 'login';
-        
-        function toggleAuth(mode) {
-            authMode = mode;
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('auth-title').innerText = mode === 'login' ? 'Connexion' : 'Inscription';
-            document.getElementById('auth-user').value = "";
-            document.getElementById('auth-pass').value = "";
-        }
-
-        function handleAuthSubmit() {
-            const u = document.getElementById('auth-user').value;
-            const p = document.getElementById('auth-pass').value;
-
-            if(!u || !p) return alert("Remplissez tout !");
-
-            if (authMode === 'signup') {
-                // Sauvegarde "Fake" Database
-                dbUsers.push({ user: u, pass: p, date: new Date().toLocaleString() });
-                localStorage.setItem('mk_db_users', JSON.stringify(dbUsers));
-                alert("Compte créé ! Connectez-vous.");
-                toggleAuth('login');
-            } else {
-                // Simple login check (accepte tout si signup n'est pas strict, mais ici on check juste si champs remplis pour la démo)
-                currentUser = u;
-                localStorage.setItem('mk_user', u);
-                closeModal('auth-modal');
-                updateUI();
-            }
-        }
-
-        function updateUI() {
-            if(currentUser) {
-                document.getElementById('btn-login').classList.add('hidden');
-                document.getElementById('btn-signup').classList.add('hidden');
-                const badge = document.getElementById('user-display');
-                badge.classList.remove('hidden');
-                badge.innerText = currentUser;
-            }
-        }
-
-        // ================= CHAT SYSTEM =================
-        let currentProduct = "";
-
-        function openChat(productName, price) {
-            if(!currentUser) {
-                alert("Connectez-vous pour parler au vendeur !");
-                return toggleAuth('login');
-            }
-            currentProduct = productName;
-            document.getElementById('chat-modal').classList.remove('hidden');
-            document.getElementById('chat-product-title').innerText = `${productName} (${price})`;
-            document.getElementById('chat-messages').innerHTML = `
-                <div class="flex justify-start fade-in">
-                    <div class="chat-bubble-other p-3 text-sm max-w-[80%]">
-                        Salut ${currentUser} ! Tu es intéressé par <b>${productName}</b> ?
-                        <br>Envoie "Dispo" pour procéder au paiement.
-                        <span class="block text-[9px] text-gray-400 text-right mt-1">MK Bot</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            // 1. Afficher message user
-            const chatBox = document.getElementById('chat-messages');
-            chatBox.innerHTML += `
-                <div class="flex justify-end mt-2 fade-in">
-                    <div class="chat-bubble-me p-3 text-sm max-w-[80%]">
-                        ${msg}
-                        <span class="block text-[9px] text-white/70 text-right mt-1">Moi</span>
-                    </div>
-                </div>
-            `;
+        function checkTvCode() {
+            const c = document.getElementById('tv-code').value;
+            const userCode = "ACCES-ACHETER-0001";
+            const adminCode = "AdminCode-CodeAdmin-fr/en";
             
-            // 2. Sauvegarder pour Admin
-            chatLogs.push({ user: currentUser, msg: msg, product: currentProduct, time: new Date().toLocaleTimeString() });
-            localStorage.setItem('mk_chat_logs', JSON.stringify(chatLogs));
-
-            // 3. Simuler réponse auto
-            setTimeout(() => {
-                chatBox.innerHTML += `
-                    <div class="flex justify-start mt-2 fade-in">
-                        <div class="chat-bubble-other p-3 text-sm max-w-[80%]">
-                            Je reçois ta demande. Un admin va te répondre sous peu.
-                            <span class="block text-[9px] text-gray-400 text-right mt-1">Système</span>
-                        </div>
-                    </div>
-                `;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1000);
-
-            input.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
+            if(isUnlocked || c === userCode) {
+                isUnlocked = true;
+                localStorage.setItem('mk_unlocked', 'true');
+                showPage('private-page');
+                launchStream(document.getElementById('channel-select').value);
+            } else if(c === adminCode) {
+                alert("MODE ADMIN : Accès illimité débloqué.");
+                showPage('private-page');
+            } else { alert("Code invalide ! Contacte le support."); }
         }
 
-        function handleEnter(e) { if(e.key === 'Enter') sendMessage(); }
-
-        // ================= ADMIN SYSTEM =================
-        function openAdminAuth() {
-            document.getElementById('admin-login-modal').classList.remove('hidden');
-        }
-
-        function checkAdminCode() {
-            const code = document.getElementById('admin-pass-input').value;
-            if(code === ADMIN_CODE) {
-                closeModal('admin-login-modal');
-                openAdminDashboard();
-            } else {
-                alert("ACCÈS REFUSÉ");
-            }
-        }
-
-        function openAdminDashboard() {
-            const dash = document.getElementById('admin-dashboard');
-            dash.classList.remove('hidden');
-            
-            // Remplir liste utilisateurs
-            const userList = document.getElementById('admin-users-list');
-            userList.innerHTML = "";
-            if(dbUsers.length === 0) userList.innerHTML = "<div class='text-gray-600'>Vide</div>";
-            dbUsers.forEach(u => {
-                userList.innerHTML += `
-                    <div class="bg-black border border-gray-700 p-2 rounded text-xs font-mono flex justify-between">
-                        <span class="text-blue-400">User: ${u.user}</span>
-                        <span class="text-red-400">Pass: ${u.pass}</span>
-                    </div>
-                `;
-            });
-
-            // Remplir Logs Chat
-            const logList = document.getElementById('admin-chat-log');
-            logList.innerHTML = "";
-            if(chatLogs.length === 0) logList.innerHTML = "<div class='text-gray-600'>Vide</div>";
-            chatLogs.slice().reverse().forEach(l => {
-                logList.innerHTML += `
-                    <div class="bg-black border border-gray-700 p-2 rounded mb-2">
-                        <div class="flex justify-between text-[10px] text-gray-500">
-                            <span>${l.time}</span>
-                            <span class="text-mk-accent">${l.product}</span>
-                        </div>
-                        <div class="font-bold text-white text-sm"><span class="text-blue-400">${l.user}:</span> ${l.msg}</div>
-                    </div>
-                `;
-            });
-        }
-
-        // ================= STREAMING LOGIC =================
-        function checkStreamingCode() {
-            const code = document.getElementById('tv-code-input').value;
-            if(code === STREAM_CODE) {
-                document.getElementById('shop-page').classList.add('hidden');
-                document.getElementById('streaming-page').classList.remove('hidden');
-            } else {
-                alert("Code invalide. Achetez le pack TV pour avoir le code.");
-            }
-        }
-
-        function logoutStream() {
-            document.getElementById('streaming-page').classList.add('hidden');
-            document.getElementById('shop-page').classList.remove('hidden');
-            document.querySelector('video').pause();
-        }
-
-        function playStream(url) {
-            const video = document.getElementById('stream-player');
+        function launchStream(url) {
+            const v = document.getElementById('video');
             if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = url;
-                video.addEventListener('loadedmetadata', function() { video.play(); });
+                if(hls) hls.destroy();
+                hls = new Hls(); hls.loadSource(url); hls.attachMedia(v);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => v.play());
             }
         }
-        
-        function openYT(id) {
-            // Simple redirect or replace player for demo
-            window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
+
+        function forcePlay() { document.getElementById('video-overlay').classList.add('hidden'); document.getElementById('video').play(); }
+        function changeChannel(u) { launchStream(u); }
+        function switchTab(id) { document.getElementById('tv-direct').classList.add('hidden'); document.getElementById('anime-sana').classList.add('hidden'); document.getElementById(id).classList.remove('hidden'); }
+        function showPage(id) { document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function playVideo(id, t) { document.getElementById('video-modal').classList.remove('hidden'); document.getElementById('main-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`; document.getElementById('modal-title').innerText = t; }
+        function closeVideo() { document.getElementById('video-modal').classList.add('hidden'); document.getElementById('main-iframe').src = ""; }
+
+        function startChat(p) { 
+            if(!currentUser) return openAuth(); 
+            document.getElementById('chat-modal').classList.remove('hidden'); 
+            document.getElementById('chat-box').innerHTML = `
+                <div class="bg-cyan-500/10 text-cyan-500 p-5 rounded-2xl border border-cyan-500/20 text-xs font-bold leading-relaxed">
+                    Salut, quelqu'un va bientot répondre, ajoute <span class="text-white bg-cyan-500 px-2 py-0.5 rounded">mkdevelopper</span> sur discord si tu veut avoir un réponse plus rapide.
+                </div>
+            `; 
         }
 
-        // ================= UTILS =================
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
+        function sendMessage() { 
+            const i = document.getElementById('chat-input'); 
+            if(i.value) { 
+                document.getElementById('chat-box').innerHTML += `<div class="flex justify-end"><div class="bg-cyan-500 text-white p-3 px-5 rounded-2xl text-xs font-black shadow-lg shadow-cyan-500/10">${i.value}</div></div>`; 
+                i.value = ""; 
+            } 
+        }
+
+        function openAuth() { showPage('auth-page'); }
+        function handleAuth() { currentUser = document.getElementById('auth-user').value; localStorage.setItem('mk_user', currentUser); updateNav(); showPage('home-page'); }
+        function updateNav() { document.getElementById('nav-auth-btns').classList.add('hidden'); document.getElementById('nav-user-info').classList.remove('hidden'); document.getElementById('nav-user-info').innerText = currentUser; }
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+        function closeChat() { document.getElementById('chat-modal').classList.add('hidden'); }
+        function toggleAuthTab(mode) {
+            document.getElementById('tab-login').className = mode === 'login' ? "font-black uppercase italic text-cyan-500 text-lg" : "font-black uppercase italic text-gray-500 text-lg";
+            document.getElementById('tab-signup').className = mode === 'signup' ? "font-black uppercase italic text-cyan-500 text-lg" : "font-black uppercase italic text-gray-500 text-lg";
         }
     </script>
 </body>
