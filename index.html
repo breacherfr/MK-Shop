@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK SHOP - Final Fix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    </style>
+</head>
+<body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+
+    <nav class="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🛍️</span>
+                    <h1 class="text-2xl font-black tracking-tight italic">MK <span class="text-cyan-500">SHOP</span></h1>
+                </div>
+                <div class="flex items-center gap-4" id="nav-auth">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <span id="dark-icon">🌙</span>
+                    </button>
+                    <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-cyan-500">Se connecter</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="home-page" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 fade-in">
+        <h2 class="text-xl font-bold mb-8 italic">Catalogue MK SHOP</h2>
+        <div class="card-grid">
+            
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 flex flex-col justify-between border-t-4 border-t-cyan-500 shadow-sm">
+                <div>
+                    <div class="text-4xl mb-4">📺</div>
+                    <h3 class="text-xl font-bold mb-2">Chaîne de Télé</h3>
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-4">TF1, CANAL+, M6, ETC...</p>
+                    <div class="bg-white dark:bg-black p-3 rounded-lg border dark:border-gray-700 mb-4">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase italic">Code d'accès :</label>
+                        <div class="flex gap-2 mt-1">
+                            <input id="tv-code" type="text" placeholder="ACCES-..." class="w-full text-xs border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white rounded px-2 py-1 outline-none">
+                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white text-xs px-3 rounded font-bold">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-lg mb-4">4€/mois</p>
+                    <button onclick="startChat('Chaîne TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-cyan-500/20">Acheter</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">🎮</div><h3 class="text-xl font-bold mb-2">Comptes Roblox</h3><p class="text-xs text-gray-500 mb-4 uppercase">(SUR DEMANDE)</p></div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-lg mb-4">5€ - 30€</p>
+                    <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/20">Acheter</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">⭐</div><h3 class="text-xl font-bold mb-2">Comptes Premium</h3><p class="text-xs text-gray-500 mb-4 uppercase">(SPOTIFY, NETFLIX, ETC.)</p></div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-lg mb-4">3€ - 20€</p>
+                    <button onclick="startChat('Premium')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/20">Acheter</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">🎯</div><h3 class="text-xl font-bold mb-2">Cheat pour Jeux</h3><p class="text-xs text-gray-500 mb-4 uppercase">FORTNITE, ROBLOX, ETC...</p></div>
+                <div>
+                    <p class="text-cyan-500 font-bold text-lg mb-4">6€ - 10€</p>
+                    <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/20">Acheter</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">✨</div><h3 class="text-xl font-bold mb-2">Demande Personnalisée</h3><p class="text-xs text-gray-500 mb-4 uppercase">FAITES VOS DEMANDES</p></div>
+                <div>
+                    <p class="text-gray-400 italic text-sm mb-5">Prix sur devis</p>
+                    <button onclick="startChat('Demande Perso')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/20">Demander</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="tv-player-page" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
+        <div class="p-4 bg-gray-900 flex justify-between items-center border-b border-gray-800">
+            <h3 class="text-white font-bold">MK SHOP - LIVE STREAMING</h3>
+            <button onclick="closeTv()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded text-sm font-bold">QUITTER</button>
+        </div>
+        <div class="flex-1 bg-black flex items-center justify-center relative">
+            <video id="video" class="w-full h-full" controls autoplay></video>
+            <div id="video-error" class="hidden absolute inset-0 bg-black flex items-center justify-center text-center p-4">
+                <p class="text-gray-400 text-sm">Le flux est actuellement indisponible ou nécessite que le site soit hébergé (HTTPS).<br>Réessayez après publication.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let hls = null;
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function checkTvCode() {
+            const code = document.getElementById('tv-code').value;
+            // Ton code de streaming spécial
+            if (code === "StreamingCode-CodeStreaming-fr/en2" || code === "ACCES-ACHETER-0001") {
+                launchVideo();
+            } else if (code === "AdminCode-CodeAdmin-fr/en2") {
+                alert("Ouverture du panneau admin..."); // Tu peux remettre ta page admin ici
+            } else {
+                alert("Code invalide !");
+            }
+        }
+
+        function launchVideo() {
+            showPage('tv-player-page');
+            const video = document.getElementById('video');
+            const videoSrc = 'https://iptv-org.github.io/iptv/countries/fr.m3u8'; // Utilisation d'un fichier .m3u8 direct
+
+            if (Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
+                hls.on(Hls.Events.ERROR, function() { document.getElementById('video-error').classList.remove('hidden'); });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+                video.addEventListener('loadedmetadata', function() { video.play(); });
+            }
+        }
+
+        function closeTv() {
+            const video = document.getElementById('video');
+            video.pause();
+            if(hls) hls.destroy();
+            showPage('home-page');
+        }
+
+        function startChat(product) {
+            alert("Support activé pour : " + product);
+        }
+    </script>
+</body>
+</html>
