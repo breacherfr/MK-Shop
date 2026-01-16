@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - Version Officielle</title>
+    <title>MK SHOP - Boutique Officielle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         .hidden { display: none !important; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #06b6d4; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
@@ -28,16 +23,20 @@
             <span class="text-2xl">🛍️</span>
             <h1 class="text-2xl font-black italic">MK <span class="text-cyan-500">SHOP</span></h1>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-110 transition">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 transition">
                 <span id="mode-icon">🌙</span>
             </button>
-            <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-500 hover:text-cyan-500 transition">Se connecter</button>
+            <div id="nav-auth-btns" class="flex gap-2">
+                <button onclick="openAuth('login')" class="text-xs font-bold text-gray-500 hover:text-cyan-500 transition">Se connecter</button>
+                <button onclick="openAuth('signup')" class="text-xs font-bold bg-cyan-500 text-white px-3 py-1 rounded-lg">S'inscrire</button>
+            </div>
+            <div id="nav-user-info" class="hidden text-xs font-bold text-cyan-500 italic"></div>
         </div>
     </nav>
 
     <main id="home-page" class="max-w-7xl mx-auto p-8 fade-in">
-        <h2 class="text-xl font-bold mb-8 italic text-cyan-500">Catalogue Officiel</h2>
+        <h2 class="text-xl font-bold mb-8 italic text-cyan-500 uppercase tracking-widest">Catalogue Officiel</h2>
         <div class="card-grid">
             
             <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm border-t-4 border-t-cyan-500">
@@ -49,132 +48,142 @@
                         <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2 italic">Code d'accès :</label>
                         <div class="flex gap-2">
                             <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-sm outline-none border-b dark:border-gray-700 focus:border-cyan-500 transition">
-                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">OK</button>
+                            <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">→</button>
                         </div>
                     </div>
                 </div>
                 <div>
                     <p class="text-cyan-500 font-bold text-xl mb-4">4€/mois</p>
-                    <button onclick="startChat('TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-cyan-500/20 uppercase tracking-widest">Acheter</button>
+                    <button onclick="buyItem('Abonnement TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-cyan-500/20 uppercase tracking-widest">Acheter</button>
                 </div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="text-4xl mb-4">🎮</div>
-                    <h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3>
-                    <p class="text-xs text-gray-400 mb-6 uppercase">(SUR DEMANDE)</p>
-                </div>
-                <div>
-                    <p class="text-cyan-500 font-bold text-xl mb-4">5€ - 30€</p>
-                    <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
-                </div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
+                <div><h3 class="text-2xl font-bold mb-2">🎮 Comptes Roblox</h3><p class="text-xs text-gray-400 mb-6 uppercase">Sur demande</p></div>
+                <div><p class="text-cyan-500 font-bold text-xl mb-4">5€ - 30€</p><button onclick="buyItem('Compte Roblox')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="text-4xl mb-4">⭐</div>
-                    <h3 class="text-2xl font-bold mb-2">Comptes Premium</h3>
-                    <p class="text-xs text-gray-400 mb-6 uppercase">(SPOTIFY, NETFLIX, ETC...)</p>
-                </div>
-                <div>
-                    <p class="text-cyan-500 font-bold text-xl mb-4">3€ - 20€</p>
-                    <button onclick="startChat('Premium')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
-                </div>
+            <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
+                <div><h3 class="text-2xl font-bold mb-2">⭐ Comptes Premium</h3><p class="text-xs text-gray-400 mb-6 uppercase">Netflix / Spotify</p></div>
+                <div><p class="text-cyan-500 font-bold text-xl mb-4">3€ - 20€</p><button onclick="buyItem('Compte Premium')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="text-4xl mb-4">🎯</div>
-                    <h3 class="text-2xl font-bold mb-2">Cheat pour Jeux</h3>
-                    <p class="text-xs text-gray-400 mb-6 uppercase">FORTNITE, ROBLOX, ETC...</p>
-                </div>
-                <div>
-                    <p class="text-cyan-500 font-bold text-xl mb-4">6€ - 10€</p>
-                    <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button>
-                </div>
+             <div class="bg-gray-50 dark:bg-gray-900 border dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
+                <div><h3 class="text-2xl font-bold mb-2">🎯 Cheat Jeux</h3><p class="text-xs text-gray-400 mb-6 uppercase">Fortnite / Roblox</p></div>
+                <div><p class="text-cyan-500 font-bold text-xl mb-4">6€ - 10€</p><button onclick="buyItem('Cheat')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl uppercase">Acheter</button></div>
             </div>
-
-            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="text-4xl mb-4">✨</div>
-                    <h3 class="text-2xl font-bold mb-2">Demande Personnalisée</h3>
-                    <p class="text-xs text-gray-400 mb-6 uppercase">FAITES VOS DEMANDES</p>
-                </div>
-                <div>
-                    <p class="text-gray-400 italic text-sm mb-5">Prix sur devis</p>
-                    <button onclick="startChat('Perso')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Demander</button>
-                </div>
-            </div>
-
         </div>
     </main>
 
+    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl w-full max-w-md border dark:border-gray-800">
+            <div class="flex justify-center gap-8 mb-8 border-b dark:border-gray-800 pb-4">
+                <button id="tab-login" onclick="toggleAuthTab('login')" class="font-black uppercase italic text-cyan-500">Connexion</button>
+                <button id="tab-signup" onclick="toggleAuthTab('signup')" class="font-black uppercase italic text-gray-400">Inscription</button>
+            </div>
+            
+            <div class="space-y-4">
+                <input id="auth-user" type="text" placeholder="Nom d'utilisateur" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl outline-none text-gray-900 dark:text-white focus:border-cyan-500 transition">
+                <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl outline-none text-gray-900 dark:text-white focus:border-cyan-500 transition">
+            </div>
+
+            <button id="auth-submit-btn" onclick="handleAuth()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl mt-6 shadow-lg shadow-cyan-500/20 uppercase tracking-widest">Valider</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-400 mt-4 text-xs hover:underline">Retourner à la boutique</button>
+        </div>
+    </div>
+
     <div id="tv-player" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
         <div class="p-4 bg-gray-900 flex justify-between items-center border-b border-gray-800">
-            <div class="flex gap-4 items-center w-full max-w-md">
-                <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded outline-none w-full">
-                    <optgroup label="Chaînes d'Info">
-                        <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews (FR)</option>
-                        <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
-                        <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV</option>
-                    </optgroup>
-                    <optgroup label="Divertissement & Documentaire">
-                        <option value="https://nhkworld.akamaized.net/hls/live/2023588/nhkwlive/g/playlist.m3u8">NHK World (Docu)</option>
-                        <option value="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8">Sintel 4K (Test)</option>
-                    </optgroup>
-                </select>
-            </div>
-            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black uppercase ml-4">Quitter</button>
+            <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-cyan-500 text-cyan-500 text-xs p-2 rounded outline-none w-2/3">
+                <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews (Stable)</option>
+                <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
+                <option value="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">Flux de test</option>
+            </select>
+            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-black">QUITTER</button>
         </div>
-        
         <div class="flex-1 bg-black flex items-center justify-center relative">
-            <div id="video-overlay" class="absolute z-10 flex flex-col items-center gap-4 text-center p-4">
+            <div id="video-overlay" class="absolute z-10 flex flex-col items-center gap-4 text-center">
                 <div id="video-loader" class="loader"></div>
-                <button onclick="forcePlay()" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-black text-sm shadow-xl">CLIQUEZ POUR LANCER LE FLUX</button>
+                <button onclick="forcePlay()" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-black text-sm">LANCER LA VIDÉO</button>
             </div>
             <video id="video" class="w-full h-full" controls playsinline></video>
         </div>
     </div>
 
-    <div id="admin-page" class="hidden p-8 min-h-screen bg-gray-100 dark:bg-black">
-        <div class="flex justify-between items-center mb-8 border-b dark:border-gray-800 pb-4">
-            <h2 class="text-3xl font-black text-cyan-500 italic uppercase">Admin Control</h2>
-            <button onclick="showPage('home-page')" class="bg-red-600 text-white px-6 py-2 rounded-xl font-bold">Quitter</button>
-        </div>
-        <div id="admin-users" class="grid gap-4"></div>
-    </div>
-
-    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl w-full max-w-md border dark:border-gray-800">
-            <h2 class="text-2xl font-black text-center mb-6 text-cyan-500 uppercase italic">Connexion</h2>
-            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-4 outline-none focus:border-cyan-500 transition text-gray-900 dark:text-white">
-            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl mb-6 outline-none focus:border-cyan-500 transition text-gray-900 dark:text-white">
-            <button onclick="login()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20">VALIDER</button>
-            <button onclick="showPage('home-page')" class="w-full text-gray-400 mt-4 text-xs">Retour</button>
+    <div id="admin-page" class="hidden p-8 min-h-screen bg-gray-50 dark:bg-black">
+        <div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-black text-cyan-500 italic">ADMIN</h2><button onclick="showPage('home-page')" class="bg-red-600 text-white px-4 py-1 rounded">FERMER</button></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl border dark:border-gray-800">
+                <h3 class="text-cyan-500 font-bold mb-4 uppercase text-xs">Comptes Clients</h3>
+                <div id="admin-user-list" class="space-y-2"></div>
+            </div>
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl border dark:border-gray-800">
+                <h3 class="text-purple-500 font-bold mb-4 uppercase text-xs">Ventes / Logs</h3>
+                <div id="admin-logs" class="space-y-2 text-xs opacity-50"></div>
+            </div>
         </div>
     </div>
 
     <script>
         let hls = null;
-        let logs = [];
+        let dbUsers = []; // Simulation base de données
         let currentUser = null;
+        let authMode = 'login';
 
         function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('mode-icon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.innerText = "🌙";
-            } else {
-                html.classList.add('dark');
-                icon.innerText = "☀️";
-            }
+            document.documentElement.classList.toggle('dark');
+            document.getElementById('mode-icon').innerText = document.documentElement.classList.contains('dark') ? "☀️" : "🌙";
         }
 
         function showPage(id) {
             document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
+        }
+
+        function openAuth(mode) {
+            authMode = mode;
+            showPage('auth-page');
+            toggleAuthTab(mode);
+        }
+
+        function toggleAuthTab(mode) {
+            authMode = mode;
+            const loginBtn = document.getElementById('tab-login');
+            const signupBtn = document.getElementById('tab-signup');
+            if(mode === 'login') {
+                loginBtn.className = "font-black uppercase italic text-cyan-500";
+                signupBtn.className = "font-black uppercase italic text-gray-400";
+            } else {
+                signupBtn.className = "font-black uppercase italic text-cyan-500";
+                loginBtn.className = "font-black uppercase italic text-gray-400";
+            }
+        }
+
+        function handleAuth() {
+            const user = document.getElementById('auth-user').value;
+            const pass = document.getElementById('auth-pass').value;
+
+            if(!user || !pass) return alert("Remplissez les champs !");
+
+            if(authMode === 'signup') {
+                const exists = dbUsers.find(u => u.user === user);
+                if(exists) return alert("Ce pseudo existe déjà !");
+                dbUsers.push({ user, pass, date: new Date().toLocaleTimeString() });
+                alert("Compte créé avec succès ! Connectez-vous.");
+                toggleAuthTab('login');
+            } else {
+                const found = dbUsers.find(u => u.user === user && u.pass === pass);
+                if(found) {
+                    currentUser = user;
+                    document.getElementById('nav-auth-btns').classList.add('hidden');
+                    document.getElementById('nav-user-info').classList.remove('hidden');
+                    document.getElementById('nav-user-info').innerText = "BIENVENUE, " + user.toUpperCase();
+                    showPage('home-page');
+                    updateAdmin();
+                } else {
+                    alert("Identifiants incorrects !");
+                }
+            }
         }
 
         function checkTvCode() {
@@ -183,25 +192,21 @@
                 launchStream(document.getElementById('channel-select').value);
             } else if (code === "AdminCode-CodeAdmin-fr/en2") {
                 showPage('admin-page');
-            } else { alert("Code invalide !"); }
+            } else { alert("Code incorrect !"); }
         }
 
         function launchStream(url) {
             showPage('tv-player');
             document.getElementById('video-overlay').classList.remove('hidden');
             const video = document.getElementById('video');
-
             if (Hls.isSupported()) {
                 if(hls) hls.destroy();
                 hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().then(() => {
-                        document.getElementById('video-overlay').classList.add('hidden');
-                    }).catch(() => {
-                        console.log("Play bloqué par le navigateur");
-                    });
+                    video.play().then(() => document.getElementById('video-overlay').classList.add('hidden'))
+                    .catch(() => console.log("Play block"));
                 });
             }
         }
@@ -214,26 +219,23 @@
         function changeChannel(url) { launchStream(url); }
 
         function closeTv() {
-            const video = document.getElementById('video');
-            video.pause();
+            document.getElementById('video').pause();
             if(hls) hls.destroy();
             showPage('home-page');
         }
 
-        function login() {
-            const user = document.getElementById('auth-user').value;
-            const pass = document.getElementById('auth-pass').value;
-            if(user && pass) {
-                currentUser = user;
-                logs.push({ user, pass, date: new Date().toLocaleString() });
-                document.getElementById('admin-users').innerHTML = logs.map(l => `<div class="p-4 bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700">👤 <b>${l.user}</b> | 🔑 <b>${l.pass}</b> | 📅 <span class="text-xs">${l.date}</span></div>`).join('');
-                showPage('home-page');
-            }
+        function buyItem(item) {
+            if(!currentUser) return openAuth('login');
+            alert("Support MK SHOP : Commande envoyée pour " + item + ". L'admin va vous recontacter.");
+            document.getElementById('admin-logs').innerHTML += `<div>[VENTE] ${currentUser} veut acheter ${item}</div>`;
         }
 
-        function startChat(p) {
-            if(!currentUser) { showPage('auth-page'); return; }
-            alert("Support activé pour : " + p + ". L'admin va vous répondre.");
+        function updateAdmin() {
+            document.getElementById('admin-user-list').innerHTML = dbUsers.map(u => 
+                `<div class="p-3 bg-gray-50 dark:bg-black rounded-xl border dark:border-gray-800 flex justify-between">
+                    <b>👤 ${u.user}</b> <span class="text-cyan-500 font-mono">${u.pass}</span>
+                </div>`
+            ).join('');
         }
     </script>
 </body>
