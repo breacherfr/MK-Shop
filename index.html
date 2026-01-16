@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V30 MASTER CATALOG</title>
+    <title>MK SHOP - V31 FULL CONSERVED</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <script>
@@ -47,42 +47,68 @@
 
     <div id="main-shop">
         <header class="text-center py-20">
-            <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Catalogue MK</h2>
-            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Qualité Premium • V30</p>
+            <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Catalogue Officiel</h2>
+            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Qualité Premium • Support 24/7</p>
         </header>
 
         <main class="max-w-7xl mx-auto px-6 pb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col relative">
+                    <div class="absolute top-0 right-0 bg-mkBlue text-white text-[10px] font-black px-5 py-2.5 rounded-bl-2xl uppercase italic">Best Seller</div>
                     <div class="text-6xl mb-8">🎮</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase">Comptes Roblox</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Optimisés</p>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Roblox</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Comptes Optimisés</p>
                     <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
                         <li>• 0 - 1000 Robux aléatoire</li>
+                        <li>• Compte Full (Blox Fruits, Da Hood)</li>
                         <li>• Voice Chat / Age Verified (+13)</li>
                     </ul>
-                    <button onclick="startChat('Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                    <button onclick="startChat('Compte Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
                 </div>
 
                 <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col relative">
                     <div class="text-6xl mb-8">📺</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase">TV & Animés</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Streaming HD</p>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">TV & Animés</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Streaming Illimité</p>
                     <div class="bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-2xl p-5 mb-8">
-                        <input id="tv-code-field" type="text" placeholder="CODE ACCÈS..." class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold">
+                        <input id="tv-code-field" type="text" placeholder="CODE-ACHETÉ-..." class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold">
                     </div>
-                    <button id="tv-main-btn" onclick="startChat('Streaming')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                    <button id="tv-main-btn" onclick="checkTvCode()" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Vérifier</button>
                 </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col relative">
-                    <div class="text-6xl mb-8">⭐</div>
-                    <h3 class="text-3xl font-black mb-1 italic uppercase">Premium</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Spotify, Netflix...</p>
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkRed flex flex-col relative">
+                    <div class="text-6xl mb-8">🎯</div>
+                    <h3 class="text-3xl font-black mb-1 italic text-mkRed uppercase tracking-tighter">Cheat Roblox</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Scripts & Tools</p>
                     <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
+                        <li>• Roblox Executors (PC/Mobile)</li>
+                        <li>• Scripts Privés Indétectables</li>
+                        <li>• Mis à jour quotidiennement</li>
+                    </ul>
+                    <button onclick="startChat('Cheat')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col relative lg:mt-4">
+                    <div class="text-6xl mb-8">⭐</div>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter">Comptes Premium</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Abonnements</p>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
+                        <li>• Spotify & Deezer à vie</li>
                         <li>• Netflix / Disney+ / Crunchyroll</li>
                         <li>• Garantie & Remplacement</li>
                     </ul>
                     <button onclick="startChat('Premium')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkPurple md:col-span-2 flex flex-col md:flex-row items-center gap-10 lg:mt-4">
+                    <div class="text-8xl">✨</div>
+                    <div class="flex-1">
+                        <h3 class="text-3xl font-black mb-2 text-mkPurple uppercase italic tracking-tighter">Demande Spéciale</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Support & Commandes</p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 italic">Un service précis ? Un compte rare ? Contacte-nous.</p>
+                    </div>
+                    <button onclick="startChat('Demande Perso')" class="bg-mkPurple text-white px-12 py-5 rounded-full font-black text-xs uppercase italic shadow-xl">Contacter</button>
                 </div>
             </div>
         </main>
@@ -112,7 +138,7 @@
         <div id="episode-view" class="hidden p-10 max-w-7xl mx-auto">
             <button onclick="backToCatalog()" class="text-mkBlue font-black mb-10 uppercase text-xs tracking-widest">← Retour au catalogue</button>
             <div class="mb-12">
-                <h2 id="ep-title" class="text-7xl font-black text-white uppercase italic tracking-tighter mb-10">---</h2>
+                <h2 id="ep-title" class="text-6xl font-black text-white uppercase italic tracking-tighter mb-10">---</h2>
                 <div id="ep-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
             </div>
         </div>
@@ -131,7 +157,7 @@
     <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-sm text-center">
             <h3 class="text-2xl font-black mb-8 italic text-mkRed uppercase">Admin Panel</h3>
-            <input id="admin-pass-input" type="password" placeholder="Code Secret" class="w-full bg-slate-100 dark:bg-black/40 p-5 rounded-2xl mb-6 outline-none border-2 border-transparent focus:border-mkRed font-bold text-center">
+            <input id="admin-pass-input" type="password" placeholder="Code Secret" class="w-full bg-slate-100 dark:bg-black/40 p-5 rounded-2xl mb-6 outline-none font-bold text-center">
             <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-5 rounded-full uppercase italic transition">Entrer</button>
         </div>
     </div>
@@ -148,11 +174,11 @@
 
     <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
-            <h3 class="text-3xl font-black mb-10 italic uppercase">Accès <span class="text-mkBlue">MK SHOP</span></h3>
+            <h3 class="text-3xl font-black mb-10 italic uppercase tracking-tighter">Accès <span class="text-mkBlue">MK SHOP</span></h3>
             <input id="in-user" type="text" placeholder="Utilisateur" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
             <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
             <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic shadow-2xl">Valider</button>
-            <button onclick="closeModal('auth-modal')" class="mt-6 text-[10px] font-black text-slate-300 uppercase">Fermer</button>
+            <button onclick="closeModal('auth-modal')" class="mt-6 text-[10px] font-black text-slate-300 uppercase tracking-widest">Fermer</button>
         </div>
     </div>
 
@@ -160,7 +186,6 @@
         const TV_CODE = "ACCES-ACHETER-0001";
         const ADMIN_PASS = "admin123";
 
-        // CATALOGUE MIS A JOUR V30
         const content = [
             { id: 0, category: "shonen", title: "One Piece", poster: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTItMDdmZC00MjA1LWEyMzYtMTY2MzM1Y2IzMDGuXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
             { id: 1, category: "shonen", title: "Naruto", poster: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00YzcwLWIyMzctOTU3MmU4MTZkZGU2XkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg", episodes: [
@@ -168,18 +193,18 @@
                 {t:"Épisode 5", u:"4c0CGatLKAc"}, {t:"Épisode 6", u:"u3X6b101irw"}, {t:"Épisode 7", u:"RCeW_mlNcm0"}, {t:"Épisode 8", u:"iLur5aSGNbw"},
                 {t:"Épisode 9", u:"7v430m5HwiE"}, {t:"Épisode 10", u:"ajSrH4LWmy0"}
             ]},
-            { id: 3, category: "shonen", title: "Dragon Ball Z", poster: "https://m.media-amazon.com/images/M/MV5BMGMyOThiMGUtYmFmZi00YTUyLThhOTctZmdhZDJiMjEwNzBkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vtj-9j2Pgzw"}] },
-            { id: 4, category: "shonen", title: "HunterXHunter", poster: "https://m.media-amazon.com/images/M/MV5BZjNmZjkzMzktOTM0MS00N2Y4LWI3ZmYtY2U3YTA4ODhkY2YxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [
+            { id: 2, category: "shonen", title: "Dragon Ball Z", poster: "https://m.media-amazon.com/images/M/MV5BMGMyOThiMGUtYmFmZi00YTUyLThhOTctZmdhZDJiMjEwNzBkXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vtj-9j2Pgzw"}] },
+            { id: 3, category: "shonen", title: "HunterXHunter", poster: "https://m.media-amazon.com/images/M/MV5BZjNmZjkzMzktOTM0MS00N2Y4LWI3ZmYtY2U3YTA4ODhkY2YxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg", episodes: [
                 {t:"Épisode 1", u:"6dEPCqfGKWA"}, {t:"Épisode 2", u:"aOGnEgn5lpk"}, {t:"Épisode 3", u:"AuX0wf6tgfQ"}, {t:"Épisode 4", u:"mIm-wRXSgWE"},
                 {t:"Épisode 5", u:"_I1bFVlZnrQ"}, {t:"Épisode 6", u:"C3c9IozSsMg"}, {t:"Épisode 7", u:"_NzbL7iLrAg"}, {t:"Épisode 8", u:"JmjRym2offY"},
                 {t:"Épisode 9", u:"1faDKF6IXCg"}, {t:"Épisode 10", u:"fD-oH86iOOY"}
             ]},
+            { id: 4, category: "shonen", title: "Jujutsu Kaisen", poster: "https://m.media-amazon.com/images/M/MV5BNGYyZGM5MGMtYTY2Ni00M2Y1LWIzNjQtYWUxM2FjN2I5YTM2XkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg", episodes: [{t:"Épisode 1", u:"cqTN1AQ09Yg"}] },
             { id: 5, category: "shonen", title: "Bleach", poster: "https://m.media-amazon.com/images/M/MV5BZjZkN2M5NWQtYzhmMy00MTdiLThhOTQtN2ZmZDRhZDE5OTU5XkEyXkFqcGdeQXVyNDgyODgxNjE@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vAnVl_9A7Xw"}] },
             { id: 6, category: "shonen", title: "SNK / AOT", poster: "https://m.media-amazon.com/images/M/MV5BNDFjYTIxMjctYTQ2ZC00YzQ4LWE3ZmMtN2MzMWQ4NGI1ODJjXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg", episodes: [{t:"Épisode 1", u:"m2vYpW72-Yk"}] },
-            { id: 7, category: "shonen", title: "Jujustu Kaisen", poster: "https://m.media-amazon.com/images/M/MV5BNGYyZGM5MGMtYTY2Ni00M2Y1LWIzNjQtYWUxM2FjN2I5YTM2XkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg", episodes: [{t:"Épisode 1", u:"cqTN1AQ09Yg"}] },
-            { id: 8, category: "cartoons", title: "SpongeBob", poster: "https://m.media-amazon.com/images/S/pv-target-images/08945653457176a960df768f77348e3a246f4a8618e765ec17676735e58c0c16.jpg", episodes: [{t:"Épisode 1", u:"vAnVl_9A7Xw"}] },
-            { id: 9, category: "cartoons", title: "Oggy", poster: "https://img.filmsactu.net/datas/films/o/g/oggy-et-les-cafards-le-film/xl/oggy-et-les-cafards-le-film-520268529e797.jpg", episodes: [{t:"Épisode 1", u:"p-iC-5i_y8A"}] },
-            { id: 10, category: "cartoons", title: "Gumball", poster: "https://m.media-amazon.com/images/M/MV5BMjA5OTYyMjg0NF5BMl5BanBnXkFtZTgwOTI3NzEwMDE@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vAnVl_9A7Xw"}] }
+            { id: 7, category: "cartoons", title: "SpongeBob", poster: "https://m.media-amazon.com/images/S/pv-target-images/08945653457176a960df768f77348e3a246f4a8618e765ec17676735e58c0c16.jpg", episodes: [{t:"Épisode 1", u:"vAnVl_9A7Xw"}] },
+            { id: 8, category: "cartoons", title: "Oggy", poster: "https://img.filmsactu.net/datas/films/o/g/oggy-et-les-cafards-le-film/xl/oggy-et-les-cafards-le-film-520268529e797.jpg", episodes: [{t:"Épisode 1", u:"p-iC-5i_y8A"}] },
+            { id: 9, category: "cartoons", title: "Gumball", poster: "https://m.media-amazon.com/images/M/MV5BMjA5OTYyMjg0NF5BMl5BanBnXkFtZTgwOTI3NzEwMDE@._V1_.jpg", episodes: [{t:"Épisode 1", u:"vAnVl_9A7Xw"}] }
         ];
 
         let db = JSON.parse(localStorage.getItem('mk_db')) || [];
@@ -216,7 +241,7 @@
             document.getElementById('episode-view').classList.remove('hidden');
             document.getElementById('ep-title').innerText = item.title;
             const list = document.getElementById('ep-list'); list.innerHTML = "";
-            item.episodes.forEach((ep, idx) => {
+            item.episodes.forEach((ep) => {
                 const thumb = `https://img.youtube.com/vi/${ep.u}/mqdefault.jpg`;
                 list.innerHTML += `
                     <div onclick="playVideo('${ep.u}')" class="ep-card cursor-pointer group">
@@ -244,6 +269,7 @@
         function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-view').classList.remove('hidden'); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function startChat(p) { alert("Contacte 'mkdevlopper' sur Discord pour : " + p); }
         function verifyAdmin() { if(document.getElementById('admin-pass-input').value === ADMIN_PASS) { closeModal('admin-auth-modal'); openModal('admin-panel'); renderAdmin(); } else alert("Error"); }
         function renderAdmin() {
             document.getElementById('admin-user-list').innerHTML = db.map((u, i) => `
@@ -258,7 +284,6 @@
             let f = db.find(x => x.u === u); if(f) user = f; else { user = { u, p, hasTv: false }; db.push(user); }
             save(); applySession(); closeModal('auth-modal');
         }
-        function startChat(p) { alert("Contacte 'mkdevlopper' sur Discord pour : " + p); }
         function save() { localStorage.setItem('mk_db', JSON.stringify(db)); localStorage.setItem('mk_session', JSON.stringify(user)); }
     </script>
 </body>
