@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V4 Premium</title>
+    <title>MK SHOP - V5 Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
     <style>
         .hidden { display: none; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-        body { background-color: #000; color: #fff; scroll-behavior: smooth; }
-        .btn-blue { @apply bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-cyan-500/20 uppercase tracking-widest; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
 
-    <nav class="border-b border-gray-800 p-6 flex justify-between items-center bg-black sticky top-0 z-50">
+    <nav class="border-b border-gray-200 dark:border-gray-800 p-6 flex justify-between items-center bg-white dark:bg-black sticky top-0 z-50">
         <div class="flex items-center gap-2">
             <span class="text-2xl">🛍️</span>
             <h1 class="text-2xl font-black italic">MK <span class="text-cyan-500">SHOP</span></h1>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-400 hover:text-white transition">Se connecter</button>
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-110 transition">
+                <span id="mode-icon">🌙</span>
+            </button>
+            <button onclick="showPage('auth-page')" class="text-sm font-bold text-gray-500 hover:text-cyan-500 transition">Se connecter</button>
         </div>
     </nav>
 
@@ -29,96 +39,116 @@
         <h2 class="text-xl font-bold mb-8 italic text-cyan-500">Catalogue Officiel</h2>
         <div class="card-grid">
             
-            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-2xl border-t-4 border-t-cyan-500">
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm border-t-4 border-t-cyan-500">
                 <div>
                     <div class="text-4xl mb-4">📺</div>
                     <h3 class="text-2xl font-bold mb-2">Chaîne de Télé</h3>
-                    <p class="text-xs text-gray-500 mb-6 uppercase">TF1, FRANCE 2, M6, ETC...</p>
-                    <div class="bg-black p-4 rounded-xl border border-gray-800 mb-6">
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2 italic">Entrez votre code :</label>
+                    <p class="text-xs text-gray-400 mb-6 uppercase">TF1, M6, CANAL+, FRANCE 2...</p>
+                    <div class="bg-white dark:bg-black p-4 rounded-xl border dark:border-gray-700 mb-6">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2 italic">Code d'accès :</label>
                         <div class="flex gap-2">
-                            <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-white text-sm outline-none border-b border-gray-700 focus:border-cyan-500 transition">
+                            <input id="tv-code" type="text" placeholder="CODE..." class="flex-1 bg-transparent text-sm outline-none border-b border-gray-300 dark:border-gray-700 focus:border-cyan-500 transition">
                             <button onclick="checkTvCode()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg font-bold">OK</button>
                         </div>
                     </div>
                 </div>
-                <button onclick="startChat('TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter - 4€</button>
+                <button onclick="startChat('TV')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition shadow-lg shadow-cyan-500/20 uppercase tracking-widest">Acheter - 4€</button>
             </div>
 
-            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">🎮</div><h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3><p class="text-xs text-gray-500 mb-6 uppercase">Sur demande</p></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
+                <div><div class="text-4xl mb-4">🎮</div><h3 class="text-2xl font-bold mb-2">Comptes Roblox</h3><p class="text-xs text-gray-400 mb-6 uppercase">Sur demande</p></div>
                 <div><p class="text-cyan-500 font-bold text-xl mb-4">5€ - 30€</p>
-                <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
+                <button onclick="startChat('Roblox')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">⭐</div><h3 class="text-2xl font-bold mb-2">Comptes Premium</h3><p class="text-xs text-gray-500 mb-6 uppercase">Netflix, Spotify...</p></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
+                <div><div class="text-4xl mb-4">⭐</div><h3 class="text-2xl font-bold mb-2">Comptes Premium</h3><p class="text-xs text-gray-400 mb-6 uppercase">Netflix, Spotify...</p></div>
                 <div><p class="text-cyan-500 font-bold text-xl mb-4">3€ - 20€</p>
-                <button onclick="startChat('Premium')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
+                <button onclick="startChat('Premium')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">🎯</div><h3 class="text-2xl font-bold mb-2">Cheat Jeux</h3><p class="text-xs text-gray-500 mb-6 uppercase">Fortnite, Roblox...</p></div>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">🎯</div><h3 class="text-2xl font-bold mb-2">Cheat pour Jeux</h3><p class="text-xs text-gray-400 mb-6 uppercase">Fortnite, Roblox...</p></div>
                 <div><p class="text-cyan-500 font-bold text-xl mb-4">6€ - 10€</p>
-                <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
+                <button onclick="startChat('Cheat')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl transition uppercase">Acheter</button></div>
             </div>
 
-            <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 flex flex-col justify-between">
-                <div><div class="text-4xl mb-4">✨</div><h3 class="text-2xl font-bold mb-2">Demande Perso</h3><p class="text-xs text-gray-500 mb-6 uppercase">Prix sur devis</p></div>
-                <button onclick="startChat('Perso')" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-black py-4 rounded-2xl transition uppercase">Demander</button>
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-3xl p-8 flex flex-col justify-between shadow-sm">
+                <div><div class="text-4xl mb-4">✨</div><h3 class="text-2xl font-bold mb-2">Demande Perso</h3><p class="text-xs text-gray-400 mb-6 uppercase">Sur devis</p></div>
+                <button onclick="startChat('Perso')" class="w-full bg-cyan-500 text-white font-black py-4 rounded-2xl transition uppercase">Demander</button>
             </div>
-
         </div>
     </main>
 
     <div id="tv-player" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
         <div class="p-4 bg-gray-900 flex justify-between items-center border-b border-gray-800">
             <div class="flex gap-4 items-center">
-                <h3 class="text-white font-bold">LIVE STREAMING</h3>
-                <select onchange="changeChannel(this.value)" class="bg-black border border-gray-700 text-cyan-500 text-xs p-2 rounded">
-                    <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews (FR)</option>
-                    <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24 (FR)</option>
-                    <option value="https://nhkworld.akamaized.net/hls/live/2023588/nhkwlive/g/playlist.m3u8">NHK World (EN)</option>
+                <h3 class="text-white font-bold text-sm sm:text-base">LIVE TV</h3>
+                <select id="channel-select" onchange="changeChannel(this.value)" class="bg-black border border-gray-700 text-cyan-500 text-[10px] sm:text-xs p-2 rounded outline-none">
+                    <optgroup label="Chaînes Françaises">
+                        <option value="https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8">Euronews FR</option>
+                        <option value="https://static.france24.com/live/f24_fr.video/playlist.m3u8">France 24</option>
+                        <option value="https://live.bfmtv.com/archive/bfmtv_fast_900.m3u8">BFM TV (Public)</option>
+                    </optgroup>
+                    <optgroup label="Autres (IPTV Public)">
+                        <option value="https://nhkworld.akamaized.net/hls/live/2023588/nhkwlive/g/playlist.m3u8">NHK World</option>
+                        <option value="https://rt-fra.akamaized.net/hls/live/2014539/rt-fra/playlist.m3u8">RT France</option>
+                    </optgroup>
                 </select>
             </div>
-            <button onclick="closeTv()" class="bg-red-600 text-white px-6 py-2 rounded-full text-xs font-black uppercase">Quitter</button>
+            <button onclick="closeTv()" class="bg-red-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase transition">Quitter</button>
         </div>
         <div class="flex-1 bg-black flex items-center justify-center">
-            <video id="video" class="w-full max-h-full" controls autoplay playsinline></video>
+            <video id="video" class="w-full h-full" controls autoplay playsinline></video>
         </div>
     </div>
 
-    <div id="admin-page" class="hidden p-8 min-h-screen">
-        <div class="flex justify-between mb-8">
-            <h2 class="text-3xl font-black text-cyan-500">ADMIN CONTROL</h2>
-            <button onclick="showPage('home-page')" class="bg-red-600 px-4 py-2 rounded">FERMER</button>
+    <div id="admin-page" class="hidden p-8 min-h-screen bg-gray-50 dark:bg-black">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-black text-cyan-500 italic">ADMIN PANEL</h2>
+            <button onclick="showPage('home-page')" class="bg-red-600 text-white px-6 py-2 rounded-xl font-bold">FERMER</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                <h3 class="text-cyan-500 font-bold mb-4">Logs Utilisateurs</h3>
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border dark:border-gray-800">
+                <h3 class="text-cyan-500 font-bold mb-4 uppercase text-xs tracking-widest">Utilisateurs Connectés</h3>
                 <div id="admin-users" class="space-y-2 text-sm"></div>
             </div>
-            <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-                <h3 class="text-purple-500 font-bold mb-4">Messages Support</h3>
-                <div id="admin-messages" class="space-y-2 text-sm"></div>
+            <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border dark:border-gray-800">
+                <h3 class="text-purple-500 font-bold mb-4 uppercase text-xs tracking-widest">Logs d'Activités</h3>
+                <div id="admin-logs" class="space-y-2 text-sm text-gray-500"></div>
             </div>
         </div>
     </div>
 
-    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4">
-        <div class="bg-gray-900 p-8 rounded-3xl w-full max-w-md border border-gray-800">
-            <h2 class="text-2xl font-black text-center mb-6 text-cyan-500">Connexion</h2>
-            <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-4 outline-none">
-            <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-black border border-gray-800 p-4 rounded-xl mb-6 outline-none">
-            <button onclick="login()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl">VALIDER</button>
-            <button onclick="showPage('home-page')" class="w-full text-gray-500 mt-4 text-xs">Annuler</button>
+    <div id="auth-page" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 p-8 rounded-3xl w-full max-w-md border dark:border-gray-800">
+            <h2 class="text-2xl font-black text-center mb-6 text-cyan-500 uppercase italic">Connexion</h2>
+            <div class="space-y-4">
+                <input id="auth-user" type="text" placeholder="Pseudo" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl outline-none focus:border-cyan-500 transition">
+                <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-gray-50 dark:bg-black border dark:border-gray-800 p-4 rounded-xl outline-none focus:border-cyan-500 transition">
+            </div>
+            <button onclick="login()" class="w-full bg-cyan-500 text-white font-bold py-4 rounded-xl mt-6 shadow-lg shadow-cyan-500/20">VALIDER</button>
+            <button onclick="showPage('home-page')" class="w-full text-gray-400 mt-4 text-xs hover:underline">Retour</button>
         </div>
     </div>
 
     <script>
         let hls = null;
-        let logs = [];
+        let users = [];
         let currentUser = null;
+
+        // MODE SOMBRE / LUMINEUX
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('mode-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerText = "🌙";
+            } else {
+                html.classList.add('dark');
+                icon.innerText = "☀️";
+            }
+        }
 
         function showPage(id) {
             document.querySelectorAll('main, div[id$="-page"]').forEach(el => el.classList.add('hidden'));
@@ -127,22 +157,27 @@
 
         function checkTvCode() {
             const code = document.getElementById('tv-code').value;
+            // Ton code de streaming
             if (code === "StreamingCode-CodeStreaming-fr/en2" || code === "ACCES-ACHETER-0001") {
-                launchStream("https://euronews-fra-p3-inter-fr.fws.m7.ovh/ottrun/euronews_fra/index.m3u8");
-            } else if (code === "AdminCode-CodeAdmin-fr/en2") {
+                launchStream(document.getElementById('channel-select').value);
+            } 
+            // Ton code admin
+            else if (code === "AdminCode-CodeAdmin-fr/en2") {
                 showPage('admin-page');
-            } else { alert("Code invalide !"); }
+            } else {
+                alert("Code invalide !");
+            }
         }
 
         function launchStream(url) {
-            document.getElementById('tv-player').classList.remove('hidden');
+            showPage('tv-player');
             const video = document.getElementById('video');
             if (Hls.isSupported()) {
                 if(hls) hls.destroy();
                 hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(e => console.log("Play failed")));
             }
         }
 
@@ -152,7 +187,7 @@
             const video = document.getElementById('video');
             video.pause();
             if(hls) hls.destroy();
-            document.getElementById('tv-player').classList.add('hidden');
+            showPage('home-page');
         }
 
         function login() {
@@ -160,7 +195,7 @@
             const pass = document.getElementById('auth-pass').value;
             if(user && pass) {
                 currentUser = user;
-                logs.push({ user, pass, time: new Date().toLocaleTimeString() });
+                users.push({ user, pass, date: new Date().toLocaleString() });
                 updateAdmin();
                 showPage('home-page');
             }
@@ -168,11 +203,12 @@
 
         function startChat(product) {
             if(!currentUser) { showPage('auth-page'); return; }
-            alert("Support activé pour " + product + ". L'admin va vous répondre.");
+            alert("Support activé pour " + product + ". L'admin va vous répondre via le chat.");
         }
 
         function updateAdmin() {
-            document.getElementById('admin-users').innerHTML = logs.map(l => `<div class="p-2 border-b border-gray-800">👤 ${l.user} (MDP: ${l.pass}) - ${l.time}</div>`).join('');
+            document.getElementById('admin-users').innerHTML = users.map(u => `<div class="p-3 border-b dark:border-gray-800 flex justify-between"><b>👤 ${u.user}</b> <span class="text-cyan-500 font-mono">${u.pass}</span></div>`).join('');
+            document.getElementById('admin-logs').innerHTML += `<div>[${new Date().toLocaleTimeString()}] Connexion de ${currentUser}</div>`;
         }
     </script>
 </body>
