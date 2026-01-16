@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - V38 CLOUD FINAL</title>
+    <title>MK SHOP - V39 ULTIMATE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     <style>
         .card-shadow { box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
         .netflix-bg { background: #050505; }
-        .btn-black { background: #111827; color: white; transition: all 0.3s; cursor: pointer; }
+        .btn-black { background: #111827; color: white; transition: all 0.3s; cursor: pointer; border-radius: 99px; }
         .btn-black:hover { background: #1f2937; transform: translateY(-2px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .chat-bubble-me { background: #111827; color: white; border-radius: 18px 18px 0 18px; padding: 10px 15px; }
@@ -33,159 +33,165 @@
 
     <nav class="bg-white dark:bg-[#1e293b] border-b border-gray-100 dark:border-white/5 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
-            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081840.png" class="w-9 h-9" alt="logo">
-            <h1 class="text-2xl font-black italic tracking-tighter text-slate-900 dark:text-white uppercase">MK <span class="text-mkBlue">SHOP</span></h1>
+            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081840.png" class="w-9 h-9">
+            <h1 class="text-2xl font-black italic text-slate-900 dark:text-white uppercase">MK <span class="text-mkBlue">SHOP</span></h1>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="startChat('Support')" class="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-full text-[10px] font-bold uppercase hover:bg-mkBlue hover:text-white transition">🎧 Support</button>
-            <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full text-xl">🌙</button>
+            <button onclick="startChat('Support')" class="bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-full text-[10px] font-bold uppercase">🎧 Support</button>
+            <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full">🌙</button>
             <div id="user-display" class="hidden flex items-center gap-3">
-                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20 uppercase"></span>
-                <button onclick="logout()" class="text-[10px] font-black text-mkRed uppercase hover:underline">Déconnexion</button>
+                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-4 py-2 rounded-full border border-mkBlue/20"></span>
+                <button onclick="logout()" class="text-[10px] font-black text-mkRed uppercase">Déconnexion</button>
             </div>
             <div id="auth-btns">
-                <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full shadow-xl uppercase">Connexion / Inscription</button>
+                <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full uppercase">Connexion</button>
             </div>
         </div>
     </nav>
 
     <div id="main-shop">
-        <header class="text-center py-20">
-            <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">MK CLOUD</h2>
-            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">Synchronisation Réelle Active</p>
+        <header class="text-center py-16">
+            <h2 class="text-6xl font-black italic uppercase mb-2">Catalogue MK</h2>
+            <p class="text-mkBlue font-bold text-xs tracking-widest uppercase">Version Cloud Intégrale</p>
         </header>
 
-        <main class="max-w-7xl mx-auto px-6 pb-20">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col">
-                    <div class="text-6xl mb-8">🎮</div>
-                    <h3 class="text-3xl font-black mb-4 italic uppercase tracking-tighter">Comptes Roblox</h3>
-                    <p class="text-sm text-slate-500 flex-1">Robux, Blox Fruits et items rares disponibles.</p>
-                    <button onclick="startChat('Achat Roblox')" class="btn-black mt-8 px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
-                </div>
+        <main class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
+            <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] card-shadow border-t-8 border-mkBlue">
+                <div class="text-5xl mb-6">🎮</div>
+                <h3 class="text-2xl font-black uppercase italic mb-2">Comptes Roblox</h3>
+                <p class="text-xs text-slate-500 mb-6 font-medium">• Robux • Blox Fruits • Da Hood</p>
+                <button onclick="startChat('Achat Roblox')" class="btn-black w-full py-4 text-[10px] font-black uppercase italic">Acheter</button>
+            </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col">
-                    <div class="text-6xl mb-8">📺</div>
-                    <h3 class="text-3xl font-black mb-4 italic uppercase tracking-tighter">TV & Animés</h3>
-                    <div class="bg-slate-50 dark:bg-black/20 border p-5 rounded-2xl mb-4">
-                        <input id="tv-code-field" type="text" placeholder="CODE ACCÈS" class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold uppercase">
-                    </div>
-                    <button onclick="checkTvCode()" class="btn-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Vérifier / Accéder</button>
-                </div>
+            <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] card-shadow border-t-8 border-mkRed">
+                <div class="text-5xl mb-6">🎯</div>
+                <h3 class="text-2xl font-black uppercase italic mb-2">Roblox Cheat</h3>
+                <p class="text-xs text-slate-500 mb-6 font-medium">• Executors PC/Mobile • Scripts Privés</p>
+                <button onclick="startChat('Achat Cheat')" class="btn-black w-full py-4 text-[10px] font-black uppercase italic">Voir Tarifs</button>
+            </div>
 
-                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col">
-                    <div class="text-6xl mb-8">⭐</div>
-                    <h3 class="text-3xl font-black mb-4 italic uppercase tracking-tighter">Premium</h3>
-                    <p class="text-sm text-slate-500 flex-1">Netflix, Spotify et Disney+ à prix MK.</p>
-                    <button onclick="startChat('Premium')" class="btn-black mt-8 px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter</button>
+            <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] card-shadow border-t-8 border-cyan-400">
+                <div class="text-5xl mb-6">📺</div>
+                <h3 class="text-2xl font-black uppercase italic mb-2">MK Stream TV</h3>
+                <input id="tv-code-field" type="text" placeholder="CODE ACHETÉ" class="w-full bg-slate-50 dark:bg-black/20 p-4 rounded-xl mb-4 outline-none text-xs font-bold uppercase">
+                <button onclick="checkTvCode()" class="btn-black w-full py-4 text-[10px] font-black uppercase italic">Accéder</button>
+            </div>
+
+            <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] card-shadow border-t-8 border-mkYellow">
+                <div class="text-5xl mb-6">⭐</div>
+                <h3 class="text-2xl font-black uppercase italic mb-2">Premium Shop</h3>
+                <p class="text-xs text-slate-500 mb-6 font-medium">• Netflix • Spotify • Disney+ (À vie)</p>
+                <button onclick="startChat('Achat Premium')" class="btn-black w-full py-4 text-[10px] font-black uppercase italic">Commander</button>
+            </div>
+
+            <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] card-shadow border-t-8 border-mkPurple lg:col-span-2 flex items-center gap-6">
+                <div class="text-6xl">✨</div>
+                <div class="flex-1">
+                    <h3 class="text-2xl font-black uppercase italic">Demande Spéciale</h3>
+                    <p class="text-xs text-slate-500 font-medium">Besoin d'autre chose ? Contactez-nous !</p>
                 </div>
+                <button onclick="startChat('Demande Perso')" class="btn-black px-10 py-4 text-[10px] font-black uppercase italic">Contacter</button>
             </div>
         </main>
-
-        <footer class="py-10 text-center">
-            <button onclick="openModal('admin-auth-modal')" class="text-[10px] text-slate-300 dark:text-slate-600 font-bold uppercase hover:text-mkRed transition">Accès Administration</button>
-        </footer>
     </div>
 
     <div id="tv-section" class="hidden fixed inset-0 z-[60] netflix-bg overflow-y-auto">
-        <nav class="p-8 flex justify-between items-center sticky top-0 bg-black/95 backdrop-blur-xl z-20 border-b border-white/5">
-            <h2 class="text-3xl font-black italic text-mkBlue uppercase tracking-tighter">MK <span class="text-white">STREAM</span></h2>
-            <button onclick="closeTv()" class="text-white bg-mkRed px-8 py-3 rounded-full text-xs font-black uppercase italic">Quitter</button>
+        <nav class="p-6 flex justify-between items-center bg-black/95 sticky top-0 border-b border-white/5">
+            <h2 class="text-2xl font-black italic text-mkBlue uppercase">MK <span class="text-white">STREAM</span></h2>
+            <button onclick="closeTv()" class="bg-mkRed text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase">Quitter</button>
         </nav>
-        <div id="catalog-view" class="p-10 space-y-20 pb-40">
+        <div id="catalog-view" class="p-8 space-y-16">
             <section>
-                <h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-mkBlue uppercase italic">Catalogue Animés</h3>
-                <div id="row-shonen" class="flex gap-6 overflow-x-auto no-scrollbar"></div>
+                <h3 class="text-xl font-black text-white mb-6 uppercase border-l-4 border-mkBlue pl-4 italic">Mangas Shonen</h3>
+                <div id="row-shonen" class="flex gap-4 overflow-x-auto no-scrollbar pb-4"></div>
+            </section>
+            <section>
+                <h3 class="text-xl font-black text-white mb-6 uppercase border-l-4 border-yellow-500 pl-4 italic">Dessins Animés</h3>
+                <div id="row-cartoons" class="flex gap-4 overflow-x-auto no-scrollbar pb-4"></div>
             </section>
         </div>
-        <div id="episode-view" class="hidden p-10 max-w-7xl mx-auto">
-            <button onclick="backToCatalog()" class="text-mkBlue font-black mb-10 uppercase text-xs tracking-widest">← Retour</button>
-            <h2 id="ep-title" class="text-5xl font-black text-white uppercase italic mb-10"></h2>
-            <div id="ep-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"></div>
+        <div id="episode-view" class="hidden p-8">
+            <button onclick="backToCatalog()" class="text-mkBlue font-bold text-xs mb-8 uppercase">← Retour au catalogue</button>
+            <h2 id="ep-title" class="text-4xl font-black text-white uppercase italic mb-8"></h2>
+            <div id="ep-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
         </div>
     </div>
 
     <div id="player-overlay" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
-        <div class="p-5 flex justify-between bg-black text-white items-center border-b border-white/10">
-            <span class="font-black text-xs uppercase text-mkBlue italic">Lecture en cours</span>
-            <button onclick="stopVideo()" class="text-2xl">✕</button>
-        </div>
+        <div class="p-4 flex justify-between bg-black text-white"><span class="text-[10px] font-black uppercase">Lecture MK HD</span><button onclick="stopVideo()">✕</button></div>
         <iframe id="ifr-player" class="flex-1 w-full h-full" allow="autoplay; fullscreen" frameborder="0"></iframe>
     </div>
 
     <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-lg h-[600px] rounded-[3rem] flex flex-col overflow-hidden shadow-2xl">
-            <div class="bg-slate-900 p-6 text-white flex justify-between items-center font-black italic uppercase text-xs">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-lg h-[550px] rounded-[2.5rem] flex flex-col overflow-hidden">
+            <div class="bg-slate-900 p-5 text-white flex justify-between items-center font-black uppercase text-[10px]">
                 <span>Support MK SHOP</span> <button onclick="closeModal('chat-modal')">✕</button>
             </div>
-            <div id="chat-body" class="flex-1 p-8 overflow-y-auto space-y-4 bg-slate-50 dark:bg-[#0f172a]"></div>
-            <div class="p-6 flex gap-4 border-t dark:border-white/5">
-                <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-8 outline-none text-sm">
-                <button onclick="sendMessage()" class="bg-mkBlue text-white w-12 h-12 rounded-full font-black">➤</button>
+            <div id="chat-body" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50 dark:bg-[#0f172a]"></div>
+            <div class="p-4 flex gap-2 border-t dark:border-white/5">
+                <input id="chat-input" type="text" placeholder="Écrire..." class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-6 outline-none text-xs">
+                <button onclick="sendMessage()" class="bg-mkBlue text-white w-10 h-10 rounded-full font-black">➤</button>
             </div>
         </div>
     </div>
 
     <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
-            <h3 class="text-3xl font-black mb-10 italic uppercase">Espace MK</h3>
-            <input id="in-user" type="text" placeholder="Pseudo" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
-            <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
-            <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic shadow-lg">Valider</button>
-            <button onclick="closeModal('auth-modal')" class="mt-6 text-[10px] font-black opacity-40 uppercase">Fermer</button>
+        <div class="bg-white dark:bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-sm text-center">
+            <h3 class="text-2xl font-black mb-8 italic uppercase">Compte Cloud</h3>
+            <input id="in-user" type="text" placeholder="Pseudo" class="w-full bg-slate-50 dark:bg-black/40 p-4 rounded-xl mb-4 outline-none font-bold">
+            <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 p-4 rounded-xl mb-6 outline-none font-bold">
+            <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-4 rounded-full uppercase italic">Valider</button>
         </div>
     </div>
 
     <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-black/90 flex items-center justify-center">
-        <div class="bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-xs text-center">
-            <h3 class="text-xl font-black mb-8 text-mkRed uppercase">Code Admin</h3>
-            <input id="admin-pass-input" type="password" placeholder="••••" class="w-full bg-black/40 p-4 rounded-xl mb-6 text-center text-white outline-none">
-            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white py-4 rounded-xl font-black uppercase">Entrer</button>
+        <div class="bg-[#1e293b] p-8 rounded-[2rem] text-center w-full max-w-xs">
+            <h3 class="text-xl font-black text-mkRed mb-6 uppercase italic">Accès Master</h3>
+            <input id="admin-pass-input" type="password" placeholder="Code" class="w-full bg-black/40 p-4 rounded-xl mb-4 text-center text-white outline-none">
+            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white py-4 rounded-xl font-black uppercase italic">Ouvrir</button>
         </div>
     </div>
 
     <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-[#0f172a] text-white p-8 overflow-y-auto">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
-                <h2 class="text-2xl font-black italic text-mkBlue uppercase">Gestion Cloud MK</h2>
-                <button onclick="closeModal('admin-panel')" class="bg-mkRed px-6 py-2 rounded-full text-xs font-bold uppercase">Fermer</button>
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                <h2 class="text-xl font-black italic text-mkBlue uppercase">MK CLOUD MANAGER</h2>
+                <button onclick="closeModal('admin-panel')" class="bg-mkRed px-6 py-2 rounded-full text-[10px] font-bold">FERMER</button>
             </div>
-            <div id="admin-user-list" class="space-y-6"></div>
+            <div id="admin-user-list" class="space-y-4"></div>
         </div>
     </div>
 
     <script>
-        // CONFIG SUPABASE
+        // CONFIG SUPABASE (COLLE TA CLÉ ICI)
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co";
-        const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn"; // METS BIEN TOUTE TA CLÉ ICI
+        const SB_KEY = "sb_publishable_..."; // <--- TA CLÉ ICI
         const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
         const ADMIN_PASS = "admin123";
         const TV_CODE = "ACCES-ACHETER-0001";
 
-        // DONNÉES
+        // CATALOGUE TRIÉ
         const content = [
-            { id: 0, title: "One Piece", poster: "https://image.animationdigitalnetwork.fr/license/onepiece/arc5/web/affiche_350x500.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
-            { id: 1, title: "Naruto", poster: "https://zqwqz.org/img/naruto-classic-1622930404.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"FoVvpkMlTqM"})) },
-            { id: 2, title: "Bob l'éponge", poster: "https://www.topkool.com/fr/wp-content/uploads/2013/04/bob-l-eponge-022.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"dhJtWThO5kw"})) }
+            { id: 0, cat: "shonen", title: "One Piece", poster: "https://image.animationdigitalnetwork.fr/license/onepiece/arc5/web/affiche_350x500.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
+            { id: 1, cat: "shonen", title: "Naruto", poster: "https://zqwqz.org/img/naruto-classic-1622930404.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"FoVvpkMlTqM"})) },
+            { id: 2, cat: "shonen", title: "Dragon Ball Z", poster: "https://fr.web.img6.acsta.net/pictures/19/04/18/14/51/1899178.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
+            { id: 3, cat: "cartoons", title: "Bob l'éponge", poster: "https://www.topkool.com/fr/wp-content/uploads/2013/04/bob-l-eponge-022.jpg", episodes: Array.from({length:10}, (_, i) => ({t:`Épisode ${i+1}`, u:"dhJtWThO5kw"})) },
+            { id: 4, cat: "cartoons", title: "Le Monde de Gumball", poster: "https://quotecatalog.imgix.net/assets/title-sbTftntUdiZ67GmtaPYjAjyX/original.jpg?w=400&h=600&fit=crop", episodes: [{t:"Épisode 1", u:"FoVvpkMlTqM"}] }
         ];
 
         let user = JSON.parse(localStorage.getItem('mk_session')) || null;
-        let allUsers = [];
 
         window.onload = () => {
-            if(user) {
-                applySession();
-                syncLoop();
-            }
+            if(user) { applySession(); syncLoop(); }
             renderCatalog();
         };
 
-        // AUTH CLOUD
+        // AUTH & SYNC
         async function handleAuth() {
             const u = document.getElementById('in-user').value.trim();
             const p = document.getElementById('in-pass').value;
-            if(!u || !p) return alert("Champs vides !");
+            if(!u || !p) return;
 
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('username', u).single();
 
@@ -194,11 +200,10 @@
                     user = { u: profile.username, p: profile.password, hasTv: profile.has_tv, messages: profile.messages };
                     saveSession();
                     location.reload();
-                } else alert("Mot de passe incorrect");
+                } else alert("Erreur MDP");
             } else {
-                const { error } = await supabaseClient.from('profiles').insert([{ username: u, password: p, has_tv: false, messages: [] }]);
-                if (!error) alert("Compte créé ! Connecte-toi.");
-                else alert("Erreur : " + error.message);
+                await supabaseClient.from('profiles').insert([{ username: u, password: p, has_tv: false, messages: [] }]);
+                alert("Compte créé !");
             }
         }
 
@@ -207,24 +212,18 @@
             if(data) {
                 user.messages = data.messages;
                 user.hasTv = data.has_tv;
-                if(document.getElementById('chat-modal').classList.contains('hidden') === false) renderMessages();
+                if(!document.getElementById('chat-modal').classList.contains('hidden')) renderMessages();
             }
             setTimeout(syncLoop, 5000);
         }
 
-        function applySession() {
-            document.getElementById('auth-btns').classList.add('hidden');
-            document.getElementById('user-display').classList.remove('hidden');
-            document.getElementById('user-name').innerText = user.u;
-        }
-
-        function logout() { localStorage.removeItem('mk_session'); location.reload(); }
-
-        // TV FUNCTIONS
+        // UI
         function renderCatalog() {
-            document.getElementById('row-shonen').innerHTML = content.map(item => `
-                <div onclick="showEpisodes(${item.id})" class="min-w-[200px] h-[280px] rounded-3xl bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl border border-white/10" style="background-image: url('${item.poster}')"></div>
-            `).join('');
+            ['shonen', 'cartoons'].forEach(cat => {
+                document.getElementById(`row-${cat}`).innerHTML = content.filter(x => x.cat === cat).map(item => `
+                    <div onclick="showEpisodes(${item.id})" class="min-w-[150px] h-[220px] rounded-2xl bg-cover bg-center cursor-pointer hover:scale-105 transition" style="background-image: url('${item.poster}')"></div>
+                `).join('');
+            });
         }
 
         function showEpisodes(id) {
@@ -233,98 +232,74 @@
             document.getElementById('episode-view').classList.remove('hidden');
             document.getElementById('ep-title').innerText = item.title;
             document.getElementById('ep-list').innerHTML = item.episodes.map(ep => `
-                <div onclick="playVideo('${ep.u}')" class="bg-white/5 p-3 rounded-2xl cursor-pointer hover:bg-mkBlue/20 transition">
-                    <img src="https://img.youtube.com/vi/${ep.u}/mqdefault.jpg" class="rounded-xl w-full mb-3">
-                    <span class="text-[10px] font-black text-white uppercase italic">${ep.t}</span>
+                <div onclick="playVideo('${ep.u}')" class="bg-white/5 p-2 rounded-xl cursor-pointer">
+                    <img src="https://img.youtube.com/vi/${ep.u}/mqdefault.jpg" class="rounded-lg w-full mb-2">
+                    <span class="text-[9px] font-bold text-white uppercase italic">${ep.t}</span>
                 </div>
             `).join('');
         }
 
-        function checkTvCode() {
-            const val = document.getElementById('tv-code-field').value;
-            if(val === TV_CODE || (user && user.hasTv)) openModal('tv-section');
-            else alert("Accès refusé. Code invalide.");
-        }
-
+        // FONCTIONS GÉNÉRALES
+        function checkTvCode() { if(document.getElementById('tv-code-field').value === TV_CODE || (user && user.hasTv)) openModal('tv-section'); else alert("Code nécessaire."); }
         function playVideo(u) { document.getElementById('player-overlay').classList.remove('hidden'); document.getElementById('ifr-player').src = `https://www.youtube.com/embed/${u}?autoplay=1`; }
         function stopVideo() { document.getElementById('player-overlay').classList.add('hidden'); document.getElementById('ifr-player').src = ""; }
-        function closeTv() { closeModal('tv-section'); }
         function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-view').classList.remove('hidden'); }
-
-        // SUPPORT CHAT
+        function closeTv() { closeModal('tv-section'); }
         function startChat() { if(!user) return openModal('auth-modal'); openModal('chat-modal'); renderMessages(); }
         function renderMessages() {
-            const body = document.getElementById('chat-body');
-            body.innerHTML = user.messages.map(m => `
+            document.getElementById('chat-body').innerHTML = user.messages.map(m => `
                 <div class="flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}">
-                    <div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} text-[11px] font-bold">
-                        ${m.txt}
-                    </div>
+                    <div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} text-[10px] font-bold">${m.txt}</div>
                 </div>
             `).join('');
-            body.scrollTop = body.scrollHeight;
         }
-
         async function sendMessage() {
             const inp = document.getElementById('chat-input'); if(!inp.value) return;
             user.messages.push({ from: 'me', txt: inp.value });
             await supabaseClient.from('profiles').update({ messages: user.messages }).eq('username', user.u);
             inp.value = ""; renderMessages();
         }
-
-        // ADMIN
-        async function verifyAdmin() {
-            if(document.getElementById('admin-pass-input').value === ADMIN_PASS) {
-                closeModal('admin-auth-modal');
-                openModal('admin-panel');
-                const { data } = await supabaseClient.from('profiles').select('*');
-                allUsers = data;
-                renderAdmin();
-            }
-        }
-
-        function renderAdmin() {
-            document.getElementById('admin-user-list').innerHTML = allUsers.map((u, i) => `
-                <div class="bg-[#1e293b] p-6 rounded-3xl border border-white/5 flex flex-col gap-4">
-                    <div class="flex justify-between items-center">
-                        <div><h4 class="font-black text-mkBlue uppercase">${u.username}</h4><p class="text-[9px] opacity-50">PASS: ${u.password}</p></div>
-                        <div class="flex gap-2">
-                            <button onclick="adminToggleTv(${i})" class="bg-slate-700 px-4 py-2 rounded-full text-[9px] font-bold">${u.has_tv ? 'TV: OK' : 'OFF'}</button>
-                            <button onclick="adminBan('${u.username}')" class="bg-mkRed px-4 py-2 rounded-full text-[9px] font-bold">BAN</button>
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <input id="rep-${i}" type="text" placeholder="Répondre..." class="flex-1 bg-black/40 p-3 rounded-xl text-xs outline-none">
-                        <button onclick="adminReply(${i})" class="bg-mkYellow text-black px-5 py-2 rounded-xl font-black text-xs">ENVOYER</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function adminReply(i) {
-            const txt = document.getElementById(`rep-${i}`).value; if(!txt) return;
-            allUsers[i].messages.push({ from: 'support', txt: txt });
-            await supabaseClient.from('profiles').update({ messages: allUsers[i].messages }).eq('username', allUsers[i].username);
-            renderAdmin();
-        }
-
-        async function adminToggleTv(i) {
-            allUsers[i].has_tv = !allUsers[i].has_tv;
-            await supabaseClient.from('profiles').update({ has_tv: allUsers[i].has_tv }).eq('username', allUsers[i].username);
-            renderAdmin();
-        }
-
-        async function adminBan(target) {
-            if(confirm("Bannir " + target + " ?")) {
-                await supabaseClient.from('profiles').delete().eq('username', target);
-                location.reload();
-            }
-        }
-
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
         function toggleTheme() { document.documentElement.classList.toggle('dark'); }
         function saveSession() { localStorage.setItem('mk_session', JSON.stringify(user)); }
+        function applySession() {
+            document.getElementById('auth-btns').classList.add('hidden');
+            document.getElementById('user-display').classList.remove('hidden');
+            document.getElementById('user-name').innerText = user.u.toUpperCase();
+        }
+        function logout() { localStorage.removeItem('mk_session'); location.reload(); }
+
+        // ADMIN
+        async function verifyAdmin() {
+            if(document.getElementById('admin-pass-input').value === ADMIN_PASS) {
+                closeModal('admin-auth-modal'); openModal('admin-panel');
+                const { data } = await supabaseClient.from('profiles').select('*');
+                document.getElementById('admin-user-list').innerHTML = data.map((u, i) => `
+                    <div class="bg-white/5 p-5 rounded-2xl flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-mkBlue uppercase text-sm">${u.username}</span>
+                            <button onclick="adminToggleTv('${u.username}', ${u.has_tv})" class="bg-slate-700 px-4 py-1 rounded text-[9px]">${u.has_tv ? 'ACCÈS TV OK' : 'PAS DE TV'}</button>
+                        </div>
+                        <div class="flex gap-2">
+                            <input id="admin-rep-${i}" type="text" placeholder="Répondre..." class="flex-1 bg-black/40 p-2 rounded text-xs outline-none">
+                            <button onclick="adminReply('${u.username}', ${i})" class="bg-mkYellow text-black px-4 rounded font-bold text-[10px]">OK</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        async function adminToggleTv(target, current) {
+            await supabaseClient.from('profiles').update({ has_tv: !current }).eq('username', target);
+            verifyAdmin();
+        }
+        async function adminReply(target, i) {
+            const txt = document.getElementById(`admin-rep-${i}`).value;
+            const { data } = await supabaseClient.from('profiles').select('messages').eq('username', target).single();
+            let msg = data.messages; msg.push({ from: 'support', txt: txt });
+            await supabaseClient.from('profiles').update({ messages: msg }).eq('username', target);
+            alert("Réponse envoyée");
+        }
     </script>
 </body>
 </html>
