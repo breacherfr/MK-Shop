@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP | SUPREME PLATINUM V72.5</title>
+    <title>MK SHOP | CRYSTAL TITANIUM V74</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -15,1015 +15,818 @@
             theme: {
                 extend: {
                     colors: {
-                        mkBlue: '#00d2ff',
-                        mkRed: '#ff4b5c',
-                        mkPurple: '#a363ff',
-                        mkYellow: '#fbbf24',
-                        mkGreen: '#22c55e',
-                        mkAdmin: '#ff00ff',
-                        mkDarker: '#020202',
-                        mkCard: '#0a0a0c'
+                        mkBlue: '#00d2ff', mkRed: '#ff4b5c', mkPurple: '#a363ff',
+                        mkYellow: '#fbbf24', mkGreen: '#22c55e', mkAdmin: '#ff00ff',
+                        mkDark: '#0a0a0b', mkCard: '#121215'
                     },
-                    borderRadius: {
-                        '4xl': '2rem',
-                        '5xl': '3rem',
-                        '6xl': '5rem'
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 3s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
+                    borderRadius: { 'xl': '1rem', '2xl': '1.5rem', '3xl': '2rem', '6xl': '4rem' }
                 }
             }
         }
     </script>
 
     <style>
-        /* BASE STYLES */
+        /* CORE DESIGN */
         body { 
             font-family: 'Montserrat', sans-serif; 
-            background-color: #030303; 
+            background-color: #050505; 
             color: #ffffff; 
-            overflow-x: hidden;
-            letter-spacing: -0.02em;
+            margin: 0; padding: 0;
+            overflow: hidden;
+            font-size: 15px; /* Correction du dézoom */
         }
 
-        .font-sync { font-family: 'Syncopate', sans-serif; }
-
-        /* GLASSMORPHISM EVOLUTION */
-        .glass { 
-            backdrop-filter: blur(40px); 
-            background: rgba(15, 15, 18, 0.98); 
-            border: 1px solid rgba(255, 255, 255, 0.04); 
+        /* GRID LAYOUT FOR STABILITY */
+        #app-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            height: 100vh;
+            width: 100vw;
         }
 
-        .glass-hover:hover {
-            background: rgba(25, 25, 30, 0.99);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            transform: translateY(-5px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        #main-content {
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 100px;
         }
 
-        /* ANIMATIONS DE CHARGEMENT */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-view { animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-
-        /* CHAT FIXED SYSTEM - STRICT RIGHT SIDE */
-        #side-chat-container {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            bottom: 25px;
-            width: 400px;
-            z-index: 5000;
+        /* RIGHT CHAT AREA */
+        #chat-sidebar {
+            background: #080808;
+            border-left: 1px solid rgba(255,255,255,0.08);
             display: flex;
             flex-direction: column;
-            border-radius: 3rem;
+            height: 100vh;
+        }
+
+        /* UI REFINEMENT */
+        .glass-nav { 
+            backdrop-filter: blur(20px); 
+            background: rgba(8, 8, 10, 0.9); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+
+        .mk-card {
+            background: #111114;
+            border-radius: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.9);
-            border: 1px solid rgba(255,255,255,0.06);
-            resize: none !important;
         }
 
-        /* DASHBOARD SECTIONING */
-        .content-wrapper {
-            margin-right: 440px; /* Space for the chat */
-            padding: 40px;
+        .mk-card:hover {
+            border-color: #00d2ff;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        /* SCROLLBAR CUSTOMIZATION */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* GAME ANIMATIONS */
+        @keyframes winPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px 10px rgba(34, 197, 94, 0); }
+            100% { transform: scale(1); }
+        }
+        .animate-win { animation: winPulse 0.6s ease-out; }
 
-        /* NOTIFICATION TOAST */
-        .toast-mk {
-            position: fixed;
-            bottom: 40px;
-            left: 40px;
-            z-index: 10000;
-            padding: 20px 40px;
-            border-radius: 20px;
-            background: #000;
-            border-left: 5px solid #00d2ff;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 11px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        @keyframes loseShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-lose { animation: loseShake 0.4s ease-in-out; }
+
+        @keyframes coinFlip {
+            0% { transform: rotateY(0); }
+            100% { transform: rotateY(1800deg); }
+        }
+        .coin-anim { animation: coinFlip 1s cubic-bezier(0.1, 0.5, 0.1, 1); }
+
+        /* MINES GRID */
+        .mine-btn {
+            aspect-ratio: 1/1;
+            background: #1a1a1e;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 15px;
-            animation: slideIn 0.5s ease-out;
+            justify-content: center;
         }
+        .mine-btn:hover:not(:disabled) { background: #2a2a30; border-color: #00d2ff; }
+        .mine-btn.active { background: #00d2ff; color: black; }
+        .mine-btn.bomb { background: #ff4b5c; }
 
-        @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
 
-        /* TAB NAVIGATION */
-        .tab-btn {
-            position: relative;
-            transition: all 0.3s;
+        /* TABS */
+        .tab-link {
+            font-size: 13px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1px; color: rgba(255,255,255,0.4);
+            transition: 0.3s; cursor: pointer; position: relative;
         }
-        .tab-btn.active { color: #00d2ff; }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: #00d2ff;
-        }
-
-        /* SLOTS MACHINE ANIMATION */
-        .slot-box {
-            background: linear-gradient(180deg, #111 0%, #050505 100%);
-            border: 2px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 20px;
-            font-size: 3rem;
-            min-width: 80px;
+        .tab-link.active { color: #00d2ff; }
+        .tab-link.active::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 100%; height: 2px; background: #00d2ff;
         }
     </style>
 </head>
-<body class="dark overflow-y-scroll">
+<body>
 
-    <nav class="glass sticky top-0 z-[6000] px-12 py-7 flex justify-between items-center border-b border-white/5">
-        <div class="flex items-center gap-14">
-            <div class="flex items-center gap-5 cursor-pointer group" onclick="showSection('shop')">
-                <div class="relative">
-                    <div class="absolute inset-0 bg-mkBlue blur-xl opacity-20 group-hover:opacity-50 transition"></div>
-                    <div class="w-14 h-14 bg-mkBlue rounded-2xl flex items-center justify-center font-black text-black text-2xl relative">MK</div>
-                </div>
-                <div>
-                    <h1 class="font-black text-2xl italic tracking-tighter leading-none font-sync">MK SHOP</h1>
-                    <span class="text-[9px] font-bold text-mkBlue uppercase tracking-[0.4em] opacity-80">Supreme v72.5 Platinum</span>
-                </div>
-            </div>
-            
-            <div class="hidden xl:flex gap-10 items-center">
-                <button onclick="showSection('shop')" class="tab-btn text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100">Marketplace</button>
-                <button onclick="showSection('games')" class="tab-btn text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100">Casino VIP</button>
-                <button onclick="showSection('leaderboard')" class="tab-btn text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100">Leaderboard</button>
-                <button onclick="showSection('profile')" class="tab-btn text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100">Mon Profil</button>
-                <button id="nav-admin" onclick="showSection('admin')" class="hidden bg-mkAdmin/10 text-mkAdmin border border-mkAdmin/20 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Admin Console</button>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-8">
-            <div class="flex bg-mkDarker rounded-2xl p-1.5 border border-white/5">
-                <button id="m-cash" onclick="setMode('cash')" class="px-6 py-2.5 rounded-xl text-[10px] font-black bg-mkGreen text-black shadow-2xl transition-all duration-500">WALLET</button>
-                <button id="m-xp" onclick="setMode('xp')" class="px-6 py-2.5 rounded-xl text-[10px] font-black opacity-30 text-white transition-all duration-500">XP LEVEL</button>
-            </div>
-            
-            <div class="bg-black/40 px-8 py-3 rounded-2xl border border-white/10 min-w-[150px] text-center">
-                <span id="val-display" class="font-black text-mkGreen text-xl tracking-tighter italic">0.00€</span>
-            </div>
-
-            <div id="auth-zone">
-                <button onclick="openModal('modal-auth')" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-mkBlue transition-all">Connexion</button>
-            </div>
-
-            <div id="user-zone" class="hidden flex items-center gap-4 border-l border-white/10 pl-8">
-                <div class="text-right">
-                    <p id="u-name-display" class="text-[10px] font-black uppercase tracking-tighter">Membre</p>
-                    <p class="text-[8px] font-bold text-mkBlue opacity-50">En ligne</p>
-                </div>
-                <img id="u-pfp" src="" class="w-12 h-12 rounded-2xl border-2 border-mkBlue object-cover shadow-lg shadow-mkBlue/20">
-                <button onclick="logout()" class="w-10 h-10 flex items-center justify-center bg-mkRed/10 text-mkRed rounded-xl hover:bg-mkRed hover:text-white transition-all">✕</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="content-wrapper">
-        
-        <section id="s-shop" class="animate-view space-y-16">
-            <header class="max-w-4xl">
-                <h2 class="text-8xl font-black italic uppercase tracking-tighter leading-[0.85]">Find Your <br><span class="text-mkBlue">Luxury</span> Items.</h2>
-                <p class="mt-6 text-sm opacity-40 font-medium max-w-xl">Bienvenue sur le marketplace MK. Tous nos comptes sont vérifiés manuellement par notre équipe pour garantir une sécurité totale après achat.</p>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="glass p-12 rounded-6xl glass-hover group">
-                    <div class="flex justify-between items-start">
-                        <div class="w-20 h-20 bg-mkBlue/10 rounded-3xl flex items-center justify-center text-4xl group-hover:scale-110 transition">🎮</div>
-                        <span class="bg-mkBlue/20 text-mkBlue px-4 py-1.5 rounded-full text-[9px] font-black uppercase">Stock: 14</span>
-                    </div>
-                    <h3 class="text-3xl font-black uppercase italic mt-10">Comptes Roblox</h3>
-                    <p class="text-xs opacity-40 mt-4 leading-relaxed">Accès exclusif à des comptes avec inventaires Limiteds, fruits permanents (Blox Fruits) et badges rares. Full mail access inclus.</p>
-                    <div class="mt-12 flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] opacity-30 font-bold uppercase">À partir de</span>
-                            <span class="text-2xl font-black italic">14.99€</span>
-                        </div>
-                        <button onclick="openTicket('Achat Roblox')" class="bg-white text-black px-10 py-5 rounded-2xl font-black text-[11px] uppercase hover:bg-mkBlue transition-all shadow-lg shadow-white/5">Commander</button>
-                    </div>
-                </div>
-
-                <div class="glass p-12 rounded-6xl glass-hover group border-t-4 border-mkPurple">
-                    <div class="flex justify-between items-start">
-                        <div class="w-20 h-20 bg-mkPurple/10 rounded-3xl flex items-center justify-center text-4xl group-hover:scale-110 transition">⚡</div>
-                        <span class="bg-mkPurple/20 text-mkPurple px-4 py-1.5 rounded-full text-[9px] font-black uppercase">Instant Delivery</span>
-                    </div>
-                    <h3 class="text-3xl font-black uppercase italic mt-10 text-mkPurple">Scripts Premium</h3>
-                    <p class="text-xs opacity-40 mt-4 leading-relaxed">Menus d'injection privés pour FPS et MMORPG. Indétectables par les derniers anti-cheats. Mises à jour hebdomadaires.</p>
-                    <div class="mt-12 flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] opacity-30 font-bold uppercase">Licence</span>
-                            <span class="text-2xl font-black italic">9.99€ <small class="text-[10px]">/MOIS</small></span>
-                        </div>
-                        <button onclick="openTicket('Achat Cheat')" class="bg-mkPurple text-white px-10 py-5 rounded-2xl font-black text-[11px] uppercase shadow-xl shadow-mkPurple/20">Voir les Offres</button>
-                    </div>
-                </div>
-
-                <div id="tv-card" class="md:col-span-2 glass p-16 rounded-[4rem] border-2 border-mkAdmin relative overflow-hidden flex flex-col lg:flex-row items-center gap-16">
-                    <div class="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
-                        <span class="text-[15rem] font-black italic">VIP</span>
-                    </div>
-                    <div class="relative z-10 flex-1">
-                        <div class="flex items-center gap-4 mb-6">
-                            <div class="w-12 h-1 flex bg-mkAdmin rounded-full"></div>
-                            <span class="text-mkAdmin font-black text-xs uppercase tracking-[0.5em]">Exclusive Service</span>
-                        </div>
-                        <h3 class="text-6xl font-black italic uppercase leading-none text-white">MK Cinema <br><span class="text-mkAdmin italic">Streaming VIP</span></h3>
-                        <p class="text-sm opacity-40 mt-8 max-w-md font-medium">Accédez à plus de 45,000 films et séries en ultra haute définition. Nécessite un code d'accès MK Premium.</p>
-                    </div>
-                    <div class="relative z-10 w-full max-w-md space-y-6">
-                        <div class="bg-black/60 p-10 rounded-[3rem] border border-white/5 shadow-inner">
-                            <label class="text-[9px] font-black uppercase opacity-40 mb-3 block tracking-widest">Code Activation</label>
-                            <input id="tv-code" type="text" placeholder="XXXX-XXXX-XXXX" class="w-full bg-mkDarker p-5 rounded-2xl text-xs font-black outline-none border border-white/5 focus:border-mkAdmin transition text-center tracking-[0.3em] uppercase mb-6">
-                            <button onclick="unlockTV()" class="w-full bg-mkAdmin text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-2xl shadow-mkAdmin/30 hover:scale-[1.02] transition-all">Débloquer l'accès</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass p-12 rounded-[5rem] border-2 border-mkRed flex flex-col lg:flex-row justify-between items-center gap-10">
-                <div class="flex items-center gap-10">
-                    <div class="w-24 h-24 bg-mkRed/10 rounded-full flex items-center justify-center text-5xl animate-pulse">💰</div>
-                    <div>
-                        <h4 class="text-4xl font-black text-mkRed uppercase italic italic leading-none">Cashout System</h4>
-                        <p class="text-xs opacity-40 uppercase font-bold tracking-widest mt-2 italic">Retrait de vos gains casino vers PayPal, Crypto ou Gift Cards.</p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="openTicket('CASHOUT')" class="bg-mkRed text-white px-12 py-5 rounded-2xl font-black text-[11px] uppercase shadow-2xl shadow-mkRed/40">Demander un retrait</button>
-                    <button onclick="openTicket('Support')" class="bg-white/5 border border-white/10 text-white px-12 py-5 rounded-2xl font-black text-[11px] uppercase">Aide</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="s-games" class="hidden animate-view space-y-16">
-            <header class="text-center">
-                <h2 class="text-7xl font-black italic uppercase tracking-tighter">MK <span class="text-mkRed">Luxury Casino</span></h2>
-                <p class="text-[10px] font-bold opacity-30 uppercase tracking-[0.5em] mt-4">Provably Fair System • High Roller Only</p>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="glass p-16 rounded-6xl text-center border-b-8 border-mkBlue">
-                    <h3 class="text-xs font-black uppercase opacity-30 tracking-widest mb-10">Coin Flip Double Or Nothing</h3>
-                    <div id="coin-res" class="text-[10rem] mb-12 animate-float">🪙</div>
-                    <div class="max-w-xs mx-auto space-y-6">
-                        <div class="relative">
-                            <span class="absolute left-6 top-1/2 -translate-y-1/2 font-black text-xs opacity-20 uppercase">Mise</span>
-                            <input id="bet-coin" type="number" value="10" class="w-full bg-black/50 py-5 px-16 rounded-2xl text-2xl font-black text-center outline-none border border-white/5 focus:border-mkBlue">
-                        </div>
-                        <div class="flex gap-4">
-                            <button onclick="playGame('coin', 'pile')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-mkBlue/20">Miser Pile</button>
-                            <button onclick="playGame('coin', 'face')" class="flex-1 bg-white text-black py-5 rounded-2xl font-black text-[11px] uppercase">Miser Face</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass p-16 rounded-6xl text-center border-b-8 border-mkPurple">
-                    <h3 class="text-xs font-black uppercase opacity-30 tracking-widest mb-10">MK Triple Slots x15</h3>
-                    <div class="flex justify-center gap-6 mb-12">
-                        <div id="sl1" class="slot-box font-sync">🍒</div>
-                        <div id="sl2" class="slot-box font-sync">🍒</div>
-                        <div id="sl3" class="slot-box font-sync">🍒</div>
-                    </div>
-                    <div class="max-w-xs mx-auto space-y-6">
-                        <input id="bet-slots" type="number" value="10" class="w-full bg-black/50 py-5 rounded-2xl text-2xl font-black text-center outline-none border border-white/5">
-                        <button onclick="playGame('slots')" class="w-full bg-mkPurple text-white py-6 rounded-2xl font-black text-[12px] uppercase shadow-2xl shadow-mkPurple/30 group">
-                            <span class="group-hover:tracking-widest transition-all">Actionner le Levier</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="glass p-16 rounded-6xl text-center border-b-8 border-mkYellow">
-                    <h3 class="text-xs font-black uppercase opacity-30 tracking-widest mb-10">Master Dice Roll</h3>
-                    <div id="dice-res" class="text-[10rem] mb-12 text-mkYellow">🎲</div>
-                    <div class="max-w-xs mx-auto space-y-6">
-                        <input id="bet-dice" type="number" value="10" class="w-full bg-black/50 py-5 rounded-2xl text-2xl font-black text-center outline-none border border-white/5">
-                        <button onclick="playGame('dice')" class="w-full bg-mkYellow text-black py-5 rounded-2xl font-black text-[11px] uppercase shadow-xl">Lancer (4+ pour win)</button>
-                    </div>
-                </div>
-
-                <div class="glass p-16 rounded-6xl text-center border-b-8 border-mkGreen">
-                    <h3 class="text-xs font-black uppercase opacity-30 tracking-widest mb-10">Chifoumi Royal (Multiplier x3)</h3>
-                    <div class="flex justify-center gap-6 mb-12">
-                        <button onclick="playGame('rps', 'pierre')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue transition-all">✊</button>
-                        <button onclick="playGame('rps', 'feuille')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue transition-all">✋</button>
-                        <button onclick="playGame('rps', 'ciseaux')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue transition-all">✌️</button>
-                    </div>
-                    <div class="max-w-xs mx-auto">
-                        <input id="bet-rps" type="number" value="10" class="w-full bg-black/50 py-5 rounded-2xl text-2xl font-black text-center outline-none border border-white/5">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="s-leaderboard" class="hidden animate-view space-y-12">
-            <div class="text-center">
-                <h2 class="text-6xl font-black uppercase italic italic font-sync">Hall of <span class="text-mkGreen">Fame</span></h2>
-                <p class="text-xs opacity-30 uppercase font-black tracking-[0.4em] mt-4 italic">Les 10 plus grandes fortunes de MK Shop</p>
-            </div>
-            
-            <div id="leader-container" class="max-w-4xl mx-auto glass rounded-[4rem] overflow-hidden shadow-2xl border border-white/5">
-                </div>
-        </section>
-
-        <section id="s-profile" class="hidden animate-view max-w-3xl mx-auto space-y-12">
-            <div class="glass p-8 rounded-3xl flex gap-6 items-center">
-                <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl">🔍</div>
-                <input id="search-name" type="text" placeholder="RECHERCHER UN UTILISATEUR..." class="flex-1 bg-transparent font-black outline-none uppercase text-xs tracking-widest">
-                <button onclick="findMember()" class="bg-mkBlue text-black px-10 py-4 rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-mkBlue/20">Rechercher</button>
-            </div>
-
-            <div id="p-card" class="glass p-20 rounded-[5rem] text-center relative overflow-hidden border-b-[20px] border-mkBlue">
-                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-mkBlue/10 to-transparent"></div>
-                
-                <img id="p-avatar" src="" class="relative z-10 w-48 h-48 rounded-[4rem] mx-auto object-cover border-8 border-mkDarker shadow-2xl mb-10 hover:scale-105 transition duration-500">
-                
-                <h3 id="p-username" class="relative z-10 text-5xl font-black italic uppercase tracking-tighter">MK User</h3>
-                <div id="p-badge-admin" class="hidden relative z-10 inline-block mt-4 bg-mkAdmin text-white px-4 py-1 rounded-md text-[9px] font-black uppercase">Administrateur</div>
-                
-                <div class="relative z-10 grid grid-cols-2 gap-8 mt-14">
-                    <div class="bg-mkDarker p-10 rounded-[3rem] border border-white/5">
-                        <p class="text-[10px] opacity-30 font-black uppercase mb-2 tracking-widest">Balance Wallet</p>
-                        <p id="p-val-cash" class="text-4xl font-black text-mkGreen tracking-tighter">0.00€</p>
-                    </div>
-                    <div class="bg-mkDarker p-10 rounded-[3rem] border border-white/5">
-                        <p class="text-[10px] opacity-30 font-black uppercase mb-2 tracking-widest">Experience Points</p>
-                        <p id="p-val-xp" class="text-4xl font-black text-mkYellow tracking-tighter">0 XP</p>
-                    </div>
-                </div>
-
-                <div id="p-controls" class="hidden relative z-10 mt-14 pt-14 border-t border-white/5 space-y-8 text-left">
-                    <div class="space-y-4">
-                        <label class="text-[10px] font-black uppercase opacity-40 ml-4 tracking-[0.2em]">Lien d'avatar (Image URL)</label>
-                        <div class="flex gap-4">
-                            <input id="new-pfp-url" type="text" placeholder="https://..." class="flex-1 bg-mkDarker p-5 rounded-2xl text-[11px] font-medium outline-none border border-white/5 focus:border-mkBlue">
-                            <button onclick="updatePfp()" class="bg-white text-black px-10 rounded-2xl font-black text-[10px] uppercase">Sauvegarder</button>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-mkBlue/5 p-8 rounded-3xl border border-mkBlue/10">
-                        <h5 class="text-[10px] font-black uppercase text-mkBlue mb-4">Code Promo / Giftcard</h5>
-                        <div class="flex gap-4">
-                            <input id="promo-code" type="text" placeholder="ENTER CODE" class="flex-1 bg-black/40 p-4 rounded-xl text-xs font-black uppercase outline-none border border-white/5">
-                            <button onclick="usePromo()" class="bg-mkBlue text-black px-8 rounded-xl font-black text-[10px] uppercase">Activer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="s-admin" class="hidden animate-view space-y-16">
-            <header class="flex justify-between items-end">
-                <div>
-                    <h2 class="text-6xl font-black text-mkAdmin italic uppercase tracking-tighter">Command <span class="text-white">Center</span></h2>
-                    <p class="text-xs opacity-40 uppercase font-black mt-2">Gestion globale des utilisateurs et des demandes de support</p>
-                </div>
-                <div class="bg-mkAdmin/10 p-4 rounded-2xl border border-mkAdmin/20">
-                    <span id="adm-stats" class="text-[10px] font-black text-mkAdmin uppercase">Système Opérationnel</span>
-                </div>
-            </header>
-
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
-                <div class="space-y-8">
-                    <h3 class="text-[11px] font-black uppercase text-mkRed tracking-[0.3em] flex items-center gap-4">
-                        <span class="w-10 h-[2px] bg-mkRed"></span> Support Tickets
-                    </h3>
-                    <div id="adm-tickets" class="space-y-4 max-h-[700px] overflow-y-auto pr-4 no-scrollbar">
-                        </div>
-                </div>
-
-                <div class="space-y-8">
-                    <h3 class="text-[11px] font-black uppercase text-mkBlue tracking-[0.3em] flex items-center gap-4">
-                        <span class="w-10 h-[2px] bg-mkBlue"></span> Database Members
-                    </h3>
-                    <div class="bg-mkDarker p-4 rounded-3xl border border-white/5 mb-6">
-                        <input id="adm-search" onkeyup="filterAdminUsers()" type="text" placeholder="Filtrer par nom..." class="w-full bg-transparent p-2 outline-none text-xs font-bold uppercase">
-                    </div>
-                    <div id="adm-users" class="space-y-4 max-h-[700px] overflow-y-auto pr-4 no-scrollbar">
-                        </div>
-                </div>
-            </div>
-        </section>
-
-    </div> <div id="side-chat-container" class="glass">
-        <div class="flex border-b border-white/5 bg-black/20">
-            <button onclick="setChatTab('global')" id="tab-global" class="flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all border-b-2 border-mkBlue text-mkBlue bg-mkBlue/5">Chat Global</button>
-            <button onclick="setChatTab('support')" id="tab-support" class="flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all opacity-40 border-b-2 border-transparent">Support Feed</button>
-        </div>
-        
-        <div id="chat-flow" class="flex-1 p-8 overflow-y-auto space-y-6 no-scrollbar scroll-smooth">
-            </div>
-        
-        <div class="p-8 bg-mkDarker border-t border-white/5">
-            <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-mkBlue to-mkPurple rounded-2xl blur opacity-20 group-focus-within:opacity-50 transition duration-500"></div>
-                <div class="relative bg-black rounded-2xl p-2 flex gap-3 border border-white/10">
-                    <input id="chat-input" type="text" placeholder="Écrire un message..." class="bg-transparent flex-1 outline-none px-4 text-xs font-semibold text-white">
-                    <button onclick="sendChatMessage()" class="w-14 h-14 bg-mkBlue text-black rounded-xl font-black text-2xl hover:scale-95 transition-all shadow-lg shadow-mkBlue/20">></button>
-                </div>
-            </div>
-            <p class="text-[8px] text-center opacity-20 mt-4 font-bold uppercase tracking-widest">Règles : Pas de spam • Pas d'insultes • MK Staff modère 24/7</p>
-        </div>
+    <div id="sync-overlay" class="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] bg-mkBlue text-black px-6 py-2 rounded-full font-black text-xs hidden shadow-2xl">
+        SYNCHRONISATION DATABASE...
     </div>
 
-    <div id="modal-auth" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center p-8 hidden">
-        <div class="glass w-full max-w-lg rounded-[5rem] p-16 text-center border-t-8 border-mkBlue animate-view">
-            <div class="w-20 h-20 bg-mkBlue rounded-3xl mx-auto flex items-center justify-center text-3xl font-black text-black mb-8 shadow-2xl shadow-mkBlue/20">MK</div>
-            <h3 class="text-4xl font-black italic uppercase leading-none font-sync">System <span class="text-mkBlue">Login</span></h3>
-            <p class="text-[10px] font-bold opacity-30 uppercase tracking-[0.5em] mt-4 mb-12">Identification Requise pour toute action</p>
+    <div id="app-wrapper">
+        
+        <div id="main-content">
+            
+            <nav class="glass-nav sticky top-0 z-[5000] px-12 py-8 flex justify-between items-center">
+                <div class="flex items-center gap-16">
+                    <div class="flex items-center gap-4 cursor-pointer group" onclick="showSection('shop')">
+                        <div class="w-14 h-14 bg-mkBlue rounded-2xl flex items-center justify-center font-black text-black text-2xl shadow-lg group-hover:rotate-12 transition">MK</div>
+                        <h1 class="font-black text-2xl italic tracking-tighter uppercase font-sync">MK SHOP <span class="text-mkBlue">v74</span></h1>
+                    </div>
+                    
+                    <div class="hidden xl:flex gap-10">
+                        <span onclick="showSection('shop')" class="tab-link active" id="link-shop">Marketplace</span>
+                        <span onclick="showSection('games')" class="tab-link" id="link-games">Casino VIP</span>
+                        <span onclick="showSection('leaderboard')" class="tab-link" id="link-leaderboard">Classement</span>
+                        <span onclick="showSection('profile')" class="tab-link" id="link-profile">Mon Profil</span>
+                        <span id="nav-admin" onclick="showSection('admin')" class="tab-link hidden !text-mkAdmin">Admin</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-8">
+                    <div class="flex bg-mkDark rounded-2xl p-1.5 border border-white/5 shadow-inner">
+                        <button id="m-cash" onclick="setMode('cash')" class="px-6 py-3 rounded-xl text-xs font-black bg-mkGreen text-black transition-all">WALLETS</button>
+                        <button id="m-xp" onclick="setMode('xp')" class="px-6 py-3 rounded-xl text-xs font-black opacity-30 text-white transition-all">EXP LVL</button>
+                    </div>
+                    <div class="bg-black/80 px-8 py-4 rounded-2xl border border-white/10 min-w-[160px] text-center">
+                        <span id="val-display" class="font-black text-mkGreen text-2xl italic">0.00€</span>
+                    </div>
+                    
+                    <div id="auth-zone">
+                        <button onclick="openModal('modal-auth')" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs uppercase hover:bg-mkBlue transition shadow-lg">Connexion</button>
+                    </div>
+                    
+                    <div id="user-zone" class="hidden flex items-center gap-5">
+                        <div class="text-right">
+                            <p id="u-name-display" class="text-xs font-black uppercase tracking-tighter">Membre</p>
+                            <p class="text-[10px] text-mkBlue font-bold uppercase opacity-60">En Ligne</p>
+                        </div>
+                        <img id="u-pfp" src="" class="w-14 h-14 rounded-2xl border-2 border-mkBlue object-cover shadow-xl">
+                        <button onclick="logout()" class="w-10 h-10 flex items-center justify-center bg-mkRed/10 text-mkRed rounded-xl hover:bg-mkRed hover:text-white transition">✕</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="max-w-7xl mx-auto px-12 py-16">
+
+                <section id="s-shop" class="space-y-16">
+                    <div class="flex flex-col gap-4">
+                        <h2 class="text-8xl font-black italic uppercase tracking-tighter leading-none">Luxury <br><span class="text-mkBlue">Digital Goods</span></h2>
+                        <p class="text-lg opacity-40 font-medium max-w-2xl">La plateforme #1 pour vos comptes de jeux, scripts premiums et accès IPTV sécurisés. Chaque transaction est protégée par MK Escrow.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div class="mk-card p-10 group bg-gradient-to-br from-mkCard to-black">
+                            <div class="w-16 h-16 bg-mkBlue/10 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition">🎮</div>
+                            <h3 class="text-3xl font-black uppercase italic">Roblox High-Tier</h3>
+                            <p class="text-sm opacity-40 mt-4 leading-relaxed">Comptes vérifiés avec Robux, fruits mythiques sur Blox Fruits et inventaires Limiteds.</p>
+                            <div class="mt-12 flex justify-between items-center">
+                                <span class="text-2xl font-black italic">24.99€</span>
+                                <button onclick="openTicket('Roblox VIP')" class="bg-white text-black px-8 py-4 rounded-xl font-black text-xs uppercase hover:bg-mkBlue transition shadow-xl">Commander</button>
+                            </div>
+                        </div>
+
+                        <div class="mk-card p-10 border-t-4 border-mkPurple bg-gradient-to-br from-mkCard to-black">
+                            <div class="w-16 h-16 bg-mkPurple/10 rounded-2xl flex items-center justify-center text-3xl mb-8">⚡</div>
+                            <h3 class="text-3xl font-black uppercase italic text-mkPurple">Executor Pro</h3>
+                            <p class="text-sm opacity-40 mt-4 leading-relaxed">La licence à vie pour le meilleur injecteur du marché. Bypass anti-cheat kernel inclus.</p>
+                            <div class="mt-12 flex justify-between items-center">
+                                <span class="text-2xl font-black italic">49.99€</span>
+                                <button onclick="openTicket('Executor License')" class="bg-mkPurple text-white px-8 py-4 rounded-xl font-black text-xs uppercase shadow-xl shadow-mkPurple/20">Acheter</button>
+                            </div>
+                        </div>
+
+                        <div class="mk-card p-10 border-t-4 border-mkYellow bg-gradient-to-br from-mkCard to-black">
+                            <div class="w-16 h-16 bg-mkYellow/10 rounded-2xl flex items-center justify-center text-3xl mb-8">💎</div>
+                            <h3 class="text-3xl font-black uppercase italic text-mkYellow">Premium Boost</h3>
+                            <p class="text-sm opacity-40 mt-4 leading-relaxed">Discord Nitro, Spotify Family et YouTube Premium à des tarifs imbattables.</p>
+                            <div class="mt-12 flex justify-between items-center">
+                                <span class="text-2xl font-black italic text-mkYellow">4.99€</span>
+                                <button onclick="openTicket('Boost Service')" class="bg-mkYellow text-black px-8 py-4 rounded-xl font-black text-xs uppercase shadow-xl">Profiter</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tv-card" class="mk-card p-16 border-2 border-mkAdmin flex flex-col lg:flex-row items-center gap-16 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]">
+                        <div class="flex-1">
+                            <span class="bg-mkAdmin text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">Offre Exclusive</span>
+                            <h3 class="text-7xl font-black uppercase italic text-white mt-8 leading-[0.9]">MK Cinema <br><span class="text-mkAdmin">Ultimate 4K</span></h3>
+                            <p class="text-base opacity-40 mt-8 max-w-lg font-bold">L'accès total : Netflix, Disney+, Prime et 4000 chaînes TV en direct. Sans engagement.</p>
+                        </div>
+                        <div class="w-full lg:w-[400px] bg-black/50 p-10 rounded-[3rem] border border-white/5">
+                            <label class="text-[10px] font-black uppercase opacity-30 mb-4 block tracking-widest">Code d'activation</label>
+                            <input id="tv-code" type="text" placeholder="XXXX-XXXX-XXXX" class="w-full bg-mkDark p-6 rounded-2xl text-lg font-black outline-none border border-white/10 text-center tracking-[0.5em] focus:border-mkAdmin transition mb-6 uppercase">
+                            <button onclick="unlockTV()" class="w-full bg-mkAdmin text-white py-6 rounded-2xl font-black text-sm uppercase shadow-2xl shadow-mkAdmin/30 hover:scale-[1.02] transition">Vérifier la Licence</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="s-games" class="hidden space-y-20">
+                    <div class="text-center space-y-4">
+                        <h2 class="text-7xl font-black italic uppercase">The <span class="text-mkRed">High Roller</span> Club</h2>
+                        <p class="text-xs font-black opacity-30 uppercase tracking-[1em]">Provably Fair System • Instant Payouts</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        
+                        <div id="game-coin" class="mk-card p-12 text-center flex flex-col items-center">
+                            <h3 class="text-xs font-black uppercase opacity-20 tracking-widest mb-10">Coinflip x1.95</h3>
+                            <div id="coin-visual" class="text-9xl mb-12 drop-shadow-[0_20px_50px_rgba(0,210,255,0.3)]">🪙</div>
+                            <div class="w-full max-w-xs space-y-6">
+                                <input id="bet-coin" type="number" value="10" class="w-full bg-black/40 p-5 rounded-2xl text-3xl font-black text-center outline-none border border-white/10 focus:border-mkBlue">
+                                <div class="flex gap-4">
+                                    <button onclick="playCoin('pile')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black text-xs uppercase shadow-lg">PILE</button>
+                                    <button onclick="playCoin('face')" class="flex-1 bg-white text-black py-5 rounded-2xl font-black text-xs uppercase shadow-lg">FACE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="game-mines" class="mk-card p-12 text-center">
+                            <h3 class="text-xs font-black uppercase opacity-20 tracking-widest mb-6">MK Mines (Multiplicateur)</h3>
+                            <div id="mines-grid" class="grid grid-cols-5 gap-3 max-w-[350px] mx-auto mb-8">
+                                </div>
+                            <div class="flex gap-4 items-center justify-center">
+                                <div class="bg-black/40 p-4 rounded-xl border border-white/10">
+                                    <span class="text-[10px] opacity-30 font-black block mb-1">MINES</span>
+                                    <select id="mine-count" class="bg-transparent font-black outline-none text-mkRed">
+                                        <option value="3">3</option><option value="5">5</option><option value="10">10</option><option value="24">24</option>
+                                    </select>
+                                </div>
+                                <input id="bet-mines" type="number" value="10" class="w-24 bg-black/40 p-4 rounded-xl font-black text-center outline-none border border-white/10">
+                                <button id="btn-mines-start" onclick="startMines()" class="bg-mkGreen text-black px-8 py-4 rounded-xl font-black text-xs uppercase">Jouer</button>
+                                <button id="btn-mines-cashout" onclick="cashoutMines()" class="hidden bg-mkYellow text-black px-8 py-4 rounded-xl font-black text-xs uppercase">Cashout</button>
+                            </div>
+                        </div>
+
+                        <div id="game-dice" class="mk-card p-12 text-center">
+                            <h3 class="text-xs font-black uppercase opacity-20 tracking-widest mb-10">Royal Dice Roll</h3>
+                            <div id="dice-visual" class="text-9xl mb-12 text-mkYellow">🎲</div>
+                            <div class="max-w-xs mx-auto space-y-6">
+                                <input id="bet-dice" type="number" value="10" class="w-full bg-black/40 p-5 rounded-2xl text-3xl font-black text-center outline-none border border-white/10">
+                                <button onclick="playDice()" class="w-full bg-mkYellow text-black py-6 rounded-2xl font-black text-xs uppercase shadow-xl">Lancer (Gagne sur 4+)</button>
+                            </div>
+                        </div>
+
+                        <div id="game-towers" class="mk-card p-12 text-center">
+                            <h3 class="text-xs font-black uppercase opacity-20 tracking-widest mb-6">Crystal Tower</h3>
+                            <div id="tower-grid" class="flex flex-col-reverse gap-2 max-w-[200px] mx-auto mb-8">
+                                </div>
+                            <div class="flex gap-4 justify-center">
+                                <input id="bet-towers" type="number" value="10" class="w-24 bg-black/40 p-4 rounded-xl font-black text-center outline-none border border-white/10">
+                                <button id="btn-tower-start" onclick="startTower()" class="bg-mkPurple text-white px-8 py-4 rounded-xl font-black text-xs uppercase">Monter</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section id="s-leaderboard" class="hidden space-y-12">
+                    <div class="text-center">
+                        <h2 class="text-6xl font-black italic uppercase font-sync">Hall of <span class="text-mkGreen">Fame</span></h2>
+                        <p class="text-xs opacity-30 uppercase font-black tracking-[0.4em] mt-4">Les 10 plus grosses fortunes du système</p>
+                    </div>
+                    <div id="leader-container" class="mk-card max-w-4xl mx-auto overflow-hidden shadow-2xl">
+                        </div>
+                </section>
+
+                <section id="s-profile" class="hidden max-w-3xl mx-auto space-y-12">
+                    <div class="mk-card p-8 flex gap-6 items-center">
+                        <input id="search-name" type="text" placeholder="Rechercher un membre..." class="flex-1 bg-transparent px-6 font-black outline-none uppercase text-sm tracking-widest">
+                        <button onclick="findMember()" class="bg-mkBlue text-black px-10 py-5 rounded-2xl font-black text-xs uppercase">Rechercher</button>
+                    </div>
+
+                    <div id="p-card" class="mk-card p-20 text-center border-b-[15px] border-mkBlue">
+                        <img id="p-avatar" src="" class="w-48 h-48 rounded-[3rem] mx-auto object-cover border-8 border-mkDark shadow-2xl mb-10">
+                        <h3 id="p-username" class="text-5xl font-black italic uppercase tracking-tighter">Membre MK</h3>
+                        <div id="p-badge-admin" class="hidden inline-block mt-4 bg-mkAdmin text-white px-4 py-1 rounded text-[10px] font-black uppercase">Administrator</div>
+                        
+                        <div class="grid grid-cols-2 gap-10 mt-16">
+                            <div class="bg-black/40 p-10 rounded-[2.5rem] border border-white/5">
+                                <p class="text-[10px] opacity-30 font-black uppercase mb-2 tracking-widest">Solde Actuel</p>
+                                <p id="p-val-cash" class="text-4xl font-black text-mkGreen">0.00€</p>
+                            </div>
+                            <div class="bg-black/40 p-10 rounded-[2.5rem] border border-white/5">
+                                <p class="text-[10px] opacity-30 font-black uppercase mb-2 tracking-widest">Points d'XP</p>
+                                <p id="p-val-xp" class="text-4xl font-black text-mkYellow">0 XP</p>
+                            </div>
+                        </div>
+
+                        <div id="p-controls" class="hidden mt-16 pt-16 border-t border-white/10 space-y-8">
+                            <div class="flex gap-4">
+                                <input id="new-pfp-url" type="text" placeholder="URL de l'avatar" class="flex-1 bg-mkDark p-6 rounded-2xl text-sm outline-none border border-white/5 focus:border-mkBlue">
+                                <button onclick="updatePfp()" class="bg-white text-black px-10 rounded-2xl font-black text-xs uppercase">Sauver</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="s-admin" class="hidden space-y-16">
+                    <div class="flex justify-between items-end">
+                        <h2 class="text-6xl font-black text-mkAdmin italic uppercase tracking-tighter">Command Center</h2>
+                        <div class="bg-mkAdmin/10 p-6 rounded-2xl border border-mkAdmin/20 text-mkAdmin font-black text-xs uppercase">
+                            Système : ONLINE
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
+                        <div class="space-y-8">
+                            <h3 class="text-xs font-black uppercase text-mkRed tracking-widest">Tickets Support</h3>
+                            <div id="adm-tickets" class="space-y-4 max-h-[600px] overflow-y-auto no-scrollbar"></div>
+                        </div>
+                        <div class="space-y-8">
+                            <h3 class="text-xs font-black uppercase text-mkBlue tracking-widest">Base de Données Membres</h3>
+                            <div id="adm-users" class="space-y-4 max-h-[600px] overflow-y-auto no-scrollbar"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <div id="chat-sidebar">
+            <div class="flex border-b border-white/10 bg-black/40">
+                <div id="tab-global" onclick="setChatTab('global')" class="flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer text-mkBlue border-b-2 border-mkBlue bg-mkBlue/5 transition">Global</div>
+                <div id="tab-support" onclick="setChatTab('support')" class="flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer opacity-40 hover:opacity-100 transition">Support</div>
+            </div>
+
+            <div id="chat-flow" class="flex-1 p-8 overflow-y-auto space-y-6 no-scrollbar scroll-smooth">
+                </div>
+
+            <div class="p-8 bg-mkDark border-t border-white/5">
+                <div class="relative bg-black rounded-2xl p-2 flex gap-3 border border-white/10 focus-within:border-mkBlue transition-all">
+                    <input id="chat-input" type="text" placeholder="Écrire un message..." class="bg-transparent flex-1 outline-none px-4 text-sm font-bold">
+                    <button onclick="sendChatMessage()" class="w-14 h-14 bg-mkBlue text-black rounded-xl font-black text-2xl shadow-xl hover:scale-95 transition">></button>
+                </div>
+                <p class="text-[9px] text-center opacity-20 mt-4 font-black uppercase tracking-widest">Modération active 24/7</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="modal-auth" class="fixed inset-0 z-[10000] bg-black/98 flex items-center justify-center p-8 hidden">
+        <div class="mk-card w-full max-w-lg p-16 text-center border-t-8 border-mkBlue">
+            <h3 class="text-4xl font-black italic uppercase leading-none font-sync">MK <span class="text-mkBlue">Central</span></h3>
+            <p class="text-xs font-bold opacity-30 uppercase tracking-[0.5em] mt-6 mb-12">Identification Requise</p>
             
             <div class="space-y-5">
-                <div class="text-left">
-                    <label class="text-[9px] font-black uppercase opacity-30 ml-4 mb-2 block tracking-widest">Identifiant Unique</label>
-                    <input id="in-user" type="text" placeholder="USERNAME" class="w-full bg-mkDarker p-6 rounded-2xl outline-none text-[11px] font-black border border-white/5 focus:border-mkBlue transition text-white uppercase tracking-widest">
-                </div>
-                <div class="text-left">
-                    <label class="text-[9px] font-black uppercase opacity-30 ml-4 mb-2 block tracking-widest">Adresse E-mail (Facultatif)</label>
-                    <input id="in-email" type="email" placeholder="EMAIL@EXAMPLE.COM" class="w-full bg-mkDarker p-6 rounded-2xl outline-none text-[11px] font-black border border-white/5 focus:border-mkBlue transition text-white uppercase">
-                </div>
-                <div class="text-left">
-                    <label class="text-[9px] font-black uppercase opacity-30 ml-4 mb-2 block tracking-widest">Code d'accès secret</label>
-                    <input id="in-pass" type="password" placeholder="PASSWORD" class="w-full bg-mkDarker p-6 rounded-2xl outline-none text-[11px] font-black border border-white/5 focus:border-mkBlue transition text-white uppercase tracking-widest">
-                </div>
-                
-                <div class="pt-6">
-                    <button onclick="processAuth()" class="w-full bg-mkBlue text-black py-6 rounded-3xl font-black text-[12px] uppercase shadow-2xl shadow-mkBlue/20 hover:scale-[1.02] transition-all">Accéder au shop</button>
-                    <button onclick="closeModal('modal-auth')" class="text-[9px] font-black opacity-20 uppercase mt-8 hover:opacity-100 transition">Annuler et fermer</button>
-                </div>
+                <input id="in-user" type="text" placeholder="PSEUDO" class="w-full bg-mkDark p-6 rounded-2xl outline-none text-sm font-black border border-white/5 text-white uppercase tracking-widest focus:border-mkBlue transition">
+                <input id="in-pass" type="password" placeholder="MOT DE PASSE" class="w-full bg-mkDark p-6 rounded-2xl outline-none text-sm font-black border border-white/5 text-white uppercase tracking-widest focus:border-mkBlue transition">
+                <button onclick="processAuth()" class="w-full bg-mkBlue text-black py-6 rounded-3xl font-black text-sm uppercase shadow-2xl hover:bg-white transition-all">Accéder au Système</button>
+                <button onclick="closeModal('modal-auth')" class="text-[10px] font-black opacity-30 uppercase mt-8 block mx-auto hover:opacity-100">Retour au shop</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATABASE CONFIGURATION ---
+        // --- DATABASE INIT ---
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co";
         const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
         const sb = supabase.createClient(SB_URL, SB_KEY);
 
-        // --- GLOBAL STATE ---
         let user = null;
+        let activeTab = 'global';
         let currentMode = 'cash';
-        let activeChatTab = 'global';
-        let lastMessageTimestamp = null;
-        let lastTicketCount = 0;
-        let chatAutoRefresh = null;
+        let lastMessageId = null;
+        let isSyncing = false;
 
-        /**
-         * Custom Notification System
-         */
-        function toast(message, type = 'mkBlue') {
-            const container = document.createElement('div');
-            container.className = 'toast-mk animate-view';
-            container.style.borderLeftColor = `var(--${type})`;
-            container.innerHTML = `
-                <div class="w-2 h-2 rounded-full bg-current"></div>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(container);
-            setTimeout(() => {
-                container.style.opacity = '0';
-                container.style.transform = 'translateX(-20px)';
-                setTimeout(() => container.remove(), 500);
-            }, 4000);
-        }
-
-        // --- AUTHENTICATION CORE ---
-
-        /**
-         * Logic for login and registration
-         * Handles optional email and local storage session
-         */
+        // --- CORE AUTH ---
         async function processAuth() {
             const u = document.getElementById('in-user').value.trim();
-            const e = document.getElementById('in-email').value.trim();
             const p = document.getElementById('in-pass').value.trim();
-            
-            if(!u || !p) return toast("Pseudo et mot de passe requis", "mkRed");
+            if(!u || !p) return;
 
-            // Check if user exists by username
-            let { data: existingProfile, error } = await sb.from('profiles')
-                .select('*')
-                .eq('username', u)
-                .maybeSingle();
+            let { data: profile } = await sb.from('profiles').select('*').eq('username', u).maybeSingle();
 
-            if(!existingProfile) {
-                // REGISTRATION LOGIC
-                const { data, error: registerError } = await sb.from('profiles').insert([{
-                    username: u, 
-                    email: e || `${u.toLowerCase()}@mk-shop.internal`, 
-                    password: p, 
-                    balance: 10.00, // Starting bonus
-                    xp: 0,
-                    pfp: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${u}`,
-                    tv_access: false,
-                    banned: false,
-                    role: u.toLowerCase() === 'admin' ? 'admin' : 'user'
+            if(!profile) {
+                const { data, error } = await sb.from('profiles').insert([{
+                    username: u, password: p, balance: 15, xp: 0,
+                    pfp: `https://api.dicebear.com/7.x/bottts/svg?seed=${u}`,
+                    tv_access: false, banned: false, role: u.toLowerCase() === 'admin' ? 'admin' : 'user'
                 }]).select().single();
-                
-                if(registerError) return toast("Erreur lors de la création du compte", "mkRed");
-                existingProfile = data;
-                toast("Compte créé avec succès ! +10€ offerts.", "mkGreen");
+                if(error) return;
+                profile = data;
             } else {
-                // LOGIN LOGIC
-                if(existingProfile.password !== p) return toast("Mot de passe incorrect", "mkRed");
-                if(existingProfile.banned) return toast("Votre compte est suspendu par l'administration.", "mkRed");
-                toast(`Ravi de vous revoir, ${u} !`, "mkBlue");
+                if(profile.password !== p) return alert("Password incorrect");
+                if(profile.banned) return alert("Compte Banni");
             }
 
-            user = existingProfile;
-            localStorage.setItem('mk_session_v72_platinum', JSON.stringify(user));
+            user = profile;
+            localStorage.setItem('mk_session_v74', JSON.stringify(user));
             closeModal('modal-auth');
-            initApp();
+            bootstrapApp();
         }
 
-        /**
-         * App Initializer
-         */
-        function initApp() {
+        function bootstrapApp() {
             if(!user) return;
-            
-            // UI Updates
             document.getElementById('auth-zone').classList.add('hidden');
             document.getElementById('user-zone').classList.remove('hidden');
             document.getElementById('u-pfp').src = user.pfp;
             document.getElementById('u-name-display').innerText = user.username;
             
-            // Admin Check
-            if(user.role === 'admin' || user.username.toLowerCase() === 'admin') {
+            if(user.role === 'admin') {
                 document.getElementById('nav-admin').classList.remove('hidden');
                 document.getElementById('p-badge-admin').classList.remove('hidden');
             }
 
-            syncGlobalDisplay();
-            
-            // Chat System Start
-            if(!chatAutoRefresh) {
-                loadChatMessages();
-                chatAutoRefresh = setInterval(loadChatMessages, 4000);
-            }
-
-            // Section Specific Updates
-            loadLeaderboard();
+            syncUI();
+            refreshChat();
+            setInterval(refreshChat, 4000);
+            initMinesGrid();
+            initTowerGrid();
         }
 
-        /**
-         * Update the money/XP display across the app
-         */
-        function syncGlobalDisplay() {
+        // --- ATOMIC TRANSACTION SYSTEM (ANTI-GLITCH) ---
+        async function runTransaction(amount, xpAdd = 10) {
+            if(isSyncing) return false;
+            isSyncing = true;
+            document.getElementById('sync-overlay').classList.remove('hidden');
+
+            try {
+                // Re-fetch fresh state to prevent race conditions
+                const { data: fresh } = await sb.from('profiles').select('balance, xp').eq('id', user.id).single();
+                
+                const nextBalance = fresh.balance + amount;
+                if(nextBalance < 0) throw new Error("Solde insuffisant");
+
+                const { data: updated, error } = await sb.from('profiles')
+                    .update({ balance: nextBalance, xp: fresh.xp + xpAdd })
+                    .eq('id', user.id)
+                    .select().single();
+
+                if(error) throw error;
+                user = updated;
+                syncUI();
+                return true;
+            } catch (e) {
+                console.error("TX ERROR:", e.message);
+                return false;
+            } finally {
+                isSyncing = false;
+                document.getElementById('sync-overlay').classList.add('hidden');
+            }
+        }
+
+        function syncUI() {
             if(!user) return;
-            const display = document.getElementById('val-display');
+            const disp = document.getElementById('val-display');
             if(currentMode === 'cash') {
-                display.innerText = user.balance.toFixed(2) + "€";
-                display.className = "font-black text-mkGreen text-xl tracking-tighter italic";
+                disp.innerText = user.balance.toFixed(2) + "€";
+                disp.className = "font-black text-mkGreen text-2xl italic";
             } else {
-                display.innerText = user.xp + " XP";
-                display.className = "font-black text-mkYellow text-xl tracking-tighter italic";
+                disp.innerText = user.xp + " XP";
+                disp.className = "font-black text-mkYellow text-2xl italic";
             }
         }
 
-        // --- DATABASE TRANSACTIONS ---
+        // --- GAME: COINFLIP ---
+        async function playCoin(pick) {
+            const bet = parseFloat(document.getElementById('bet-coin').value);
+            if(isNaN(bet) || bet <= 0) return;
 
-        async function updateStats(newBalance, xpReward = 10) {
-            const { data, error } = await sb.from('profiles')
-                .update({ 
-                    balance: newBalance, 
-                    xp: user.xp + xpReward 
-                })
-                .eq('id', user.id)
-                .select()
-                .single();
-            
-            if(!error && data) {
-                user = data;
-                syncGlobalDisplay();
-                // Update profile card if visible
-                if(!document.getElementById('s-profile').classList.contains('hidden')) {
-                    renderProfileData(user);
-                }
-            }
-        }
+            const visual = document.getElementById('coin-visual');
+            const card = document.getElementById('game-coin');
+            visual.classList.add('coin-anim');
 
-        // --- CASINO ENGINE ---
-
-        async function playGame(gameType, selection) {
-            if(!user) return toast("Veuillez vous connecter pour jouer", "mkRed");
-            
-            const betInput = document.getElementById('bet-' + gameType);
-            const betAmount = parseFloat(betInput.value);
-
-            if(isNaN(betAmount) || betAmount <= 0) return toast("Mise invalide", "mkRed");
-            if(betAmount > user.balance) return toast("Solde insuffisant dans votre Wallet", "mkRed");
-
-            // Game Logic
-            if(gameType === 'coin') {
-                const win = Math.random() > 0.53; // House edge
-                const resultCoin = document.getElementById('coin-res');
-                resultCoin.style.transform = 'rotateY(1800deg)';
+            setTimeout(async () => {
+                visual.classList.remove('coin-anim');
+                const win = Math.random() > 0.53; // House Edge
                 
-                setTimeout(async () => {
-                    resultCoin.style.transform = 'rotateY(0deg)';
-                    if(win) {
-                        await updateStats(user.balance + betAmount, 20);
-                        resultCoin.innerText = selection === 'pile' ? '🪙' : '🟡';
-                        toast(`Gagné ! +${betAmount}€`, "mkGreen");
-                    } else {
-                        await updateStats(user.balance - betAmount, 5);
-                        resultCoin.innerText = selection === 'pile' ? '🟡' : '🪙';
-                        toast(`Perdu... -${betAmount}€`, "mkRed");
+                if(win) {
+                    const ok = await runTransaction(bet * 0.95, 20);
+                    if(ok) {
+                        visual.innerText = pick === 'pile' ? '🪙' : '🟡';
+                        card.classList.add('animate-win');
                     }
-                }, 600);
-            }
-
-            if(gameType === 'slots') {
-                const symbols = ['💎', '🍒', '🍋', '⭐', '🍇', '🔔', '🍀'];
-                const spin = [
-                    symbols[Math.floor(Math.random() * symbols.length)],
-                    symbols[Math.floor(Math.random() * symbols.length)],
-                    symbols[Math.floor(Math.random() * symbols.length)]
-                ];
-
-                document.getElementById('sl1').innerText = '⏳';
-                document.getElementById('sl2').innerText = '⏳';
-                document.getElementById('sl3').innerText = '⏳';
-
-                setTimeout(async () => {
-                    document.getElementById('sl1').innerText = spin[0];
-                    document.getElementById('sl2').innerText = spin[1];
-                    document.getElementById('sl3').innerText = spin[2];
-
-                    let multiplier = 0;
-                    if(spin[0] === spin[1] && spin[1] === spin[2]) multiplier = 15;
-                    else if(spin[0] === spin[1] || spin[1] === spin[2] || spin[0] === spin[2]) multiplier = 2;
-
-                    if(multiplier > 0) {
-                        const winAmount = betAmount * multiplier;
-                        await updateStats(user.balance - betAmount + winAmount, 50);
-                        toast(`JACKPOT x${multiplier} ! +${winAmount}€`, "mkPurple");
-                    } else {
-                        await updateStats(user.balance - betAmount, 10);
-                        toast("Rien du tout...", "mkRed");
+                } else {
+                    const ok = await runTransaction(-bet, 5);
+                    if(ok) {
+                        visual.innerText = pick === 'pile' ? '🟡' : '🪙';
+                        card.classList.add('animate-lose');
                     }
-                }, 800);
-            }
-
-            if(gameType === 'dice') {
-                const roll = Math.floor(Math.random() * 6) + 1;
-                const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-                document.getElementById('dice-res').innerText = diceFaces[roll-1];
-                
-                if(roll >= 4) {
-                    await updateStats(user.balance + (betAmount * 0.9), 15);
-                    toast("Gagné !", "mkGreen");
-                } else {
-                    await updateStats(user.balance - betAmount, 5);
-                    toast("Perdu", "mkRed");
                 }
-            }
+                setTimeout(() => card.classList.remove('animate-win', 'animate-lose'), 600);
+            }, 1000);
+        }
 
-            if(gameType === 'rps') {
-                const choices = ['pierre', 'feuille', 'ciseaux'];
-                const botChoice = choices[Math.floor(Math.random() * 3)];
-                
-                if(selection === botChoice) {
-                    toast(`Égalité ! Le bot a choisi ${botChoice}`, "mkYellow");
-                } else if (
-                    (selection === 'pierre' && botChoice === 'ciseaux') ||
-                    (selection === 'feuille' && botChoice === 'pierre') ||
-                    (selection === 'ciseaux' && botChoice === 'feuille')
-                ) {
-                    await updateStats(user.balance + (betAmount * 2), 30);
-                    toast(`BRAVO ! Tu bats ${botChoice}`, "mkGreen");
-                } else {
-                    await updateStats(user.balance - betAmount, 10);
-                    toast(`PERDU ! Le bot a choisi ${botChoice}`, "mkRed");
-                }
+        // --- GAME: MINES ---
+        let minesActive = false;
+        let minesData = [];
+        let minesRevealed = [];
+        let minesBet = 0;
+
+        function initMinesGrid() {
+            const grid = document.getElementById('mines-grid');
+            grid.innerHTML = "";
+            for(let i=0; i<25; i++) {
+                grid.innerHTML += `<button onclick="revealMine(${i})" id="mine-${i}" class="mine-btn" disabled>?</button>`;
             }
         }
 
-        // --- CHAT SYSTEM REWORKED ---
+        async function startMines() {
+            const bet = parseFloat(document.getElementById('bet-mines').value);
+            const count = parseInt(document.getElementById('mine-count').value);
+            if(bet > user.balance || bet <= 0) return;
 
+            minesBet = bet;
+            minesActive = true;
+            minesRevealed = [];
+            minesData = Array(25).fill('diamond');
+            let placed = 0;
+            while(placed < count) {
+                let idx = Math.floor(Math.random() * 25);
+                if(minesData[idx] === 'diamond') { minesData[idx] = 'bomb'; placed++; }
+            }
+
+            const ok = await runTransaction(-bet, 10);
+            if(!ok) return;
+
+            document.querySelectorAll('.mine-btn').forEach(b => {
+                b.disabled = false; b.innerText = "?"; b.className = "mine-btn";
+            });
+            document.getElementById('btn-mines-start').classList.add('hidden');
+            document.getElementById('btn-mines-cashout').classList.remove('hidden');
+        }
+
+        async function revealMine(idx) {
+            if(!minesActive || minesRevealed.includes(idx)) return;
+            minesRevealed.push(idx);
+            const btn = document.getElementById('mine-' + idx);
+
+            if(minesData[idx] === 'bomb') {
+                btn.innerText = "💣"; btn.classList.add('bomb');
+                minesActive = false;
+                document.getElementById('game-mines').classList.add('animate-lose');
+                setTimeout(() => {
+                    document.getElementById('btn-mines-start').classList.remove('hidden');
+                    document.getElementById('btn-mines-cashout').classList.add('hidden');
+                    document.querySelectorAll('.mine-btn').forEach(b => b.disabled = true);
+                    document.getElementById('game-mines').classList.remove('animate-lose');
+                }, 1000);
+            } else {
+                btn.innerText = "💎"; btn.classList.add('active');
+                const mult = 1 + (minesRevealed.length * 0.2);
+                document.getElementById('btn-mines-cashout').innerText = `Cashout (${(minesBet * mult).toFixed(2)}€)`;
+            }
+        }
+
+        async function cashoutMines() {
+            if(!minesActive) return;
+            const mult = 1 + (minesRevealed.length * 0.2);
+            await runTransaction(minesBet * mult, 30);
+            minesActive = false;
+            document.getElementById('btn-mines-start').classList.remove('hidden');
+            document.getElementById('btn-mines-cashout').classList.add('hidden');
+            document.querySelectorAll('.mine-btn').forEach(b => b.disabled = true);
+            document.getElementById('game-mines').classList.add('animate-win');
+            setTimeout(() => document.getElementById('game-mines').classList.remove('animate-win'), 600);
+        }
+
+        // --- GAME: DICE ---
+        async function playDice() {
+            const bet = parseFloat(document.getElementById('bet-dice').value);
+            if(bet > user.balance || bet <= 0) return;
+
+            const roll = Math.floor(Math.random() * 6) + 1;
+            const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+            document.getElementById('dice-visual').innerText = faces[roll-1];
+
+            if(roll >= 4) {
+                await runTransaction(bet * 0.8, 20);
+                document.getElementById('game-dice').classList.add('animate-win');
+            } else {
+                await runTransaction(-bet, 5);
+                document.getElementById('game-dice').classList.add('animate-lose');
+            }
+            setTimeout(() => document.getElementById('game-dice').classList.remove('animate-win', 'animate-lose'), 600);
+        }
+
+        // --- GAME: TOWERS ---
+        let towerLevel = 0;
+        function initTowerGrid() {
+            const grid = document.getElementById('tower-grid');
+            grid.innerHTML = "";
+            for(let i=0; i<8; i++) {
+                grid.innerHTML += `<div id="tower-row-${i}" class="grid grid-cols-3 gap-2 opacity-20">
+                    <div class="h-8 bg-white/10 rounded"></div>
+                    <div class="h-8 bg-white/10 rounded"></div>
+                    <div class="h-8 bg-white/10 rounded"></div>
+                </div>`;
+            }
+        }
+
+        async function startTower() {
+            const bet = parseFloat(document.getElementById('bet-towers').value);
+            if(bet > user.balance) return;
+            
+            // Tower is simplified for the demo: 50/50 chance to climb
+            const win = Math.random() > 0.5;
+            if(win) {
+                await runTransaction(bet * 0.5, 20);
+                towerLevel = Math.min(towerLevel + 1, 7);
+                document.getElementById(`tower-row-${towerLevel}`).classList.remove('opacity-20');
+                document.getElementById(`tower-row-${towerLevel}`).classList.add('bg-mkPurple/20');
+            } else {
+                await runTransaction(-bet, 5);
+                towerLevel = 0;
+                initTowerGrid();
+            }
+        }
+
+        // --- CHAT SYSTEM ---
         function setChatTab(tab) {
-            activeChatTab = tab;
-            const tGlobal = document.getElementById('tab-global');
-            const tSupport = document.getElementById('tab-support');
-            
+            activeTab = tab;
+            const tG = document.getElementById('tab-global');
+            const tS = document.getElementById('tab-support');
             if(tab === 'global') {
-                tGlobal.className = "flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all border-b-2 border-mkBlue text-mkBlue bg-mkBlue/5";
-                tSupport.className = "flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all opacity-40 border-b-2 border-transparent";
+                tG.className = "flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer text-mkBlue border-b-2 border-mkBlue bg-mkBlue/5 transition";
+                tS.className = "flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer opacity-40 hover:opacity-100 transition";
             } else {
-                tSupport.className = "flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all border-b-2 border-mkRed text-mkRed bg-mkRed/5";
-                tGlobal.className = "flex-1 py-7 text-[10px] font-black uppercase tracking-[0.2em] transition-all opacity-40 border-b-2 border-transparent";
+                tS.className = "flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer text-mkRed border-b-2 border-mkRed bg-mkRed/5 transition";
+                tG.className = "flex-1 py-8 text-center text-[11px] font-black uppercase tracking-widest cursor-pointer opacity-40 hover:opacity-100 transition";
             }
-            lastMessageTimestamp = null; // Force reload
-            loadChatMessages();
+            lastMessageId = null;
+            refreshChat();
         }
 
-        async function loadChatMessages() {
-            const container = document.getElementById('chat-flow');
-            
-            if(activeChatTab === 'global') {
-                const { data, error } = await sb.from('messages')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(30);
-
-                if(error || !data) return;
-                
-                // Anti-flicker: Only update if content changed
-                const currentHash = data.length > 0 ? data[0].id : '';
-                if(currentHash === lastMessageTimestamp) return;
-                lastMessageTimestamp = currentHash;
-
-                container.innerHTML = data.reverse().map(msg => `
-                    <div class="flex gap-4 items-start animate-view">
-                        <img src="${msg.pfp}" class="w-11 h-11 rounded-2xl object-cover border border-white/5 shadow-lg">
+        async function refreshChat() {
+            const flow = document.getElementById('chat-flow');
+            if(activeTab === 'global') {
+                const { data } = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(30);
+                if(!data || data.length === 0 || data[0].id === lastMessageId) return;
+                lastMessageId = data[0].id;
+                flow.innerHTML = data.reverse().map(m => `
+                    <div class="flex gap-4 items-start animate-up">
+                        <img src="${m.pfp}" class="w-10 h-10 rounded-xl object-cover border border-white/5">
                         <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-[7px] font-black bg-mkBlue text-black px-2 py-0.5 rounded uppercase">LVL ${Math.floor((msg.level || 0)/100)}</span>
-                                <b class="text-[10px] uppercase text-white/90 font-sync">${msg.username}</b>
-                            </div>
-                            <div class="bg-white/5 p-4 rounded-3xl rounded-tl-none border border-white/5">
-                                <p class="text-[11px] text-white/70 font-medium leading-relaxed">${msg.content}</p>
+                            <span class="text-[9px] font-black uppercase opacity-40">${m.username}</span>
+                            <div class="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5 mt-1">
+                                <p class="text-xs font-medium">${m.content}</p>
                             </div>
                         </div>
                     </div>
                 `).join('');
             } else {
-                // Support Feed for user
-                const { data, error } = await sb.from('tickets')
-                    .select('*')
-                    .eq('username', user.username)
-                    .order('created_at', { ascending: false });
-
-                if(error) return;
-                if(data.length === lastTicketCount) return;
-                lastTicketCount = data.length;
-
-                container.innerHTML = data.map(tk => `
-                    <div class="p-6 rounded-3xl bg-mkRed/5 border border-mkRed/10 animate-view">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-[8px] font-black uppercase text-mkRed">Ticket #${tk.id.slice(0,5)}</span>
-                            <span class="px-2 py-1 rounded bg-mkRed text-white text-[7px] font-black">${tk.status.toUpperCase()}</span>
+                const { data } = await sb.from('tickets').select('*').eq('username', user.username).order('created_at', { ascending: false });
+                flow.innerHTML = data.map(t => `
+                    <div class="p-6 rounded-2xl bg-mkRed/5 border border-mkRed/20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[9px] font-black text-mkRed uppercase">#${t.id.slice(0,6)}</span>
+                            <span class="bg-mkRed text-white px-2 py-0.5 rounded text-[8px] font-black">${t.status}</span>
                         </div>
-                        <p class="text-[10px] font-bold text-white uppercase">${tk.type}</p>
-                        <p class="text-[9px] opacity-40 mt-1">Demande enregistrée. Un admin vous contactera bientôt.</p>
+                        <p class="text-xs font-bold uppercase">${t.type}</p>
                     </div>
-                `).join('') || `<p class="text-center text-[10px] opacity-20 py-10 uppercase font-black tracking-widest">Aucun ticket ouvert</p>`;
+                `).join('') || `<p class="text-center opacity-20 text-xs py-10 uppercase font-black">Aucun ticket</p>`;
             }
-            container.scrollTop = container.scrollHeight;
+            flow.scrollTop = flow.scrollHeight;
         }
 
         async function sendChatMessage() {
             const input = document.getElementById('chat-input');
-            const content = input.value.trim();
-            if(!user) return toast("Connectez-vous pour parler", "mkRed");
-            if(!content) return;
-
+            const val = input.value.trim();
+            if(!val || !user) return;
             input.value = "";
-            const { error } = await sb.from('messages').insert([{
-                username: user.username,
-                content: content,
-                pfp: user.pfp,
-                level: user.xp
-            }]);
-
-            if(error) toast("Erreur d'envoi", "mkRed");
-            loadChatMessages();
+            await sb.from('messages').insert([{ username: user.username, pfp: user.pfp, content: val }]);
+            refreshChat();
         }
 
-        // --- PROFILE LOGIC ---
-
-        function renderProfileData(u) {
-            document.getElementById('p-avatar').src = u.pfp;
-            document.getElementById('p-username').innerText = u.username;
-            document.getElementById('p-val-cash').innerText = u.balance.toFixed(2) + "€";
-            document.getElementById('p-val-xp').innerText = u.xp + " XP";
-            
-            const controls = document.getElementById('p-controls');
-            if(user && u.id === user.id) controls.classList.remove('hidden');
-            else controls.classList.add('hidden');
-        }
-
-        async function findMember() {
-            const search = document.getElementById('search-name').value.trim();
-            if(!search) return;
-            const { data, error } = await sb.from('profiles').select('*').eq('username', search).maybeSingle();
-            if(data) renderProfileData(data);
-            else toast("Utilisateur introuvable", "mkRed");
-        }
-
-        async function updatePfp() {
-            const newUrl = document.getElementById('new-pfp-url').value.trim();
-            if(!newUrl) return;
-            const { data, error } = await sb.from('profiles').update({ pfp: newUrl }).eq('id', user.id).select().single();
-            if(!error) {
-                user = data;
-                renderProfileData(user);
-                document.getElementById('u-pfp').src = user.pfp;
-                toast("Avatar mis à jour", "mkGreen");
-            }
-        }
-
-        // --- ADMIN MODULE ---
-
-        async function loadAdminPanel() {
-            if(user.username.toLowerCase() !== 'admin' && user.role !== 'admin') return;
-
-            // Load Tickets
-            const { data: tickets } = await sb.from('tickets').select('*').eq('status', 'open').order('created_at', { ascending: false });
-            const tkContainer = document.getElementById('adm-tickets');
-            tkContainer.innerHTML = tickets.map(t => `
-                <div class="glass p-6 rounded-3xl flex justify-between items-center border-l-4 border-mkRed">
+        // --- ADMIN PANEL ---
+        async function loadAdmin() {
+            const { data: tks } = await sb.from('tickets').select('*').eq('status', 'open');
+            document.getElementById('adm-tickets').innerHTML = tks.map(t => `
+                <div class="mk-card p-6 flex justify-between items-center border-l-4 border-mkRed">
                     <div>
-                        <p class="text-[10px] font-black uppercase text-white">${t.type}</p>
-                        <p class="text-[9px] font-bold opacity-30 uppercase mt-1">Client: ${t.username}</p>
+                        <p class="text-xs font-black uppercase">${t.type}</p>
+                        <p class="text-[10px] opacity-40 font-bold uppercase">${t.username}</p>
                     </div>
-                    <button onclick="closeTicket('${t.id}')" class="bg-mkRed text-white px-6 py-2 rounded-xl text-[9px] font-black uppercase shadow-lg shadow-mkRed/20 hover:scale-105 transition">Fermer</button>
+                    <button onclick="closeTicket('${t.id}')" class="bg-mkRed text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase">Fermer</button>
                 </div>
-            `).join('') || `<p class="opacity-20 text-[9px] uppercase font-black">Aucun ticket en attente</p>`;
+            `).join('');
 
-            // Load Users
-            const { data: usersList } = await sb.from('profiles').select('*').order('balance', { ascending: false });
-            const usContainer = document.getElementById('adm-users');
-            usContainer.innerHTML = usersList.map(u => `
-                <div class="glass p-6 rounded-3xl space-y-4 border border-white/5">
+            const { data: users } = await sb.from('profiles').select('*').order('balance', { ascending: false });
+            document.getElementById('adm-users').innerHTML = users.map(u => `
+                <div class="mk-card p-6 space-y-4">
                     <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <img src="${u.pfp}" class="w-8 h-8 rounded-lg object-cover">
-                            <b class="text-[10px] uppercase font-sync">${u.username}</b>
-                        </div>
-                        <span class="text-mkGreen font-black text-xs">${u.balance.toFixed(2)}€</span>
+                        <b class="text-xs uppercase font-sync">${u.username}</b>
+                        <span class="text-mkGreen font-black">${u.balance.toFixed(2)}€</span>
                     </div>
                     <div class="flex gap-2">
-                        <input id="adm-mod-${u.id}" type="number" placeholder="Montant" class="bg-black/50 p-2 rounded-xl text-[10px] w-24 outline-none border border-white/5">
-                        <button onclick="adminModifyBalance('${u.id}', 1)" class="bg-mkGreen/20 text-mkGreen px-3 rounded-xl text-[8px] font-black">ADD</button>
-                        <button onclick="adminModifyBalance('${u.id}', -1)" class="bg-mkRed/20 text-mkRed px-3 rounded-xl text-[8px] font-black">SUB</button>
-                        <button onclick="adminToggleTV('${u.id}', ${!u.tv_access})" class="bg-mkAdmin text-white px-3 rounded-xl text-[8px] font-black uppercase">${u.tv_access ? 'Retirer TV' : 'Donner TV'}</button>
+                        <input id="mod-val-${u.id}" type="number" placeholder="Somme" class="bg-black p-3 rounded-xl text-xs w-24 border border-white/5">
+                        <button onclick="adminMod('${u.id}', 1)" class="bg-mkGreen text-black px-4 rounded-xl text-[10px] font-black">ADD</button>
+                        <button onclick="adminMod('${u.id}', -1)" class="bg-mkRed text-white px-4 rounded-xl text-[10px] font-black">SUB</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function adminModifyBalance(targetId, multiplier) {
-            const amount = parseFloat(document.getElementById('adm-mod-' + targetId).value);
-            if(isNaN(amount)) return;
-            const { data: targetUser } = await sb.from('profiles').select('balance').eq('id', targetId).single();
-            await sb.from('profiles').update({ balance: targetUser.balance + (amount * multiplier) }).eq('id', targetId);
-            toast("Balance mise à jour", "mkBlue");
-            loadAdminPanel();
-        }
-
-        async function adminToggleTV(targetId, newState) {
-            await sb.from('profiles').update({ tv_access: newState }).eq('id', targetId);
-            toast("Accès TV modifié", "mkAdmin");
-            loadAdminPanel();
+        async function adminMod(uid, dir) {
+            const val = parseFloat(document.getElementById('mod-val-'+uid).value) || 0;
+            const { data: target } = await sb.from('profiles').select('balance').eq('id', uid).single();
+            await sb.from('profiles').update({ balance: target.balance + (val * dir) }).eq('id', uid);
+            loadAdmin();
         }
 
         async function closeTicket(id) {
             await sb.from('tickets').update({ status: 'closed' }).eq('id', id);
-            toast("Ticket clôturé", "mkRed");
-            loadAdminPanel();
+            loadAdmin();
         }
 
-        // --- UI NAVIGATION & HELPERS ---
+        // --- NAVIGATION & UI ---
+        function showSection(id) {
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('s-' + id).classList.remove('hidden');
+            if(document.getElementById('link-' + id)) document.getElementById('link-' + id).classList.add('active');
+            
+            if(id === 'leaderboard') loadLeaderboard();
+            if(id === 'admin') loadAdmin();
+            if(id === 'profile') renderProfile(user);
+            window.scrollTo(0,0);
+        }
 
         async function loadLeaderboard() {
             const { data } = await sb.from('profiles').select('*').order('balance', { ascending: false }).limit(10);
-            const container = document.getElementById('leader-container');
-            if(!data) return;
-
-            container.innerHTML = data.map((u, i) => `
-                <div class="flex justify-between items-center p-10 border-b border-white/5 hover:bg-white/5 transition-all">
-                    <div class="flex items-center gap-10">
-                        <span class="text-3xl font-black italic font-sync ${i < 3 ? 'text-mkBlue' : 'opacity-10'}">0${i+1}</span>
-                        <img src="${u.pfp}" class="w-16 h-16 rounded-3xl object-cover shadow-2xl border border-white/10">
-                        <div>
-                            <p class="text-sm font-black uppercase tracking-widest">${u.username}</p>
-                            <p class="text-[9px] font-bold text-mkYellow uppercase mt-1">${u.xp} Experience Points</p>
-                        </div>
+            document.getElementById('leader-container').innerHTML = data.map((u, i) => `
+                <div class="flex justify-between items-center p-10 border-b border-white/5 hover:bg-white/5 transition">
+                    <div class="flex items-center gap-8">
+                        <span class="text-3xl font-black italic opacity-10">#${i+1}</span>
+                        <img src="${u.pfp}" class="w-16 h-16 rounded-2xl object-cover border border-white/10">
+                        <b class="text-lg font-black uppercase tracking-widest">${u.username}</b>
                     </div>
-                    <div class="text-right">
-                        <span class="text-2xl font-black text-mkGreen tracking-tighter">${u.balance.toFixed(2)}€</span>
-                        <p class="text-[8px] opacity-20 font-black uppercase mt-1">Global Balance</p>
-                    </div>
+                    <span class="text-mkGreen font-black text-3xl italic">${u.balance.toFixed(2)}€</span>
                 </div>
             `).join('');
         }
 
         async function openTicket(type) {
-            if(!user) return toast("Connectez-vous pour ouvrir un ticket", "mkRed");
-            const { error } = await sb.from('tickets').insert([{
-                username: user.username,
-                type: type,
-                status: 'open'
-            }]);
-            if(!error) toast("Votre demande a été envoyée au staff !", "mkGreen");
-        }
-
-        async function unlockTV() {
-            const input = document.getElementById('tv-code').value.trim();
-            if(input === "ACCES-BUYED-0001" || user.tv_access) {
-                const { error } = await sb.from('profiles').update({ tv_access: true }).eq('id', user.id);
-                user.tv_access = true;
-                document.getElementById('tv-card').innerHTML = `
-                    <div class="w-full text-center py-10 animate-view">
-                        <h3 class="text-5xl font-black text-mkGreen uppercase italic mb-4 font-sync">Access Granted</h3>
-                        <p class="text-xs opacity-50 uppercase tracking-widest">Bienvenue dans le MK Cinema VIP. Profitez de votre contenu.</p>
-                        <button class="mt-8 bg-white text-black px-12 py-4 rounded-2xl font-black text-[10px] uppercase">Lancer le Player 4K</button>
-                    </div>
-                `;
-                toast("MK CINEMA DÉBLOQUÉ", "mkGreen");
-            } else {
-                toast("Code invalide ou expiré", "mkRed");
-            }
-        }
-
-        function showSection(id) {
-            document.querySelectorAll('.content-wrapper > section').forEach(s => s.classList.add('hidden'));
-            document.getElementById('s-' + id).classList.remove('hidden');
-            
-            // Tab active state
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'opacity-100'));
-            // Sync triggers
-            if(id === 'leaderboard') loadLeaderboard();
-            if(id === 'admin') loadAdminPanel();
-            if(id === 'profile') renderProfileData(user);
-            window.scrollTo(0,0);
+            if(!user) return alert("Login requis");
+            await sb.from('tickets').insert([{ username: user.username, type: type, status: 'open' }]);
+            alert("Ticket ouvert !");
         }
 
         function setMode(m) {
             currentMode = m;
-            document.getElementById('m-cash').className = m === 'cash' ? 'px-6 py-2.5 rounded-xl text-[10px] font-black bg-mkGreen text-black shadow-2xl transition-all' : 'px-6 py-2.5 rounded-xl text-[10px] font-black opacity-30 text-white transition-all';
-            document.getElementById('m-xp').className = m === 'xp' ? 'px-6 py-2.5 rounded-xl text-[10px] font-black bg-mkYellow text-black shadow-2xl transition-all' : 'px-6 py-2.5 rounded-xl text-[10px] font-black opacity-30 text-white transition-all';
-            syncGlobalDisplay();
+            document.getElementById('m-cash').className = m === 'cash' ? 'px-6 py-3 rounded-xl text-xs font-black bg-mkGreen text-black transition-all' : 'px-6 py-3 rounded-xl text-xs font-black opacity-30 text-white transition-all';
+            document.getElementById('m-xp').className = m === 'xp' ? 'px-6 py-3 rounded-xl text-xs font-black bg-mkYellow text-black transition-all' : 'px-6 py-3 rounded-xl text-xs font-black opacity-30 text-white transition-all';
+            syncUI();
         }
 
-        function openModal(id) { 
-            document.getElementById(id).classList.remove('hidden'); 
-            document.body.style.overflow = 'hidden';
+        function renderProfile(u) {
+            if(!u) return;
+            document.getElementById('p-avatar').src = u.pfp;
+            document.getElementById('p-username').innerText = u.username;
+            document.getElementById('p-val-cash').innerText = u.balance.toFixed(2) + "€";
+            document.getElementById('p-val-xp').innerText = u.xp + " XP";
+            if(user && u.id === user.id) document.getElementById('p-controls').classList.remove('hidden');
         }
 
-        function closeModal(id) { 
-            document.getElementById(id).classList.add('hidden'); 
-            document.body.style.overflow = 'auto';
+        async function findMember() {
+            const s = document.getElementById('search-name').value.trim();
+            const { data } = await sb.from('profiles').select('*').eq('username', s).maybeSingle();
+            if(data) renderProfile(data);
         }
 
-        function logout() {
-            localStorage.removeItem('mk_session_v72_platinum');
-            location.reload();
+        async function updatePfp() {
+            const url = document.getElementById('new-pfp-url').value.trim();
+            if(!url) return;
+            const { data } = await sb.from('profiles').update({ pfp: url }).eq('id', user.id).select().single();
+            user = data; renderProfile(user); document.getElementById('u-pfp').src = user.pfp;
         }
 
-        // --- BOOTSTRAP ---
+        async function unlockTV() {
+            const code = document.getElementById('tv-code').value.trim();
+            if(code === "ACCES-BUYED-0001" || user.tv_access) {
+                await sb.from('profiles').update({ tv_access: true }).eq('id', user.id);
+                document.getElementById('tv-card').innerHTML = `<h3 class="text-5xl font-black text-mkGreen italic uppercase">LICENCE VIP ACTIVÉE</h3><p class="opacity-50 mt-4">Bon visionnage sur MK Cinema.</p>`;
+            } else { alert("Code invalide"); }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function logout() { localStorage.removeItem('mk_session_v74'); location.reload(); }
+
         window.onload = () => {
-            const saved = localStorage.getItem('mk_session_v72_platinum');
-            if(saved) {
-                user = JSON.parse(saved);
-                initApp();
-            }
-            // Auto-scroll chat to bottom on first load
-            const flow = document.getElementById('chat-flow');
-            flow.scrollTop = flow.scrollHeight;
+            const saved = localStorage.getItem('mk_session_v74');
+            if(saved) { user = JSON.parse(saved); bootstrapApp(); }
         };
-
-        // --- FILTER FOR ADMIN SEARCH ---
-        function filterAdminUsers() {
-            const val = document.getElementById('adm-search').value.toLowerCase();
-            const cards = document.querySelectorAll('#adm-users > div');
-            cards.forEach(c => {
-                const name = c.querySelector('b').innerText.toLowerCase();
-                c.style.display = name.includes(val) ? 'block' : 'none';
-            });
-        }
     </script>
 </body>
 </html>
