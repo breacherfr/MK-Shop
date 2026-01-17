@@ -3,338 +3,755 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - FULL VERSION V53</title>
+    <title>MK SHOP - SUPREME SYSTEM V63</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: { 
-                        mkBlue: '#00d2ff', mkRed: '#ff4b5c', mkPurple: '#a363ff', 
-                        mkYellow: '#fbbf24', mkGreen: '#22c55e', mkAdmin: '#ff00ff'
-                    }
+                    colors: {
+                        mkBlue: '#00d2ff',
+                        mkRed: '#ff4b5c',
+                        mkPurple: '#a363ff',
+                        mkYellow: '#fbbf24',
+                        mkGreen: '#22c55e',
+                        mkAdmin: '#ff00ff',
+                        mkDark: '#050505',
+                        mkLight: '#f3f4f6'
+                    },
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] }
                 }
             }
         }
     </script>
+
     <style>
-        :root { --bg-body: #050505; --text-main: #ffffff; --glass: rgba(20, 20, 25, 0.96); --border: rgba(255,255,255,0.1); }
-        .light { --bg-body: #f3f4f6; --text-main: #111827; --glass: rgba(255, 255, 255, 0.95); --border: rgba(0,0,0,0.1); }
-        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Montserrat', sans-serif; transition: 0.3s; overflow-x: hidden; }
-        .glass { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); }
-        .nav-link { font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; padding: 12px 20px; border-radius: 99px; transition: 0.3s; }
-        .active-link { background: #00d2ff !important; color: black !important; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
-        .mk-toast { position: fixed; top: 20px; right: 20px; background: #000; color: #fff; border-left: 5px solid #00d2ff; padding: 15px 25px; border-radius: 15px; z-index: 10000; font-size: 11px; font-weight: 900; animation: slideIn 0.3s forwards; }
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* BASE STYLES */
+        body { transition: background-color 0.3s, color 0.3s; overflow-x: hidden; }
+        .glass { backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .dark .glass { background: rgba(20, 20, 25, 0.8); }
+        .light .glass { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); }
+
+        /* CUSTOM ANIMATIONS */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
+
+        /* TOAST SYSTEM */
+        #notification-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 16px 24px; border-radius: 12px; font-weight: 800; font-size: 12px; color: white; display: flex; align-items: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* TAGS */
+        .chat-tag { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-right: 6px; }
+        
+        /* SLOTS ANIMATION */
+        .slot-spinning { animation: blur 0.1s infinite linear; }
+        @keyframes blur { 0% { filter: blur(0px); } 50% { filter: blur(4px); } 100% { filter: blur(0px); } }
     </style>
 </head>
-<body class="dark">
+<body class="dark bg-mkDark text-white light:bg-mkLight light:text-mkDark">
 
-    <div id="toast-container"></div>
+    <div id="notification-container"></div>
 
-    <nav class="glass sticky top-0 z-[100] px-6 py-4 flex justify-between items-center border-b">
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('shop')">
-                <div class="w-10 h-10 bg-mkBlue rounded-xl flex items-center justify-center font-black text-black">MK</div>
-                <h1 class="text-xl font-black italic uppercase">MK <span class="text-mkBlue">SHOP</span></h1>
+    <nav class="glass sticky top-0 z-[100] px-8 py-4 flex justify-between items-center border-b border-white/5">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="showSection('shop')">
+                <div class="w-12 h-12 bg-mkBlue rounded-2xl flex items-center justify-center font-black text-black group-hover:scale-110 transition">MK</div>
+                <div class="flex flex-col">
+                    <span class="font-black text-xl italic leading-none">MK SHOP</span>
+                    <span class="text-[9px] font-bold text-mkBlue tracking-[0.2em]">ULTIMATE</span>
+                </div>
             </div>
             
-            <div class="hidden lg:flex gap-1 bg-black/10 p-1 rounded-full border border-white/5">
-                <button id="nav-shop" class="nav-link active-link" onclick="showSection('shop')">🛒 Boutique</button>
-                <button id="nav-gamble" class="nav-link" onclick="showSection('gamble')">🎲 Jeux</button>
-                <button id="nav-leaderboard" class="nav-link" onclick="showSection('leaderboard')">🏆 Top 10</button>
-                <button id="nav-profile" class="nav-link" onclick="showSection('profile')">👤 Profil</button>
-                <button id="nav-tv" class="nav-link hidden text-mkPurple" onclick="showSection('tv')">📺 TV VIP</button>
-                <button id="nav-admin" class="nav-link hidden text-mkAdmin" onclick="showSection('admin')">⚡ Admin</button>
+            <div class="hidden lg:flex gap-2">
+                <button onclick="showSection('shop')" class="nav-btn px-4 py-2 text-[10px] font-black uppercase hover:text-mkBlue transition">Boutique</button>
+                <button onclick="showSection('gamble')" class="nav-btn px-4 py-2 text-[10px] font-black uppercase hover:text-mkBlue transition">Casino</button>
+                <button onclick="showSection('leaderboard')" class="nav-btn px-4 py-2 text-[10px] font-black uppercase hover:text-mkBlue transition">Classement</button>
+                <button onclick="showSection('profile')" class="nav-btn px-4 py-2 text-[10px] font-black uppercase hover:text-mkBlue transition">Mon Profil</button>
+                <button id="nav-admin" onclick="showSection('admin')" class="hidden px-4 py-2 text-[10px] font-black uppercase text-mkAdmin border border-mkAdmin/30 rounded-lg hover:bg-mkAdmin hover:text-black transition">Panel Admin</button>
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button onclick="toggleTheme()" class="p-2 glass rounded-xl">🌓</button>
-            <div class="flex items-center gap-3 bg-mkGreen/10 border-2 border-mkGreen/40 px-4 py-2 rounded-xl">
-                <p id="top-balance-val" class="text-lg font-black text-mkGreen">0.00€</p>
-                <span class="text-xl">💰</span>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleTheme()" class="w-10 h-10 glass rounded-xl flex items-center justify-center text-lg hover:bg-white/10 transition">🌓</button>
+            
+            <div class="flex items-center bg-black/40 rounded-2xl p-1 border border-white/10">
+                <button onclick="setActiveStat('cash')" id="btn-stat-cash" class="px-4 py-2 rounded-xl text-[11px] font-black bg-mkGreen text-black transition">CASH</button>
+                <button onclick="setActiveStat('xp')" id="btn-stat-xp" class="px-4 py-2 rounded-xl text-[11px] font-black opacity-40 transition">XP</button>
             </div>
-            <div id="user-display" class="hidden flex items-center gap-2 bg-white/5 p-1 rounded-xl">
-                <img id="user-pfp-nav" src="" class="w-8 h-8 rounded-lg object-cover border border-mkBlue">
-                <button onclick="logout()" class="text-mkRed font-black text-[10px] px-2">✕</button>
+
+            <div class="bg-black/20 px-6 py-2.5 rounded-2xl border border-white/5 min-w-[120px] text-center">
+                <span id="top-display-val" class="font-black text-lg text-mkGreen">0.00€</span>
             </div>
-            <button id="auth-btn" onclick="openModal('auth-modal')" class="bg-mkBlue text-black text-[10px] font-black px-6 py-3 rounded-xl uppercase">Connexion</button>
+
+            <div id="user-controls" class="hidden flex items-center gap-3">
+                <img id="nav-pfp" src="" class="w-10 h-10 rounded-xl border-2 border-mkBlue object-cover">
+                <button onclick="logout()" class="w-10 h-10 flex items-center justify-center text-mkRed hover:bg-mkRed/10 rounded-xl transition">✕</button>
+            </div>
+            
+            <button id="login-trigger" onclick="openModal('auth-modal')" class="bg-mkBlue text-black px-6 py-3 rounded-xl font-black text-xs uppercase hover:bg-cyan-400 transition">Connexion</button>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 py-10 lg:pr-[320px]">
+    <main class="max-w-7xl mx-auto px-6 py-12 lg:pr-[400px]">
 
-        <div id="section-shop" class="content-section space-y-10">
-            <div class="flex justify-between items-center">
-                <h2 class="text-4xl font-black italic uppercase">Catalogue</h2>
-                <div class="flex gap-2 bg-black/40 p-2 rounded-2xl border border-white/10">
-                    <input id="shop-code" type="text" placeholder="CODE CADEAU" class="bg-transparent outline-none px-4 text-[10px] font-black uppercase w-32 text-white">
-                    <button onclick="useCode('shop-code')" class="bg-mkBlue text-black px-4 py-2 rounded-xl font-black text-[9px] uppercase">Activer</button>
-                </div>
-            </div>
-            
+        <section id="section-shop" class="content-view space-y-12 animate-fade">
+            <header>
+                <h2 class="text-5xl font-black italic uppercase tracking-tighter">Boutique <span class="text-mkBlue">Exclusive</span></h2>
+                <p class="text-white/40 font-bold mt-2 uppercase text-xs">Les meilleurs produits Roblox et Premium du marché.</p>
+            </header>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkBlue">
-                    <h3 class="text-3xl font-black uppercase italic mb-2">Comptes Roblox</h3>
-                    <p class="text-xs opacity-60 mb-8">Comptes avec Robux / Skins rares.</p>
-                    <button onclick="openSupport('Roblox')" class="w-full bg-white text-black py-4 rounded-2xl font-black uppercase">Acheter (5€ - 30€)</button>
+                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkBlue hover:translate-y-[-5px] transition-all">
+                    <span class="bg-mkBlue/10 text-mkBlue px-3 py-1 rounded text-[9px] font-black uppercase">Instantané</span>
+                    <h3 class="text-2xl font-black mt-4">COMPTES ROBLOX</h3>
+                    <p class="text-xs opacity-50 mt-2 leading-relaxed">Accès à des comptes avec skins rares, Robux et anciens badges de collection.</p>
+                    <button onclick="openTicket('Achat Roblox')" class="w-full mt-8 bg-white text-black py-4 rounded-2xl font-black text-xs uppercase hover:scale-[1.02] transition">Consulter les prix</button>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkYellow">
-                    <h3 class="text-3xl font-black uppercase italic mb-2">Comptes Premium</h3>
-                    <p class="text-xs opacity-60 mb-8">Spotify, Netflix, Disney+ garantis.</p>
-                    <button onclick="openSupport('Premium')" class="w-full bg-mkYellow text-black py-4 rounded-2xl font-black uppercase">Acheter (3€ - 20€)</button>
+                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkBlue hover:translate-y-[-5px] transition-all">
+                    <span class="bg-mkBlue/10 text-mkBlue px-3 py-1 rounded text-[9px] font-black uppercase">Sécurisé</span>
+                    <h3 class="text-2xl font-black mt-4">ROBLOX CHEATS</h3>
+                    <p class="text-xs opacity-50 mt-2 leading-relaxed">Scripts, executors et bypass pour dominer tous les jeux sans risque de ban.</p>
+                    <button onclick="openTicket('Achat Cheat')" class="w-full mt-8 bg-white text-black py-4 rounded-2xl font-black text-xs uppercase hover:scale-[1.02] transition">Voir le catalogue</button>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkPurple">
-                    <h3 class="text-3xl font-black uppercase italic mb-2">Accès TV VIP</h3>
-                    <p class="text-xs opacity-60 mb-8">Débloquez l'onglet TV avec un code ou achat.</p>
-                    <button onclick="openSupport('TV')" class="w-full bg-mkPurple text-white py-4 rounded-2xl font-black uppercase">Débloquer (3€)</button>
+                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkYellow hover:translate-y-[-5px] transition-all">
+                    <span class="bg-mkYellow/10 text-mkYellow px-3 py-1 rounded text-[9px] font-black uppercase">Premium</span>
+                    <h3 class="text-2xl font-black mt-4">COMPTES STREAMING</h3>
+                    <p class="text-xs opacity-50 mt-2 leading-relaxed">Netflix 4K, Disney+, Spotify Premium à prix cassés garantis à vie.</p>
+                    <button onclick="openTicket('Achat Premium')" class="w-full mt-8 bg-mkYellow text-black py-4 rounded-2xl font-black text-xs uppercase hover:scale-[1.02] transition">Acheter maintenant</button>
                 </div>
-                <div class="glass p-8 rounded-[2.5rem] border-t-8 border-mkGreen">
-                    <h3 class="text-3xl font-black uppercase italic mb-2">Demande Staff</h3>
-                    <p class="text-xs opacity-60 mb-8">Recrutement ou commande personnalisée.</p>
-                    <button onclick="openSupport('Staff')" class="w-full bg-mkGreen text-black py-4 rounded-2xl font-black uppercase">Contacter (1€)</button>
+                <div id="shop-tv-card" class="glass p-8 rounded-[2.5rem] border-t-8 border-mkPurple hover:translate-y-[-5px] transition-all">
+                    <span class="bg-mkPurple/10 text-mkPurple px-3 py-1 rounded text-[9px] font-black uppercase">Multimédia</span>
+                    <h3 class="text-2xl font-black mt-4">ACCÈS TV FILMS</h3>
+                    <p class="text-xs opacity-50 mt-2 leading-relaxed">Regardez tous les derniers films et animés directement sur MK SHOP.</p>
+                    <div id="tv-activation-ui" class="mt-8 space-y-3">
+                        <input id="tv-code-input" type="text" placeholder="Entrez votre code TV..." class="w-full bg-black/30 p-4 rounded-xl text-xs outline-none border border-white/5 focus:border-mkPurple/50">
+                        <button onclick="activateTV()" class="w-full bg-mkPurple text-white py-4 rounded-2xl font-black text-xs uppercase">Activer l'accès</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="section-gamble" class="content-section hidden space-y-10">
-            <div class="flex justify-between items-end">
-                <h2 class="text-4xl font-black italic uppercase">Casino <span class="text-mkYellow">MK</span></h2>
-                <button onclick="handleCashout()" class="bg-mkGreen text-black px-6 py-3 rounded-xl font-black text-xs uppercase shadow-[0_0_15px_rgba(34,197,94,0.4)]">💸 Retirer (Cashout)</button>
+            <div class="glass p-10 rounded-[3rem] border-2 border-mkRed flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none text-8xl">🛡️</div>
+                <div class="relative z-10 text-center lg:text-left">
+                    <h3 class="text-3xl font-black text-mkRed uppercase italic">Support & Cashout</h3>
+                    <p class="text-sm font-bold opacity-60 mt-1 uppercase">Besoin d'aide ou prêt à retirer vos gains ?</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 relative z-10">
+                    <button onclick="openTicket('Support Technique')" class="bg-white/10 hover:bg-white/20 px-8 py-4 rounded-2xl font-black text-xs uppercase transition">Ticket Support</button>
+                    <button onclick="openTicket('Demande Cashout')" class="bg-mkRed text-white px-10 py-4 rounded-2xl font-black text-xs uppercase shadow-xl shadow-mkRed/30 hover:scale-105 transition">💰 Retirer Cash</button>
+                </div>
             </div>
+        </section>
+
+        <section id="section-gamble" class="content-view hidden space-y-10 animate-fade">
+            <header>
+                <h2 class="text-5xl font-black italic uppercase tracking-tighter">Casino <span class="text-mkRed">MK</span></h2>
+                <p class="text-white/40 font-bold mt-2 uppercase text-xs">Multipliez votre argent avec nos jeux équitables.</p>
+            </header>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass p-8 rounded-[3rem] text-center">
-                    <div id="coin-visual" class="text-6xl mb-4">🪙</div>
-                    <input id="bet-coin" type="number" value="1" class="bg-black/40 w-full p-4 rounded-xl text-center font-black mb-4 outline-none">
-                    <button onclick="playCoin()" class="w-full bg-mkBlue text-black font-black py-4 rounded-xl uppercase italic">Jouer Pile ou Face</button>
+                <div class="glass p-8 rounded-[2.5rem] text-center space-y-6">
+                    <div class="text-6xl mx-auto w-24 h-24 bg-mkBlue/10 rounded-full flex items-center justify-center">🪙</div>
+                    <div>
+                        <h4 class="text-xl font-black uppercase">Pile ou Face</h4>
+                        <p class="text-[10px] opacity-50">50% de chance de doubler votre mise.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <input id="bet-coin" type="number" value="1" min="1" class="w-full bg-black/40 p-4 rounded-2xl text-center font-black text-mkGreen outline-none border border-white/5">
+                        <div class="flex gap-2">
+                            <button onclick="playCoin('pile')" class="flex-1 bg-mkBlue text-black py-4 rounded-xl font-black text-[10px] uppercase">Miser Pile</button>
+                            <button onclick="playCoin('face')" class="flex-1 bg-mkBlue text-black py-4 rounded-xl font-black text-[10px] uppercase">Miser Face</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="glass p-8 rounded-[3rem] text-center">
-                    <div id="dice-visual" class="text-6xl mb-4">🎲</div>
-                    <input id="bet-dice" type="number" value="1" class="bg-black/40 w-full p-4 rounded-xl text-center font-black mb-4 outline-none">
-                    <button onclick="playDice()" class="w-full bg-mkRed text-white font-black py-4 rounded-xl uppercase italic">Lancer le Dé</button>
+
+                <div class="glass p-8 rounded-[2.5rem] text-center space-y-6">
+                    <div id="slot-machine" class="flex justify-center gap-4 text-5xl py-6 bg-black/40 rounded-3xl border border-white/5">
+                        <span id="slot1">🍒</span><span id="slot2">🍒</span><span id="slot3">🍒</span>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black uppercase">Jackpot Slots</h4>
+                        <p class="text-[10px] opacity-50">Gagnez jusqu'à x10 votre mise.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <input id="bet-slots" type="number" value="1" min="1" class="w-full bg-black/40 p-4 rounded-2xl text-center font-black text-mkPurple outline-none border border-white/5">
+                        <button onclick="playSlots()" class="w-full bg-mkPurple text-white py-4 rounded-xl font-black text-[10px] uppercase">Lancer les rouleaux</button>
+                    </div>
                 </div>
-                <div class="glass p-8 rounded-[3rem] text-center col-span-1 md:col-span-2">
-                    <div id="slots-visual" class="text-4xl mb-6 font-black tracking-widest bg-black/40 py-4 rounded-2xl italic">❓ | ❓ | ❓</div>
-                    <input id="bet-slots" type="number" value="2" class="bg-black/40 w-full p-4 rounded-xl text-center font-black mb-4 outline-none">
-                    <button onclick="playSlots()" class="w-full bg-mkPurple text-white font-black py-4 rounded-xl uppercase">Spin (JACKPOT x10)</button>
+
+                <div class="glass p-8 rounded-[2.5rem] text-center space-y-6">
+                    <div id="dice-res" class="text-6xl">🎲</div>
+                    <h4 class="text-xl font-black uppercase">Lancer de Dés</h4>
+                    <input id="bet-dice" type="number" value="1" class="w-full bg-black/40 p-4 rounded-2xl text-center font-black outline-none border border-white/5">
+                    <button onclick="playDice()" class="w-full bg-mkRed text-white py-4 rounded-xl font-black text-[10px] uppercase">Lancer le dé</button>
+                </div>
+
+                <div class="glass p-8 rounded-[2.5rem] text-center space-y-6">
+                    <div class="text-xl font-black uppercase italic">Pierre Feuille Ciseaux</div>
+                    <div class="flex justify-center gap-2">
+                        <button onclick="playRPS('pierre')" class="w-16 h-16 glass rounded-2xl text-2xl hover:bg-white/10">✊</button>
+                        <button onclick="playRPS('feuille')" class="w-16 h-16 glass rounded-2xl text-2xl hover:bg-white/10">✋</button>
+                        <button onclick="playRPS('ciseaux')" class="w-16 h-16 glass rounded-2xl text-2xl hover:bg-white/10">✌️</button>
+                    </div>
+                    <input id="bet-rps" type="number" value="1" class="w-full bg-black/40 p-4 rounded-2xl text-center font-black outline-none border border-white/5">
+                    <p class="text-[9px] opacity-40 uppercase font-black">Choisissez votre signe et misez</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="section-profile" class="content-section hidden space-y-8">
-            <div class="glass p-10 rounded-[4rem] text-center border-t-8 border-mkBlue">
-                <img id="prof-pfp" src="" class="w-32 h-32 rounded-[2.5rem] mx-auto mb-6 border-4 border-mkBlue object-cover">
-                <h2 id="prof-user" class="text-4xl font-black uppercase italic mb-8">---</h2>
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-black/20 p-6 rounded-3xl"><p class="text-[10px] opacity-50 uppercase font-black italic">Solde</p><h4 id="prof-cash" class="text-2xl font-black text-mkGreen">0.00€</h4></div>
-                    <div class="bg-black/20 p-6 rounded-3xl"><p class="text-[10px] opacity-50 uppercase font-black italic">Niveau</p><h4 id="prof-xp" class="text-2xl font-black text-mkYellow">0 XP</h4></div>
+        <section id="section-profile" class="content-view hidden space-y-8 animate-fade">
+            <div class="max-w-xl mx-auto space-y-6">
+                <div class="glass p-4 rounded-2xl flex gap-3">
+                    <input id="search-username" type="text" placeholder="Rechercher un profil par nom..." class="flex-1 bg-transparent px-4 outline-none font-bold text-sm">
+                    <button onclick="searchUser()" class="bg-mkBlue text-black px-6 py-3 rounded-xl font-black text-xs uppercase">Rechercher</button>
                 </div>
-                <div class="space-y-4 max-w-sm mx-auto">
-                    <input id="new-pfp-url" type="text" placeholder="URL Image Avatar" class="w-full bg-black/40 p-4 rounded-xl outline-none text-xs text-center border border-white/5">
-                    <button onclick="updatePFP()" class="w-full bg-white text-black py-3 rounded-xl text-[10px] font-black uppercase">Changer de Photo</button>
+
+                <div id="profile-card" class="glass p-10 rounded-[3rem] text-center relative overflow-hidden border border-white/10">
+                    <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-mkBlue/20 to-transparent"></div>
                     
-                    <div class="flex gap-2 pt-4 border-t border-white/10">
-                        <input id="profile-code" type="text" placeholder="CODE ACTIVATION" class="bg-black/40 flex-1 p-4 rounded-xl outline-none text-center font-black uppercase text-xs border border-mkPurple/30">
-                        <button onclick="useCode('profile-code')" class="bg-mkPurple text-white px-6 rounded-xl font-black text-xs uppercase">OK</button>
+                    <div class="relative z-10">
+                        <img id="p-avatar" src="" class="w-32 h-32 rounded-[2rem] mx-auto border-4 border-mkDark shadow-2xl object-cover">
+                        <h2 id="p-username" class="text-4xl font-black mt-6 italic uppercase tracking-tighter">Chargement...</h2>
+                        <div class="flex justify-center gap-4 mt-6">
+                            <div class="bg-black/40 px-6 py-4 rounded-3xl border border-white/5">
+                                <p class="text-[9px] opacity-50 uppercase font-black">Solde Cash</p>
+                                <p id="p-cash" class="text-xl font-black text-mkGreen">0.00€</p>
+                            </div>
+                            <div class="bg-black/40 px-6 py-4 rounded-3xl border border-white/5">
+                                <p class="text-[9px] opacity-50 uppercase font-black">Points XP</p>
+                                <p id="p-xp" class="text-xl font-black text-mkYellow">0</p>
+                            </div>
+                        </div>
+
+                        <div id="profile-actions" class="mt-10 pt-10 border-t border-white/5 space-y-4">
+                            <div class="text-left space-y-2">
+                                <label class="text-[10px] font-black uppercase opacity-40 ml-2">Changer Photo de Profil (URL)</label>
+                                <input id="p-pfp-input" type="text" placeholder="https://image.com/votre-photo.jpg" class="w-full bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5 focus:border-mkBlue/50">
+                                <button onclick="updateProfilePFP()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-xs uppercase">Sauvegarder l'avatar</button>
+                            </div>
+
+                            <div class="text-left space-y-2 pt-4">
+                                <label class="text-[10px] font-black uppercase opacity-40 ml-2">Code Cadeau / TV</label>
+                                <div class="flex gap-2">
+                                    <input id="p-code-input" type="text" placeholder="Entrez le code" class="flex-1 bg-black/40 p-4 rounded-2xl text-xs outline-none border border-white/5 font-black uppercase">
+                                    <button onclick="redeemCode('p-code-input')" class="bg-mkPurple text-white px-8 rounded-2xl font-black text-xs uppercase">OK</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="section-tv" class="content-section hidden space-y-6">
-            <h2 class="text-4xl font-black italic uppercase text-center">MK <span class="text-mkPurple">TV VIP</span></h2>
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div class="glass p-4 rounded-[2rem] h-[500px] overflow-y-auto no-scrollbar space-y-4">
-                    <p class="text-[10px] font-black text-mkBlue uppercase opacity-50 px-2 italic">Bibliothèque</p>
-                    <div class="space-y-1">
-                        <button onclick="setVideo('One Piece - EP 1', 'https://www.youtube.com/embed/S8_YwFLCh4U')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-mkBlue hover:text-black transition">🏴‍☠️ One Piece</button>
-                        <button onclick="setVideo('Naruto - EP 1', 'https://www.youtube.com/embed/1vRzN7p0f8Y')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-mkRed transition">🦊 Naruto</button>
-                        <button onclick="setVideo('Dragon Ball Z', 'https://www.youtube.com/embed/Sx-C5yF2yJk')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-mkYellow hover:text-black transition">🐉 DBZ</button>
-                        <button onclick="setVideo('Hunter x Hunter', 'https://www.youtube.com/embed/d6kBeWjQDqA')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-mkPurple transition">⚡ Hunter x Hunter</button>
-                        <button onclick="setVideo('Jujutsu Kaisen', 'https://www.youtube.com/embed/S2C_P4tU_3Y')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-mkGreen hover:text-black transition">👹 Jujutsu Kaisen</button>
-                        <button onclick="setVideo('Bob l\'éponge', 'https://www.youtube.com/embed/2sFFj6X85Q4')" class="w-full text-left p-3 rounded-xl text-[10px] font-bold bg-white/5 hover:bg-blue-400 transition">🍍 Bob l'éponge</button>
-                    </div>
+        <section id="section-leaderboard" class="content-view hidden space-y-8 animate-fade">
+            <h2 class="text-5xl font-black italic uppercase text-center">Tops <span class="text-mkGreen">Riches</span></h2>
+            <div id="leaderboard-container" class="glass rounded-[3rem] overflow-hidden border border-white/10">
                 </div>
-                <div class="lg:col-span-3 space-y-4">
-                    <div class="bg-black rounded-[3rem] aspect-video overflow-hidden border-4 border-mkPurple/20 shadow-2xl">
-                        <iframe id="video-frame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="glass p-6 rounded-3xl flex justify-between items-center">
-                        <h4 id="video-title" class="text-xl font-black italic uppercase">Sélectionnez un programme</h4>
-                    </div>
+        </section>
+
+        <section id="section-tv" class="content-view hidden space-y-6 animate-fade">
+            <h2 class="text-4xl font-black italic uppercase">Lecteur <span class="text-mkPurple">Cinéma VIP</span></h2>
+            <div class="bg-black aspect-video rounded-[2.5rem] overflow-hidden border-4 border-mkPurple/30 shadow-2xl relative">
+                <iframe id="tv-iframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="flex gap-3 overflow-x-auto py-4 no-scrollbar">
+                <button onclick="playMovie('https://www.youtube.com/embed/S8_YwFLCh4U')" class="bg-white/5 hover:bg-mkPurple/20 px-6 py-4 rounded-2xl whitespace-nowrap font-bold text-xs transition">ONE PIECE: RED</button>
+                <button onclick="playMovie('https://www.youtube.com/embed/1vRzN7p0f8Y')" class="bg-white/5 hover:bg-mkPurple/20 px-6 py-4 rounded-2xl whitespace-nowrap font-bold text-xs transition">NARUTO SHIPPUDEN</button>
+                <button onclick="playMovie('https://www.youtube.com/embed/Sx-C5yF2yJk')" class="bg-white/5 hover:bg-mkPurple/20 px-6 py-4 rounded-2xl whitespace-nowrap font-bold text-xs transition">DRAGON BALL SUPER</button>
+                <button onclick="playMovie('https://www.youtube.com/embed/5m3O6B6rRz4')" class="bg-white/5 hover:bg-mkPurple/20 px-6 py-4 rounded-2xl whitespace-nowrap font-bold text-xs transition">FILM ACTION EXCLU</button>
+            </div>
+        </section>
+
+        <section id="section-admin" class="content-view hidden space-y-10 animate-fade">
+            <h2 class="text-4xl font-black text-mkAdmin italic uppercase">⚡ Console Suprême</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h3 class="font-black uppercase text-sm flex items-center gap-2">Tickets Ouverts <span id="ticket-count" class="bg-mkRed text-[10px] px-2 py-0.5 rounded">0</span></h3>
+                    <div id="admin-tickets-list" class="space-y-3">
+                        </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-black uppercase text-sm">Gestion des Utilisateurs</h3>
+                    <div id="admin-users-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2 no-scrollbar">
+                        </div>
                 </div>
             </div>
-        </div>
-
-        <div id="section-leaderboard" class="content-section hidden">
-            <h2 class="text-4xl font-black italic uppercase text-center mb-8">Top 10 Fortunes</h2>
-            <div id="leaderboard-list" class="glass rounded-[3rem] overflow-hidden"></div>
-        </div>
-
-        <div id="section-admin" class="content-section hidden space-y-6">
-            <h2 class="text-4xl font-black text-mkAdmin italic uppercase">Admin</h2>
-            <div id="admin-user-list" class="space-y-4"></div>
-        </div>
+        </section>
 
     </main>
 
-    <aside class="fixed right-6 top-28 bottom-8 w-72 glass rounded-[2.5rem] hidden xl:flex flex-col overflow-hidden z-[40]">
-        <div class="p-4 bg-mkBlue/10 text-mkBlue font-black uppercase text-[10px] text-center italic">Global Chat</div>
-        <div id="public-messages" class="flex-1 p-4 overflow-y-auto space-y-4 no-scrollbar"></div>
-        <div class="p-4 border-t border-white/5">
-            <div class="flex gap-2 bg-black/20 p-2 rounded-xl">
-                <input id="public-input" type="text" placeholder="Message..." class="bg-transparent outline-none text-[11px] flex-1 px-2 font-bold">
-                <button onclick="sendPublicMessage()" class="w-8 h-8 bg-mkBlue text-black rounded-lg font-black">></button>
+    <aside id="chat-sidebar" class="fixed right-8 top-28 bottom-12 w-[340px] glass rounded-[3rem] hidden xl:flex flex-col overflow-hidden border border-white/5 shadow-2xl">
+        <div class="p-6 bg-white/5 border-b border-white/5 flex justify-between items-center">
+            <span class="text-[11px] font-black uppercase tracking-widest text-mkBlue italic">Chat Global</span>
+            <span id="online-indicator" class="w-2 h-2 bg-mkGreen rounded-full shadow-[0_0_10px_#22c55e]"></span>
+        </div>
+        
+        <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-6 no-scrollbar">
+            </div>
+
+        <div class="p-6 border-t border-white/5">
+            <div class="bg-black/40 rounded-2xl p-2 flex gap-2 border border-white/10 focus-within:border-mkBlue/50 transition">
+                <input id="chat-input" type="text" placeholder="Écrire un message..." class="bg-transparent outline-none flex-1 px-3 text-xs font-medium">
+                <button onclick="sendChatMessage()" class="w-10 h-10 bg-mkBlue text-black rounded-xl flex items-center justify-center hover:scale-105 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
             </div>
         </div>
     </aside>
 
-    <div id="auth-modal" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
-        <div class="glass p-10 rounded-[3rem] w-full max-w-sm text-center border-t-8 border-mkBlue">
-            <h3 class="text-2xl font-black mb-6 text-white uppercase italic">MK Connexion</h3>
+    <div id="auth-modal" class="fixed inset-0 z-[1000] bg-black/95 hidden flex items-center justify-center p-6">
+        <div class="glass w-full max-w-md rounded-[3rem] p-12 text-center relative border-t-8 border-mkBlue">
+            <button onclick="closeModal('auth-modal')" class="absolute top-8 right-8 text-white/40 hover:text-white transition">✕</button>
+            <h3 class="text-3xl font-black italic uppercase">Rejoindre <span class="text-mkBlue">MK</span></h3>
+            <p class="text-white/40 font-bold text-[10px] uppercase mt-2 mb-8">Accédez à votre compte et à vos fonds</p>
+            
             <div class="space-y-3">
-                <input id="in-email" type="email" placeholder="Email" class="w-full bg-white/5 p-4 rounded-xl outline-none text-center font-bold">
-                <input id="in-user" type="text" placeholder="Pseudo" class="w-full bg-white/5 p-4 rounded-xl outline-none text-center font-bold">
-                <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-white/5 p-4 rounded-xl outline-none text-center font-bold">
-                <button onclick="handleAuth()" class="w-full bg-mkBlue text-black font-black py-4 rounded-xl uppercase">Valider</button>
+                <input id="auth-email" type="email" placeholder="Adresse Email" class="w-full bg-white/5 p-4 rounded-2xl outline-none focus:bg-white/10 transition">
+                <input id="auth-username" type="text" placeholder="Pseudo MK" class="w-full bg-white/5 p-4 rounded-2xl outline-none focus:bg-white/10 transition">
+                <input id="auth-password" type="password" placeholder="Mot de passe" class="w-full bg-white/5 p-4 rounded-2xl outline-none focus:bg-white/10 transition">
+                <button onclick="submitAuth()" class="w-full bg-mkBlue text-black py-4 rounded-2xl font-black text-xs uppercase shadow-xl shadow-mkBlue/20 mt-4">Confirmer l'accès</button>
             </div>
         </div>
     </div>
 
     <script>
-        const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co"; 
-        const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
-        const db = supabase.createClient(SB_URL, SB_KEY);
-        let user = null;
+        // CONFIGURATION SUPABASE
+        const SUPABASE_URL = "https://eeiuxfcgysrarctokuyg.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function toggleTheme() { document.body.classList.toggle('light'); document.body.classList.toggle('dark'); }
+        // STATE MANAGER
+        let currentUser = null;
+        let activeStat = 'cash'; // 'cash' ou 'xp'
+        let chatInterval = null;
 
-        function mkNotify(msg, color='mkBlue') {
-            const t = document.createElement('div');
-            t.className = `mk-toast`; t.style.borderLeftColor = `var(--${color})`;
-            t.innerText = msg; document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
+        // --- CORE FUNCTIONS ---
+
+        function mkNotify(msg, color = 'mkBlue') {
+            const container = document.getElementById('notification-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.borderLeft = `6px solid var(--${color})`;
+            toast.style.backgroundColor = '#000';
+            toast.innerHTML = `<span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        async function handleAuth() {
-            const e = document.getElementById('in-email').value.trim();
-            const u = document.getElementById('in-user').value.trim();
-            const p = document.getElementById('in-pass').value.trim();
-            if(!e || !p) return;
-            let { data: prof } = await db.from('profiles').select('*').eq('email', e).maybeSingle();
-            if(!prof) {
-                const { data } = await db.from('profiles').insert([{ 
-                    username: u || "User", email: e, password: p, balance: 10, xp: 0, 
-                    pfp: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${e}`, tv_access: false
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            document.body.classList.toggle('light', !isDark);
+            mkNotify(isDark ? "Mode Sombre activé" : "Mode Clair activé");
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.content-view').forEach(v => v.classList.add('hidden'));
+            document.getElementById('section-' + id).classList.remove('hidden');
+            
+            // Re-sync specific section data
+            if(id === 'leaderboard') fetchLeaderboard();
+            if(id === 'admin') fetchAdminPanel();
+            if(id === 'profile') renderProfileData(currentUser);
+        }
+
+        function setActiveStat(type) {
+            activeStat = type;
+            document.getElementById('btn-stat-cash').className = type === 'cash' ? 'px-4 py-2 rounded-xl text-[11px] font-black bg-mkGreen text-black transition' : 'px-4 py-2 rounded-xl text-[11px] font-black opacity-40 transition';
+            document.getElementById('btn-stat-xp').className = type === 'xp' ? 'px-4 py-2 rounded-xl text-[11px] font-black bg-mkYellow text-black transition' : 'px-4 py-2 rounded-xl text-[11px] font-black opacity-40 transition';
+            updateTopDisplay();
+        }
+
+        // --- AUTH SYSTEM ---
+
+        async function submitAuth() {
+            const e = document.getElementById('auth-email').value.trim();
+            const u = document.getElementById('auth-username').value.trim();
+            const p = document.getElementById('auth-password').value.trim();
+
+            if(!e || !p) return mkNotify("Veuillez remplir les champs", "mkRed");
+
+            // Recherche si l'utilisateur existe
+            let { data: profile, error } = await sb.from('profiles').select('*').eq('email', e).maybeSingle();
+
+            if(!profile) {
+                // Création si nouveau
+                const { data, error: insErr } = await sb.from('profiles').insert([{
+                    email: e,
+                    username: u || "User" + Math.floor(Math.random()*999),
+                    password: p,
+                    balance: 10,
+                    xp: 0,
+                    pfp: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${e}`,
+                    tv_access: false,
+                    banned: false
                 }]).select().single();
-                prof = data;
-            }
-            user = prof; localStorage.setItem('mk_session', JSON.stringify(user)); location.reload();
-        }
-
-        function syncUser() {
-            if(!user) return;
-            document.getElementById('user-display').classList.remove('hidden');
-            document.getElementById('auth-btn').classList.add('hidden');
-            document.getElementById('top-balance-val').innerText = user.balance.toFixed(2) + "€";
-            document.getElementById('prof-cash').innerText = user.balance.toFixed(2) + "€";
-            document.getElementById('prof-xp').innerText = Math.floor(user.xp) + " XP";
-            document.getElementById('prof-user').innerText = user.username;
-            document.getElementById('prof-pfp').src = user.pfp;
-            document.getElementById('user-pfp-nav').src = user.pfp;
-            if(user.tv_access) document.getElementById('nav-tv').classList.remove('hidden');
-            if(user.username.toLowerCase() === 'admin') document.getElementById('nav-admin').classList.remove('hidden');
-        }
-
-        // --- SYSTEME DE CODE UNIFIÉ ---
-        async function useCode(inputId) {
-            const code = document.getElementById(inputId).value.trim();
-            if(!code || !user) return mkNotify("Entrez un code", "mkRed");
-
-            if(code === "TVVIP2024") {
-                const { data } = await db.from('profiles').update({ tv_access: true }).eq('id', user.id).select().single();
-                user = data; syncUser();
-                mkNotify("📺 Accès TV Débloqué !", "mkPurple");
-            } else if(code.startsWith("MK50")) {
-                const { data } = await db.from('profiles').update({ balance: user.balance + 50 }).eq('id', user.id).select().single();
-                user = data; syncUser();
-                mkNotify("💰 +50€ Ajoutés !", "mkGreen");
+                if(insErr) return mkNotify("Erreur création", "mkRed");
+                profile = data;
             } else {
-                mkNotify("❌ Code Invalide", "mkRed");
+                // Vérification password (simple pour cet exemple)
+                if(profile.password !== p) return mkNotify("Mot de passe incorrect", "mkRed");
             }
-            document.getElementById(inputId).value = "";
+
+            if(profile.banned) return mkNotify("CE COMPTE EST BANNI", "mkRed");
+
+            currentUser = profile;
+            localStorage.setItem('mk_session', JSON.stringify(currentUser));
+            closeModal('auth-modal');
+            setupUserSession();
+            mkNotify(`Bienvenue, ${currentUser.username} !`, "mkGreen");
         }
 
-        function setVideo(title, url) {
-            document.getElementById('video-frame').src = url;
-            document.getElementById('video-title').innerText = title;
-            mkNotify("Lecture : " + title, "mkPurple");
+        function setupUserSession() {
+            if(!currentUser) return;
+            document.getElementById('login-trigger').classList.add('hidden');
+            document.getElementById('user-controls').classList.remove('hidden');
+            document.getElementById('nav-pfp').src = currentUser.pfp;
+            
+            updateTopDisplay();
+
+            if(currentUser.username.toLowerCase() === 'admin') {
+                document.getElementById('nav-admin').classList.remove('hidden');
+            }
+
+            if(currentUser.tv_access) {
+                renderTVButton();
+            }
+
+            startChatSync();
         }
 
-        async function playCoin() {
+        function updateTopDisplay() {
+            if(!currentUser) return;
+            const disp = document.getElementById('top-display-val');
+            if(activeStat === 'cash') {
+                disp.innerText = currentUser.balance.toFixed(2) + "€";
+                disp.className = "font-black text-lg text-mkGreen";
+            } else {
+                disp.innerText = currentUser.xp + " XP";
+                disp.className = "font-black text-lg text-mkYellow";
+            }
+        }
+
+        // --- CASINO SYSTEM ---
+
+        async function updateBalance(newAmount, xpGain = 5) {
+            const { data, error } = await sb.from('profiles').update({ 
+                balance: newAmount, 
+                xp: currentUser.xp + xpGain 
+            }).eq('id', currentUser.id).select().single();
+            
+            if(!error) {
+                currentUser = data;
+                updateTopDisplay();
+                renderProfileData(currentUser);
+            }
+        }
+
+        async function playCoin(side) {
             const bet = parseFloat(document.getElementById('bet-coin').value);
-            if(bet > user.balance) return mkNotify("Solde insuffisant", "mkRed");
-            const win = Math.random() > 0.5;
-            const { data } = await db.from('profiles').update({ balance: win ? user.balance + bet : user.balance - bet, xp: user.xp + 5 }).eq('id', user.id).select().single();
-            user = data; syncUser(); mkNotify(win ? "GAGNÉ !" : "PERDU", win ? "mkGreen" : "mkRed");
-        }
+            if(bet > currentUser.balance || bet <= 0) return mkNotify("Pas assez de Cash", "mkRed");
 
-        async function playDice() {
-            const bet = parseFloat(document.getElementById('bet-dice').value);
-            if(bet > user.balance) return mkNotify("Solde insuffisant", "mkRed");
-            const res = Math.floor(Math.random() * 6) + 1;
-            const win = res >= 4;
-            const { data } = await db.from('profiles').update({ balance: win ? user.balance + bet : user.balance - bet, xp: user.xp + 5 }).eq('id', user.id).select().single();
-            user = data; syncUser(); mkNotify("DÉ : " + res, win ? "mkGreen" : "mkRed");
+            const win = Math.random() > 0.52; // Maison a un léger avantage
+            const outcome = win ? side : (side === 'pile' ? 'face' : 'pile');
+            
+            mkNotify(`Lancement de la pièce... Résultat: ${outcome.toUpperCase()}`);
+            
+            const newBal = win ? currentUser.balance + bet : currentUser.balance - bet;
+            await updateBalance(newBal, 10);
+            
+            mkNotify(win ? "C'EST GAGNÉ ! x2" : "PERDU... Retente ta chance", win ? "mkGreen" : "mkRed");
         }
 
         async function playSlots() {
             const bet = parseFloat(document.getElementById('bet-slots').value);
-            if(bet > user.balance) return mkNotify("Solde insuffisant", "mkRed");
-            const win = Math.random() < 0.1;
-            const { data } = await db.from('profiles').update({ balance: win ? user.balance + (bet*10) : user.balance - bet, xp: user.xp + 10 }).eq('id', user.id).select().single();
-            user = data; syncUser(); mkNotify(win ? "JACKPOT x10 !" : "PERDU", win ? "mkYellow" : "mkRed");
+            if(bet > currentUser.balance || bet <= 0) return mkNotify("Pas assez de Cash", "mkRed");
+
+            const s1 = document.getElementById('slot1');
+            const s2 = document.getElementById('slot2');
+            const s3 = document.getElementById('slot3');
+            
+            s1.classList.add('slot-spinning'); s2.classList.add('slot-spinning'); s3.classList.add('slot-spinning');
+            
+            const symbols = ['🍒', '🍋', '💎', '🍇', '⭐'];
+            
+            setTimeout(async () => {
+                s1.classList.remove('slot-spinning');
+                s2.classList.remove('slot-spinning');
+                s3.classList.remove('slot-spinning');
+                
+                const r1 = symbols[Math.floor(Math.random()*symbols.length)];
+                const r2 = symbols[Math.floor(Math.random()*symbols.length)];
+                const r3 = symbols[Math.floor(Math.random()*symbols.length)];
+                
+                s1.innerText = r1; s2.innerText = r2; s3.innerText = r3;
+                
+                let winMult = 0;
+                if(r1 === r2 && r2 === r3) winMult = 10;
+                else if(r1 === r2 || r2 === r3 || r1 === r3) winMult = 2;
+                
+                const profit = bet * winMult;
+                const newBal = (currentUser.balance - bet) + profit;
+                await updateBalance(newBal, 15);
+                
+                if(winMult > 0) mkNotify(`JACKPOT x${winMult} ! +${profit}€`, "mkPurple");
+                else mkNotify("Aucune correspondance.", "mkRed");
+            }, 1000);
         }
 
-        function showSection(id) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
-            document.getElementById('section-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
-            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active-link');
-            if(id === 'leaderboard') fetchLeaderboard();
+        async function playRPS(choice) {
+            const bet = parseFloat(document.getElementById('bet-rps').value);
+            if(bet > currentUser.balance || bet <= 0) return mkNotify("Solde insuffisant", "mkRed");
+
+            const bot = ['pierre', 'feuille', 'ciseaux'][Math.floor(Math.random()*3)];
+            let res = "perdu";
+            if(choice === bot) res = "nul";
+            else if((choice === 'pierre' && bot === 'ciseaux') || (choice === 'feuille' && bot === 'pierre') || (choice === 'ciseaux' && bot === 'feuille')) res = "gagné";
+            
+            const newBal = res === 'gagné' ? currentUser.balance + bet : (res === 'perdu' ? currentUser.balance - bet : currentUser.balance);
+            await updateBalance(newBal, 5);
+            
+            mkNotify(`BOT: ${bot.toUpperCase()} -> ${res.toUpperCase()}`, res === 'gagné' ? 'mkGreen' : 'mkRed');
         }
+
+        // --- PROFILE & CODES SYSTEM ---
+
+        async function redeemCode(inputId) {
+            const code = document.getElementById(inputId).value.trim().toUpperCase();
+            if(!code) return;
+
+            if(code === "LXS-1") {
+                const { data } = await sb.from('profiles').update({ balance: currentUser.balance + 10 }).eq('id', currentUser.id).select().single();
+                currentUser = data;
+                mkNotify("🎁 Code Cadeau: +10.00€ ajoutés !", "mkGreen");
+            } else if(code === "TVACCESS") {
+                const { data } = await sb.from('profiles').update({ tv_access: true }).eq('id', currentUser.id).select().single();
+                currentUser = data;
+                renderTVButton();
+                mkNotify("📺 Accès TV débloqué à vie !", "mkPurple");
+            } else {
+                mkNotify("Code invalide ou expiré.", "mkRed");
+            }
+            setupUserSession();
+            document.getElementById(inputId).value = "";
+        }
+
+        function renderTVButton() {
+            const area = document.getElementById('tv-activation-ui');
+            if(area) area.innerHTML = `<button onclick="showSection('tv')" class="w-full bg-mkGreen text-black py-4 rounded-2xl font-black text-xs uppercase animate-pulse">Accéder à la TV Films</button>`;
+        }
+
+        async function updateProfilePFP() {
+            const url = document.getElementById('p-pfp-input').value;
+            if(!url.startsWith('http')) return mkNotify("URL invalide", "mkRed");
+            
+            const { data, error } = await sb.from('profiles').update({ pfp: url }).eq('id', currentUser.id).select().single();
+            if(!error) {
+                currentUser = data;
+                setupUserSession();
+                renderProfileData(currentUser);
+                mkNotify("Avatar mis à jour !");
+            }
+        }
+
+        function renderProfileData(u) {
+            if(!u) return;
+            document.getElementById('p-avatar').src = u.pfp;
+            document.getElementById('p-username').innerText = u.username;
+            document.getElementById('p-cash').innerText = u.balance.toFixed(2) + "€";
+            document.getElementById('p-xp').innerText = u.xp;
+        }
+
+        async function searchUser() {
+            const name = document.getElementById('search-username').value.trim();
+            const { data, error } = await sb.from('profiles').select('*').eq('username', name).maybeSingle();
+            if(data) {
+                renderProfileData(data);
+                mkNotify(`Profil de ${name} trouvé`);
+            } else {
+                mkNotify("Utilisateur introuvable", "mkRed");
+            }
+        }
+
+        // --- SUPPORT & TICKETS ---
+
+        async function openTicket(type) {
+            if(!currentUser) return mkNotify("Connectez-vous d'abord", "mkRed");
+            const { error } = await sb.from('tickets').insert([{
+                username: currentUser.username,
+                type: type,
+                status: 'open',
+                created_at: new Date()
+            }]);
+            if(!error) mkNotify("Ticket envoyé au staff !", "mkGreen");
+        }
+
+        // --- ADMIN SYSTEM ---
+
+        async function fetchAdminPanel() {
+            // USERS
+            const { data: users } = await sb.from('profiles').select('*');
+            const list = document.getElementById('admin-users-list');
+            list.innerHTML = users.map(u => `
+                <div class="glass p-5 rounded-2xl text-[10px] space-y-3">
+                    <div class="flex justify-between items-center">
+                        <b class="text-xs uppercase">${u.username}</b>
+                        <span class="${u.banned ? 'text-mkRed' : 'text-mkGreen'} font-black">${u.banned ? 'BANNI' : 'ACTIF'}</span>
+                    </div>
+                    <div class="opacity-60 bg-black/20 p-2 rounded">
+                        Email: ${u.email} <br> Pass: <span class="text-mkBlue font-bold">${u.password}</span>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="adminAction('${u.id}', 'cash', 50)" class="bg-mkGreen/20 text-mkGreen p-2 rounded flex-1">+50€</button>
+                        <button onclick="adminAction('${u.id}', 'cash', -50)" class="bg-mkRed/20 text-mkRed p-2 rounded flex-1">-50€</button>
+                        <button onclick="adminAction('${u.id}', 'xp', 100)" class="bg-mkYellow/20 text-mkYellow p-2 rounded flex-1">+100XP</button>
+                        <button onclick="adminAction('${u.id}', 'ban', ${!u.banned})" class="bg-white/10 p-2 rounded flex-1">${u.banned ? 'UNBAN' : 'BAN'}</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // TICKETS
+            const { data: tix } = await sb.from('tickets').select('*').eq('status', 'open');
+            document.getElementById('ticket-count').innerText = tix.length;
+            document.getElementById('admin-tickets-list').innerHTML = tix.map(t => `
+                <div class="bg-mkRed/10 border border-mkRed/30 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <b class="text-[11px] uppercase text-mkRed">${t.type}</b>
+                        <p class="text-[9px] opacity-60">Par: ${t.username}</p>
+                    </div>
+                    <button onclick="closeTicket('${t.id}')" class="bg-mkRed text-white px-4 py-2 rounded-xl text-[10px] font-black">RÉPONDRE/FERMER</button>
+                </div>
+            `).join('');
+        }
+
+        async function adminAction(userId, action, value) {
+            const { data: u } = await sb.from('profiles').select('*').eq('id', userId).single();
+            let update = {};
+            if(action === 'cash') update = { balance: u.balance + value };
+            if(action === 'xp') update = { xp: u.xp + value };
+            if(action === 'ban') update = { banned: value };
+
+            await sb.from('profiles').update(update).eq('id', userId);
+            fetchAdminPanel();
+            mkNotify("Action Admin effectuée");
+        }
+
+        async function closeTicket(id) {
+            await sb.from('tickets').update({ status: 'closed' }).eq('id', id);
+            fetchAdminPanel();
+        }
+
+        // --- CHAT SYSTEM ---
+
+        async function startChatSync() {
+            if(chatInterval) clearInterval(chatInterval);
+            fetchChatMessages();
+            chatInterval = setInterval(fetchChatMessages, 3000);
+        }
+
+        async function fetchChatMessages() {
+            const { data } = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(20);
+            if(!data) return;
+
+            const box = document.getElementById('chat-messages');
+            const html = data.reverse().map(m => {
+                const lvl = m.level || 0;
+                let tagColor = 'mkBlue';
+                if(lvl > 10) tagColor = 'mkPurple';
+                if(m.username.toLowerCase() === 'admin') tagColor = 'mkAdmin';
+
+                return `
+                <div class="flex gap-3 items-start group">
+                    <img src="${m.pfp || 'https://api.dicebear.com/7.x/pixel-art/svg?seed='+m.username}" class="w-8 h-8 rounded-lg">
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <span class="chat-tag bg-${tagColor} text-white">LVL ${lvl}</span>
+                            <b class="text-[10px] uppercase tracking-tighter">${m.username}</b>
+                        </div>
+                        <p class="text-[11px] opacity-80 mt-1 leading-relaxed">${m.content}</p>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            const shouldScroll = box.scrollTop + box.offsetHeight >= box.scrollHeight - 50;
+            box.innerHTML = html;
+            if(shouldScroll) box.scrollTop = box.scrollHeight;
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if(!currentUser || !msg) return;
+
+            await sb.from('messages').insert([{
+                username: currentUser.username,
+                content: msg,
+                pfp: currentUser.pfp,
+                level: Math.floor(currentUser.xp / 100),
+                created_at: new Date()
+            }]);
+
+            input.value = "";
+            fetchChatMessages();
+        }
+
+        // --- UI UTILS ---
 
         async function fetchLeaderboard() {
-            const { data } = await db.from('profiles').select('username, balance, pfp').order('balance', { ascending: false }).limit(10);
-            document.getElementById('leaderboard-list').innerHTML = data.map((u, i) => `
-                <div class="flex items-center justify-between p-5 border-b border-white/5 bg-black/5">
-                    <div class="flex items-center gap-4">
-                        <span class="font-black italic opacity-30">#${i+1}</span>
-                        <img src="${u.pfp}" class="w-8 h-8 rounded-lg object-cover">
-                        <b class="uppercase italic text-xs">${u.username}</b>
+            const { data } = await sb.from('profiles').select('*').order('balance', { ascending: false }).limit(10);
+            const cont = document.getElementById('leaderboard-container');
+            cont.innerHTML = data.map((u, i) => `
+                <div class="flex justify-between items-center p-6 border-b border-white/5 hover:bg-white/5 transition">
+                    <div class="flex items-center gap-6">
+                        <span class="text-2xl font-black italic opacity-20 w-8">#${i+1}</span>
+                        <img src="${u.pfp}" class="w-10 h-10 rounded-xl">
+                        <b class="uppercase italic text-sm">${u.username}</b>
                     </div>
-                    <span class="text-mkGreen font-black">${u.balance.toFixed(2)}€</span>
-                </div>`).join('');
+                    <div class="text-right">
+                        <p class="text-mkGreen font-black">${u.balance.toFixed(2)}€</p>
+                        <p class="text-[9px] opacity-40 font-bold uppercase">${u.xp} XP</p>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        window.onload = async () => {
-            const saved = localStorage.getItem('mk_session');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                const { data } = await db.from('profiles').select('*').eq('id', parsed.id).single();
-                if (data) { user = data; syncUser(); }
-            }
-        };
+        function playMovie(url) {
+            document.getElementById('tv-iframe').src = url;
+            mkNotify("Chargement du flux vidéo...", "mkPurple");
+        }
 
-        function logout() { localStorage.clear(); location.reload(); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function openSupport(i) { mkNotify("Ticket Support: " + i); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function logout() { localStorage.clear(); location.reload(); }
+
+        // --- BOOTSTRAP ---
+        window.onload = () => {
+            const session = localStorage.getItem('mk_session');
+            if(session) {
+                currentUser = JSON.parse(session);
+                // Refresh data from DB
+                sb.from('profiles').select('*').eq('id', currentUser.id).single().then(({data}) => {
+                    if(data) {
+                        currentUser = data;
+                        setupUserSession();
+                    }
+                });
+            }
+            fetchChatMessages();
+            setInterval(fetchChatMessages, 5000);
+        };
     </script>
 </body>
 </html>
