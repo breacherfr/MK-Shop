@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP - SUPREME V65 GOLD</title>
+    <title>MK SHOP - V66 PLATINUM EDITION</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,711 +17,558 @@
                     colors: {
                         mkBlue: '#00d2ff', mkRed: '#ff4b5c', mkPurple: '#a363ff',
                         mkYellow: '#fbbf24', mkGreen: '#22c55e', mkAdmin: '#ff00ff',
-                        mkDark: '#050505', mkLight: '#f9fafb'
-                    }
+                        mkDark: '#050505', mkLight: '#f3f4f6'
+                    },
+                    borderRadius: { '4xl': '2rem', '5xl': '3rem' }
                 }
             }
         }
     </script>
 
     <style>
-        /* CONFIGURATION DU DESIGN SYSTEM */
-        :root { --mk-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        body { font-family: 'Montserrat', sans-serif; transition: var(--mk-transition); overflow-x: hidden; }
-        .glass { backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .dark .glass { background: rgba(13, 13, 18, 0.96); }
+        /* BASE STYLE & SCROLLBAR */
+        body { font-family: 'Montserrat', sans-serif; transition: 0.4s; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
+        
+        /* EFFETS GLASSMORPHISM */
+        .glass { backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .dark .glass { background: rgba(10, 10, 15, 0.95); }
         .light .glass { background: rgba(255, 255, 255, 0.9); border-color: rgba(0, 0, 0, 0.05); }
 
-        /* ANIMATIONS & EFFETS */
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-        .animate-slide { animation: slideIn 0.4s ease-out forwards; }
-        .toast { position: fixed; top: 25px; right: 25px; z-index: 9999; padding: 18px 28px; border-radius: 16px; font-weight: 800; font-size: 13px; color: white; display: flex; align-items: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+        /* ANIMATIONS */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
         
-        /* SCROLLBAR PERSONNALISÉE */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 10px; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .toast { position: fixed; top: 30px; right: 30px; z-index: 9999; padding: 20px 30px; border-radius: 20px; font-weight: 900; animation: slideIn 0.3s ease-out; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        /* COMPOSANTS SPECIFIQUES */
-        .chat-tag { font-size: 8px; padding: 2px 7px; border-radius: 5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card { transition: transform 0.2s; cursor: pointer; }
-        .stat-card:hover { transform: translateY(-5px); }
-        .slot-spin { animation: blurAnim 0.1s infinite; }
-        @keyframes blurAnim { 0% { filter: blur(0); } 50% { filter: blur(3px); } 100% { filter: blur(0); } }
+        /* COMPOSANTS CHAT */
+        .chat-msg { animation: fadeIn 0.3s ease-out; }
+        .badge-admin { background: linear-gradient(45deg, #ff00ff, #ff4b5c); color: white; padding: 2px 8px; border-radius: 5px; font-size: 9px; font-weight: 900; }
+        
+        /* CASINO ANIM */
+        .slot-rolling { filter: blur(4px); transform: translateY(5px); }
     </style>
 </head>
 <body class="dark bg-mkDark text-white light:bg-mkLight light:text-mkDark">
 
-    <div id="toast-container"></div>
-
     <nav class="glass sticky top-0 z-[100] px-8 py-5 flex justify-between items-center border-b border-white/5">
-        <div class="flex items-center gap-10">
-            <div class="flex items-center gap-4 cursor-pointer group" onclick="showSection('shop')">
-                <div class="w-12 h-12 bg-mkBlue rounded-2xl flex items-center justify-center font-black text-black group-hover:rotate-12 transition-all">MK</div>
-                <div class="flex flex-col">
-                    <span class="font-black text-2xl italic tracking-tighter leading-none">MK SHOP</span>
-                    <span class="text-[9px] font-bold text-mkBlue tracking-[0.3em] uppercase opacity-70">Gold Edition</span>
+        <div class="flex items-center gap-12">
+            <div class="flex items-center gap-4 cursor-pointer" onclick="showSection('shop')">
+                <div class="w-12 h-12 bg-mkBlue rounded-2xl flex items-center justify-center font-black text-black text-xl shadow-lg shadow-mkBlue/30">MK</div>
+                <div>
+                    <h1 class="font-black text-2xl italic tracking-tighter leading-none">MK SHOP</h1>
+                    <span class="text-[9px] font-bold text-mkBlue uppercase tracking-widest">Premium System V66</span>
                 </div>
             </div>
-            
-            <div class="hidden xl:flex gap-6">
-                <button onclick="showSection('shop')" class="text-[11px] font-black uppercase hover:text-mkBlue transition-colors">Boutique</button>
-                <button onclick="showSection('gamble')" class="text-[11px] font-black uppercase hover:text-mkBlue transition-colors">Casino</button>
-                <button onclick="showSection('leaderboard')" class="text-[11px] font-black uppercase hover:text-mkBlue transition-colors">Classement</button>
-                <button onclick="showSection('profile')" class="text-[11px] font-black uppercase hover:text-mkBlue transition-colors">Profil</button>
-                <button id="nav-admin" onclick="showSection('admin')" class="hidden text-[11px] font-black uppercase text-mkAdmin border border-mkAdmin/40 px-3 py-1.5 rounded-xl hover:bg-mkAdmin hover:text-black transition-all">Console Admin</button>
+
+            <div class="hidden xl:flex items-center gap-8">
+                <button onclick="showSection('shop')" class="text-[11px] font-black uppercase hover:text-mkBlue tracking-wider transition">Magasin</button>
+                <button onclick="showSection('gamble')" class="text-[11px] font-black uppercase hover:text-mkBlue tracking-wider transition">Casino</button>
+                <button onclick="showSection('leaderboard')" class="text-[11px] font-black uppercase hover:text-mkBlue tracking-wider transition">Top Joueurs</button>
+                <button onclick="showSection('profile')" class="text-[11px] font-black uppercase hover:text-mkBlue tracking-wider transition">Profil</button>
+                <button id="adm-nav" onclick="showSection('admin')" class="hidden text-[11px] font-black uppercase text-mkAdmin border-2 border-mkAdmin/20 px-4 py-2 rounded-xl hover:bg-mkAdmin hover:text-black transition">Console Admin</button>
             </div>
         </div>
 
-        <div class="flex items-center gap-5">
-            <button onclick="toggleTheme()" class="w-11 h-11 glass rounded-2xl flex items-center justify-center text-xl hover:scale-110 transition">🌓</button>
-            
-            <div class="flex items-center bg-black/40 rounded-2xl p-1.5 border border-white/10">
-                <button onclick="changeActiveStat('cash')" id="nav-btn-cash" class="px-5 py-2 rounded-xl text-[10px] font-black bg-mkGreen text-black transition-all">CASH</button>
-                <button onclick="changeActiveStat('xp')" id="nav-btn-xp" class="px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition-all">XP</button>
+        <div class="flex items-center gap-6">
+            <div class="flex items-center bg-black/40 rounded-2xl p-1 border border-white/10">
+                <button id="btn-mode-cash" onclick="toggleStatMode('cash')" class="px-5 py-2 rounded-xl text-[10px] font-black bg-mkGreen text-black transition">CASH</button>
+                <button id="btn-mode-xp" onclick="toggleStatMode('xp')" class="px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition">XP</button>
             </div>
 
-            <div class="bg-black/20 px-6 py-3 rounded-2xl border border-white/5 min-w-[130px] text-center shadow-inner">
-                <span id="nav-stat-display" class="font-black text-lg text-mkGreen">0.00€</span>
+            <div class="bg-black/30 px-6 py-3 rounded-2xl border border-white/10 min-w-[140px] text-center">
+                <span id="nav-val" class="font-black text-lg text-mkGreen">0.00€</span>
             </div>
 
-            <div id="logged-ui" class="hidden flex items-center gap-4 border-l border-white/10 pl-5">
-                <img id="nav-avatar" src="" class="w-11 h-11 rounded-2xl border-2 border-mkBlue object-cover shadow-lg shadow-mkBlue/20">
-                <button onclick="logout()" class="text-mkRed hover:rotate-90 transition-transform duration-300 font-black text-xl">✕</button>
+            <div id="user-panel" class="hidden flex items-center gap-4">
+                <img id="nav-pfp" src="" class="w-11 h-11 rounded-2xl border-2 border-mkBlue object-cover">
+                <button onclick="logout()" class="w-10 h-10 flex items-center justify-center bg-mkRed/10 text-mkRed rounded-xl font-black text-xl hover:bg-mkRed hover:text-white transition">✕</button>
             </div>
-            
-            <button id="auth-trigger" onclick="openModal('auth-modal')" class="bg-mkBlue text-black px-7 py-3.5 rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-mkBlue/20 hover:scale-105 transition">Connexion</button>
+            <button id="auth-trigger" onclick="openModal('modal-auth')" class="bg-mkBlue text-black px-8 py-3.5 rounded-2xl font-black text-[11px] uppercase shadow-xl shadow-mkBlue/20">Accès Client</button>
+            <button onclick="toggleTheme()" class="w-11 h-11 glass rounded-2xl">🌓</button>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-8 py-12 lg:pr-[420px]">
 
-        <section id="section-shop" class="view-panel space-y-12 animate-slide">
-            <header>
-                <h2 class="text-6xl font-black italic uppercase tracking-tighter">Boutique <span class="text-mkBlue">MK</span></h2>
-                <p class="text-white/40 font-bold mt-3 uppercase text-[11px] tracking-widest">Le n°1 des comptes et services premium.</p>
-            </header>
+        <section id="sect-shop" class="animate-fade space-y-12">
+            <div class="flex flex-col gap-2">
+                <h2 class="text-6xl font-black italic uppercase tracking-tighter">Nos <span class="text-mkBlue">Services</span></h2>
+                <p class="text-white/30 font-bold uppercase text-[11px] tracking-[0.4em]">Le catalogue le plus complet du marché</p>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass p-10 rounded-[3rem] border-t-8 border-mkBlue hover:shadow-2xl hover:shadow-mkBlue/10 transition-all">
-                    <div class="flex justify-between items-start">
-                        <span class="bg-mkBlue/10 text-mkBlue px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Instant</span>
-                        <span class="text-3xl">🎮</span>
-                    </div>
-                    <h3 class="text-3xl font-black mt-6">ROBLOX ACCOUNTS</h3>
-                    <p class="text-xs opacity-50 mt-3 leading-relaxed">Accès exclusif à des comptes avec skins limités et Robux certifiés.</p>
-                    <button onclick="openSupportTicket('Achat Compte Roblox')" class="w-full mt-10 bg-white text-black py-5 rounded-[1.5rem] font-black text-xs uppercase hover:bg-mkBlue transition">Ouvrir Ticket Achat</button>
+                <div class="glass p-10 rounded-5xl border-t-8 border-mkBlue group hover:scale-[1.02] transition-transform">
+                    <div class="w-16 h-16 bg-mkBlue/10 rounded-3xl flex items-center justify-center text-3xl mb-8">🎮</div>
+                    <h3 class="text-3xl font-black">COMPTES ROBLOX</h3>
+                    <p class="text-xs opacity-50 mt-4 leading-relaxed">Comptes vérifiés avec skins rares, Robux et accès complet au mail d'origine.</p>
+                    <button onclick="createSupportTicket('Achat Roblox')" class="w-full mt-10 bg-white text-black py-5 rounded-2xl font-black text-xs uppercase group-hover:bg-mkBlue transition">Commander</button>
                 </div>
 
-                <div class="glass p-10 rounded-[3rem] border-t-8 border-mkBlue hover:shadow-2xl hover:shadow-mkBlue/10 transition-all">
-                    <div class="flex justify-between items-start">
-                        <span class="bg-mkBlue/10 text-mkBlue px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Indétectable</span>
-                        <span class="text-3xl">⚡</span>
-                    </div>
-                    <h3 class="text-3xl font-black mt-6">EXECUTORS & CHEATS</h3>
-                    <p class="text-xs opacity-50 mt-3 leading-relaxed">Les meilleurs scripts pour dominer vos serveurs sans risque.</p>
-                    <button onclick="openSupportTicket('Achat Cheat/Script')" class="w-full mt-10 bg-white text-black py-5 rounded-[1.5rem] font-black text-xs uppercase hover:bg-mkBlue transition">Voir le catalogue</button>
+                <div class="glass p-10 rounded-5xl border-t-8 border-mkBlue group hover:scale-[1.02] transition-transform">
+                    <div class="w-16 h-16 bg-mkBlue/10 rounded-3xl flex items-center justify-center text-3xl mb-8">⚡</div>
+                    <h3 class="text-3xl font-black">SCRIPTS & EXECUTORS</h3>
+                    <p class="text-xs opacity-50 mt-4 leading-relaxed">Les meilleurs cheats indétectables pour vos jeux favoris. Mise à jour quotidienne.</p>
+                    <button onclick="createSupportTicket('Achat Cheat')" class="w-full mt-10 bg-white text-black py-5 rounded-2xl font-black text-xs uppercase group-hover:bg-mkBlue transition">Voir Scripts</button>
                 </div>
 
-                <div class="glass p-10 rounded-[3rem] border-t-8 border-mkYellow hover:shadow-2xl hover:shadow-mkYellow/10 transition-all">
-                    <div class="flex justify-between items-start">
-                        <span class="bg-mkYellow/10 text-mkYellow px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Premium</span>
-                        <span class="text-3xl">🍿</span>
-                    </div>
-                    <h3 class="text-3xl font-black mt-6">STREAMING VIPS</h3>
-                    <p class="text-xs opacity-50 mt-3 leading-relaxed">Netflix 4K, Disney+, Spotify à des tarifs imbattables.</p>
-                    <button onclick="openSupportTicket('Achat Abonnement')" class="w-full mt-10 bg-mkYellow text-black py-5 rounded-[1.5rem] font-black text-xs uppercase hover:scale-[1.02] transition">Accéder aux offres</button>
+                <div class="glass p-10 rounded-5xl border-t-8 border-mkYellow group">
+                    <div class="w-16 h-16 bg-mkYellow/10 rounded-3xl flex items-center justify-center text-3xl mb-8">🍿</div>
+                    <h3 class="text-3xl font-black">PREMIUMS VIPS</h3>
+                    <p class="text-xs opacity-50 mt-4 leading-relaxed">Netflix 4K, Disney+, Spotify Premium. Garantie de remplacement 12 mois.</p>
+                    <button onclick="createSupportTicket('Achat Premium')" class="w-full mt-10 bg-mkYellow text-black py-5 rounded-2xl font-black text-xs uppercase">Acheter Premium</button>
                 </div>
 
-                <div id="tv-unlock-card" class="glass p-10 rounded-[3rem] border-t-8 border-mkPurple hover:shadow-2xl hover:shadow-mkPurple/10 transition-all">
-                    <div class="flex justify-between items-start">
-                        <span class="bg-mkPurple/10 text-mkPurple px-4 py-1.5 rounded-full text-[10px] font-black uppercase">Cinema</span>
-                        <span class="text-3xl">📺</span>
-                    </div>
-                    <h3 class="text-3xl font-black mt-6">ACCÈS TV FILMS</h3>
-                    <p class="text-xs opacity-50 mt-3 leading-relaxed">Activez votre accès pour regarder des milliers de films.</p>
-                    <div id="tv-control-area" class="mt-8 space-y-3">
-                        <input id="tv-code-input" type="text" placeholder="Entrez votre code..." class="w-full bg-black/40 p-5 rounded-2xl text-[11px] outline-none border border-white/5 focus:border-mkPurple">
-                        <button onclick="claimReward('tv-code-input')" class="w-full bg-mkPurple text-white py-5 rounded-[1.5rem] font-black text-xs uppercase">Vérifier le code</button>
+                <div id="tv-card" class="glass p-10 rounded-5xl border-t-8 border-mkPurple text-center">
+                    <h3 class="text-2xl font-black text-mkPurple">ACCÈS CINÉMA</h3>
+                    <p class="text-[10px] font-bold opacity-40 mt-2 uppercase tracking-widest">Débloquez la section TV Films</p>
+                    <div id="tv-ui-logic" class="mt-8 space-y-4">
+                        <input id="tv-code" type="text" placeholder="Entrez votre code VIP" class="w-full bg-black/40 p-5 rounded-2xl text-xs outline-none border border-white/5 font-black uppercase">
+                        <button onclick="redeemCode('tv-code')" class="w-full bg-mkPurple text-white py-5 rounded-2xl font-black text-xs uppercase shadow-lg shadow-mkPurple/20">Activer l'accès</button>
                     </div>
                 </div>
             </div>
 
-            <div class="glass p-12 rounded-[4rem] border-2 border-mkRed flex flex-col lg:flex-row items-center justify-between gap-10 relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 text-[15rem] opacity-5 pointer-events-none">🛡️</div>
-                <div class="relative z-10 text-center lg:text-left">
-                    <h3 class="text-4xl font-black text-mkRed uppercase italic tracking-tighter">Support & Cashout</h3>
-                    <p class="text-sm font-bold opacity-50 mt-2 uppercase tracking-widest">Besoin d'aide ou envie de retirer votre cash ?</p>
+            <div class="glass p-12 rounded-[4rem] border-2 border-mkRed flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div>
+                    <h3 class="text-4xl font-black text-mkRed italic uppercase">Support & Retrait</h3>
+                    <p class="text-sm font-bold opacity-40 uppercase tracking-widest mt-2">Échangez votre cash ou contactez un administrateur</p>
                 </div>
-                <div class="flex flex-wrap justify-center gap-4 relative z-10">
-                    <button onclick="openSupportTicket('Support Général')" class="bg-white/10 hover:bg-white/20 px-10 py-5 rounded-[1.5rem] font-black text-xs uppercase transition">Support 24/7</button>
-                    <button onclick="openSupportTicket('Demande Cashout')" class="bg-mkRed text-white px-12 py-5 rounded-[1.5rem] font-black text-xs uppercase shadow-2xl shadow-mkRed/30 hover:scale-105 transition-all">💰 Retirer mon Cash</button>
+                <div class="flex gap-4">
+                    <button onclick="createSupportTicket('Support Général')" class="bg-white/5 px-10 py-5 rounded-2xl font-black text-xs uppercase hover:bg-white/10 transition">Ouvrir Ticket</button>
+                    <button onclick="createSupportTicket('DEMANDE CASHOUT')" class="bg-mkRed text-white px-12 py-5 rounded-2xl font-black text-xs uppercase shadow-2xl shadow-mkRed/30">Faire un Cashout</button>
                 </div>
             </div>
         </section>
 
-        <section id="section-gamble" class="view-panel hidden space-y-12 animate-slide">
-            <header>
-                <h2 class="text-6xl font-black italic uppercase tracking-tighter">Casino <span class="text-mkRed">MK</span></h2>
-                <p class="text-white/40 font-bold mt-3 uppercase text-[11px]">Tentez votre chance et multipliez vos gains.</p>
-            </header>
-
+        <section id="sect-gamble" class="hidden animate-fade space-y-12">
+            <h2 class="text-5xl font-black italic uppercase italic">Espace <span class="text-mkRed">Casino</span></h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass p-10 rounded-[3.5rem] text-center group">
-                    <div class="text-7xl mb-8 group-hover:rotate-[360deg] transition-transform duration-700">🪙</div>
-                    <h4 class="text-2xl font-black uppercase">Double ou Rien</h4>
-                    <p class="text-[10px] opacity-40 mt-2 uppercase font-bold tracking-widest">Chance de gain: 48%</p>
-                    <div class="mt-8 space-y-4">
-                        <input id="bet-coin" type="number" value="1" min="1" class="w-full bg-black/40 p-5 rounded-2xl text-center font-black text-xl text-mkGreen outline-none border border-white/5">
-                        <div class="flex gap-3">
-                            <button onclick="playCoinFlip('pile')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-mkBlue/20">Pile</button>
-                            <button onclick="playCoinFlip('face')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-mkBlue/20">Face</button>
+                <div class="glass p-12 rounded-[3.5rem] text-center">
+                    <div id="coin-visual" class="text-8xl mb-10 transition-transform duration-500">🪙</div>
+                    <div class="space-y-6">
+                        <input id="bet-coin" type="number" value="1" min="1" class="w-32 bg-black/40 p-4 rounded-xl text-center font-black text-xl outline-none border border-white/10">
+                        <div class="flex gap-4">
+                            <button onclick="gambleCoin('pile')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black uppercase text-xs">Miser Pile</button>
+                            <button onclick="gambleCoin('face')" class="flex-1 bg-mkBlue text-black py-5 rounded-2xl font-black uppercase text-xs">Miser Face</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass p-10 rounded-[3.5rem] text-center">
-                    <div id="slot-container" class="flex justify-center gap-5 text-6xl py-10 bg-black/50 rounded-[2.5rem] border border-white/5 shadow-inner mb-8">
+                <div class="glass p-12 rounded-[3.5rem] text-center">
+                    <div id="slot-machine" class="flex justify-center gap-4 text-5xl py-8 bg-black/50 rounded-3xl mb-10 border border-white/5 shadow-inner">
                         <span id="s1">💎</span><span id="s2">💎</span><span id="s3">💎</span>
                     </div>
-                    <h4 class="text-2xl font-black uppercase">Super Jackpot</h4>
-                    <input id="bet-slots" type="number" value="1" min="1" class="w-full mt-8 bg-black/40 p-5 rounded-2xl text-center font-black text-xl text-mkPurple outline-none border border-white/5">
-                    <button onclick="startSlots()" class="w-full mt-4 bg-mkPurple text-white py-5 rounded-2xl font-black text-[11px] uppercase shadow-xl shadow-mkPurple/20">Actionner</button>
-                </div>
-
-                <div class="glass p-10 rounded-[3.5rem] text-center col-span-1 md:col-span-2">
-                    <h4 class="text-3xl font-black uppercase italic mb-10">Chifoumi Master</h4>
-                    <div class="flex flex-wrap justify-center gap-6 mb-10">
-                        <button onclick="playRPS('pierre')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue/20 hover:scale-110 transition-all">✊</button>
-                        <button onclick="playRPS('feuille')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue/20 hover:scale-110 transition-all">✋</button>
-                        <button onclick="playRPS('ciseaux')" class="w-24 h-24 glass rounded-3xl text-4xl hover:bg-mkBlue/20 hover:scale-110 transition-all">✌️</button>
-                    </div>
-                    <div class="max-w-xs mx-auto">
-                        <input id="bet-rps" type="number" value="1" class="w-full bg-black/40 p-5 rounded-2xl text-center font-black text-xl outline-none border border-white/5">
-                        <p class="text-[9px] opacity-30 mt-4 uppercase font-black">Choisissez votre signe pour lancer la mise</p>
-                    </div>
+                    <input id="bet-slots" type="number" value="5" min="1" class="w-32 bg-black/40 p-4 rounded-xl text-center font-black text-xl outline-none border border-white/10 mb-6">
+                    <button onclick="spinSlots()" class="w-full bg-mkPurple text-white py-6 rounded-2xl font-black uppercase text-xs shadow-xl shadow-mkPurple/30">Lancer la machine</button>
                 </div>
             </div>
         </section>
 
-        <section id="section-profile" class="view-panel hidden animate-slide">
-            <div class="max-w-2xl mx-auto space-y-8">
-                <div class="glass p-6 rounded-3xl flex gap-4">
-                    <input id="search-input" type="text" placeholder="Rechercher un joueur..." class="flex-1 bg-transparent px-6 font-bold outline-none">
-                    <button onclick="findUserProfile()" class="bg-mkBlue text-black px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg shadow-mkBlue/20">Rechercher</button>
+        <section id="sect-leaderboard" class="hidden animate-fade space-y-10">
+            <h2 class="text-5xl font-black italic text-center uppercase tracking-tighter">Les Plus <span class="text-mkGreen">Riches</span></h2>
+            <div id="lead-container" class="glass rounded-[3rem] overflow-hidden shadow-2xl border border-white/10">
+                </div>
+        </section>
+
+        <section id="sect-profile" class="hidden animate-fade max-w-2xl mx-auto space-y-8">
+            <div class="glass p-5 rounded-2xl flex gap-4">
+                <input id="find-user" type="text" placeholder="Chercher un membre..." class="flex-1 bg-transparent px-6 font-bold outline-none">
+                <button onclick="searchProfile()" class="bg-mkBlue text-black px-8 py-4 rounded-xl font-black text-xs uppercase">Rechercher</button>
+            </div>
+
+            <div id="profile-box" class="glass p-16 rounded-[4rem] text-center border-b-8 border-mkBlue">
+                <img id="p-img" src="" class="w-40 h-40 rounded-[3rem] mx-auto border-4 border-mkDark shadow-2xl mb-8 object-cover">
+                <h3 id="p-user" class="text-4xl font-black italic uppercase tracking-tighter">Profil</h3>
+                
+                <div class="grid grid-cols-2 gap-6 mt-12">
+                    <div class="bg-black/40 p-8 rounded-3xl">
+                        <p class="text-[9px] font-black opacity-30 uppercase tracking-widest">Solde actuel</p>
+                        <p id="p-cash" class="text-3xl font-black text-mkGreen mt-2">0.00€</p>
+                    </div>
+                    <div class="bg-black/40 p-8 rounded-3xl">
+                        <p class="text-[9px] font-black opacity-30 uppercase tracking-widest">Expérience</p>
+                        <p id="p-xp" class="text-3xl font-black text-mkYellow mt-2">0 XP</p>
+                    </div>
                 </div>
 
-                <div id="profile-display" class="glass p-12 rounded-[4rem] text-center relative overflow-hidden border border-white/10">
-                    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-mkBlue/20 to-transparent"></div>
-                    <div class="relative z-10">
-                        <img id="prof-img" src="" class="w-40 h-40 rounded-[3rem] mx-auto border-4 border-mkDark shadow-2xl object-cover">
-                        <h2 id="prof-user" class="text-5xl font-black mt-8 italic uppercase tracking-tighter">Profil</h2>
-                        
-                        <div class="grid grid-cols-2 gap-6 mt-10">
-                            <div class="bg-black/40 p-8 rounded-[2.5rem] border border-white/5">
-                                <p class="text-[10px] opacity-40 uppercase font-black tracking-widest">Porte-feuille</p>
-                                <p id="prof-cash" class="text-3xl font-black text-mkGreen mt-2">0.00€</p>
-                            </div>
-                            <div class="bg-black/40 p-8 rounded-[2.5rem] border border-white/5">
-                                <p class="text-[10px] opacity-40 uppercase font-black tracking-widest">Niveau Joueur</p>
-                                <p id="prof-xp" class="text-3xl font-black text-mkYellow mt-2">0 XP</p>
-                            </div>
-                        </div>
-
-                        <div id="self-actions" class="mt-12 pt-12 border-t border-white/5 space-y-6">
-                            <div class="text-left space-y-3">
-                                <label class="text-[10px] font-black uppercase opacity-40 ml-4 italic">Changer l'image de profil</label>
-                                <input id="new-pfp-url" type="text" placeholder="URL Directe (https://...)" class="w-full bg-black/40 p-5 rounded-[1.5rem] text-xs outline-none border border-white/5 focus:border-mkBlue">
-                                <button onclick="updateUserAvatar()" class="w-full bg-white text-black py-5 rounded-[1.5rem] font-black text-xs uppercase">Appliquer l'avatar</button>
-                            </div>
-                            <div class="text-left space-y-3 pt-4">
-                                <label class="text-[10px] font-black uppercase opacity-40 ml-4 italic">Utiliser un Code</label>
-                                <div class="flex gap-3">
-                                    <input id="profile-code-in" type="text" placeholder="Entrez le code" class="flex-1 bg-black/40 p-5 rounded-[1.5rem] text-xs outline-none border border-white/5 font-black uppercase">
-                                    <button onclick="claimReward('profile-code-in')" class="bg-mkPurple text-white px-10 rounded-[1.5rem] font-black text-xs uppercase">Valider</button>
-                                </div>
-                            </div>
+                <div id="profile-edit" class="mt-12 pt-12 border-t border-white/5 space-y-6">
+                    <div class="text-left space-y-2">
+                        <label class="text-[9px] font-black uppercase opacity-30 ml-2">Modifier l'avatar (Lien image)</label>
+                        <input id="p-new-pfp" type="text" placeholder="https://..." class="w-full bg-black/40 p-5 rounded-2xl text-xs outline-none">
+                        <button onclick="updatePfp()" class="w-full bg-white text-black py-4 rounded-2xl font-black text-[10px] uppercase">Mettre à jour l'image</button>
+                    </div>
+                    <div class="text-left space-y-2 pt-4">
+                        <label class="text-[9px] font-black uppercase opacity-30 ml-2">Appliquer un code</label>
+                        <div class="flex gap-3">
+                            <input id="p-code-in" type="text" placeholder="CODE SECRET" class="flex-1 bg-black/40 p-5 rounded-2xl text-xs font-black uppercase outline-none">
+                            <button onclick="redeemCode('p-code-in')" class="bg-mkPurple text-white px-8 rounded-2xl font-black text-[10px] uppercase">Valider</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="section-leaderboard" class="view-panel hidden animate-slide space-y-10">
-            <h2 class="text-5xl font-black italic uppercase text-center tracking-tighter">Top <span class="text-mkGreen">Fortune</span></h2>
-            <div id="leader-list" class="glass rounded-[3.5rem] overflow-hidden border border-white/10 shadow-2xl">
-                </div>
-        </section>
-
-        <section id="section-tv" class="view-panel hidden animate-slide space-y-8">
-            <h2 class="text-4xl font-black italic uppercase tracking-tighter"><span class="text-mkPurple">MK</span> Cinema VIP</h2>
-            <div class="bg-black aspect-video rounded-[3rem] overflow-hidden border-8 border-mkPurple/10 shadow-2xl relative">
-                <iframe id="cinema-frame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+        <section id="sect-tv" class="hidden animate-fade space-y-8">
+            <h2 class="text-4xl font-black text-mkPurple italic uppercase">MK TV VIP</h2>
+            <div class="bg-black aspect-video rounded-[3rem] overflow-hidden border-8 border-mkPurple/10 shadow-2xl">
+                <iframe id="tv-player" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
             </div>
-            <div class="flex gap-4 overflow-x-auto py-6 no-scrollbar">
-                <button onclick="changeMovie('https://www.youtube.com/embed/S8_YwFLCh4U')" class="bg-white/5 hover:bg-mkPurple/20 px-8 py-5 rounded-2xl font-black text-[11px] whitespace-nowrap transition">ONE PIECE FILM</button>
-                <button onclick="changeMovie('https://www.youtube.com/embed/1vRzN7p0f8Y')" class="bg-white/5 hover:bg-mkPurple/20 px-8 py-5 rounded-2xl font-black text-[11px] whitespace-nowrap transition">NARUTO MOVIE</button>
-                <button onclick="changeMovie('https://www.youtube.com/embed/Sx-C5yF2yJk')" class="bg-white/5 hover:bg-mkPurple/20 px-8 py-5 rounded-2xl font-black text-[11px] whitespace-nowrap transition">DB SUPER HERO</button>
+            <div class="flex gap-4 overflow-x-auto p-4 no-scrollbar">
+                <button onclick="loadTV('https://www.youtube.com/embed/S8_YwFLCh4U')" class="bg-white/5 px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap">ANIME MOVIE 1</button>
+                <button onclick="loadTV('https://www.youtube.com/embed/1vRzN7p0f8Y')" class="bg-white/5 px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap">ANIME MOVIE 2</button>
+                <button onclick="loadTV('https://www.youtube.com/embed/Sx-C5yF2yJk')" class="bg-white/5 px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap">ANIME MOVIE 3</button>
             </div>
         </section>
 
-        <section id="section-admin" class="view-panel hidden animate-slide space-y-12">
-            <header class="flex justify-between items-center">
-                <h2 class="text-5xl font-black text-mkAdmin italic uppercase italic">Console Suprême</h2>
-                <button onclick="refreshAdminData()" class="bg-mkAdmin/10 text-mkAdmin p-4 rounded-2xl font-black text-[10px] uppercase border border-mkAdmin/20">Rafraîchir les logs</button>
-            </header>
-            
+        <section id="sect-admin" class="hidden animate-fade space-y-12">
+            <div class="flex justify-between items-end">
+                <h2 class="text-5xl font-black text-mkAdmin italic uppercase tracking-tighter">Console Suprême</h2>
+                <button onclick="loadAdminData()" class="bg-mkAdmin/10 text-mkAdmin px-6 py-3 rounded-xl font-black text-[10px] uppercase border border-mkAdmin/20">Sync Database</button>
+            </div>
+
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
                 <div class="space-y-6">
-                    <h3 class="font-black uppercase text-sm tracking-widest text-mkRed flex items-center gap-3">
-                        <span class="w-3 h-3 bg-mkRed rounded-full animate-pulse"></span> Tickets Support Ouverts
-                    </h3>
-                    <div id="admin-tix-list" class="space-y-4">
-                        </div>
+                    <h3 class="font-black text-xs uppercase tracking-widest text-mkRed">Tickets en attente</h3>
+                    <div id="adm-tickets" class="space-y-4"></div>
                 </div>
-
                 <div class="space-y-6">
-                    <h3 class="font-black uppercase text-sm tracking-widest text-mkBlue">Base de données Utilisateurs</h3>
-                    <div id="admin-user-list" class="space-y-4 max-h-[700px] overflow-y-auto pr-4 no-scrollbar">
-                        </div>
+                    <h3 class="font-black text-xs uppercase tracking-widest text-mkBlue">Gestion des Membres</h3>
+                    <div id="adm-users" class="space-y-4 max-h-[700px] overflow-y-auto no-scrollbar pr-2"></div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <aside id="chat-system" class="fixed right-10 top-32 bottom-12 w-[360px] glass rounded-[3.5rem] hidden xl:flex flex-col overflow-hidden border border-white/5 shadow-2xl">
-        <div class="p-8 bg-white/5 border-b border-white/5 flex justify-between items-center">
-            <span class="text-[12px] font-black uppercase tracking-[0.3em] text-mkBlue italic">Chat Global</span>
-            <div class="flex items-center gap-2">
-                <span id="chat-status" class="w-2 h-2 bg-mkGreen rounded-full shadow-[0_0_15px_#22c55e]"></span>
-                <span class="text-[9px] font-black opacity-40 uppercase">Live</span>
-            </div>
+    <aside id="chat-bar" class="fixed right-10 top-32 bottom-12 w-[340px] glass rounded-[3rem] hidden xl:flex flex-col overflow-hidden border border-white/5">
+        <div class="p-8 bg-white/5 border-b border-white/5">
+            <h4 class="text-[12px] font-black uppercase tracking-[0.3em] text-mkBlue italic">Chat Global</h4>
         </div>
         
-        <div id="chat-feed" class="flex-1 p-8 overflow-y-auto space-y-8 no-scrollbar scroll-smooth">
+        <div id="chat-content" class="flex-1 p-6 overflow-y-auto space-y-6 no-scrollbar">
             </div>
 
-        <div class="p-8 border-t border-white/5">
-            <div class="bg-black/50 rounded-2xl p-2.5 flex gap-3 border border-white/10 focus-within:border-mkBlue/50 transition-all">
-                <input id="chat-msg-input" type="text" placeholder="Entrer un message..." class="bg-transparent outline-none flex-1 px-4 text-xs font-semibold">
-                <button onclick="sendUserMessage()" class="w-12 h-12 bg-mkBlue text-black rounded-xl flex items-center justify-center hover:scale-105 transition active:scale-95 shadow-lg shadow-mkBlue/20">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7-7 7M5 12h16"/></svg>
-                </button>
+        <div class="p-6 border-t border-white/5">
+            <div class="bg-black/50 rounded-2xl p-2 flex gap-2 border border-white/10">
+                <input id="chat-input" type="text" placeholder="Votre message..." class="bg-transparent outline-none flex-1 px-4 text-[11px] font-semibold">
+                <button onclick="sendMessage()" class="w-12 h-12 bg-mkBlue text-black rounded-xl flex items-center justify-center font-black">></button>
             </div>
         </div>
     </aside>
 
-    <div id="auth-modal" class="fixed inset-0 z-[1000] bg-black/95 hidden flex items-center justify-center p-8 backdrop-blur-md">
-        <div class="glass w-full max-w-lg rounded-[4rem] p-16 text-center relative border-t-8 border-mkBlue animate-slide">
-            <button onclick="closeModal('auth-modal')" class="absolute top-10 right-10 text-white/30 hover:text-white transition-colors text-2xl font-black">✕</button>
-            <h3 class="text-4xl font-black italic uppercase tracking-tighter">Accéder à <span class="text-mkBlue">MK SHOP</span></h3>
-            <p class="text-white/30 font-bold text-[10px] uppercase mt-3 mb-12 tracking-widest">Connectez-vous pour gérer votre cash et vos achats</p>
+    <div id="modal-auth" class="fixed inset-0 z-[2000] bg-black/95 flex items-center justify-center p-8 hidden backdrop-blur-md">
+        <div class="glass w-full max-w-md rounded-[3.5rem] p-12 text-center animate-fade border-t-8 border-mkBlue">
+            <h3 class="text-4xl font-black italic uppercase tracking-tighter">Accès Client</h3>
+            <p class="text-white/30 font-bold text-[10px] uppercase mt-3 mb-10 tracking-widest">Inscrivez-vous ou connectez-vous</p>
             
             <div class="space-y-4">
-                <input id="auth-e" type="email" placeholder="Adresse Email" class="w-full bg-white/5 p-5 rounded-2xl outline-none focus:bg-white/10 transition border border-white/5">
-                <input id="auth-u" type="text" placeholder="Pseudo MK" class="w-full bg-white/5 p-5 rounded-2xl outline-none focus:bg-white/10 transition border border-white/5">
-                <input id="auth-p" type="password" placeholder="Mot de passe" class="w-full bg-white/5 p-5 rounded-2xl outline-none focus:bg-white/10 transition border border-white/5">
-                <button onclick="processAuth()" class="w-full bg-mkBlue text-black py-5 rounded-2xl font-black text-xs uppercase shadow-2xl shadow-mkBlue/20 mt-6 hover:scale-[1.02] transition">Démarrer la session</button>
+                <input id="auth-email" type="email" placeholder="Email (Unique)" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/5 text-xs font-bold">
+                <input id="auth-user" type="text" placeholder="Pseudo MK" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/5 text-xs font-bold">
+                <input id="auth-pass" type="password" placeholder="Mot de passe" class="w-full bg-white/5 p-5 rounded-2xl outline-none border border-white/5 text-xs font-bold">
+                <button onclick="handleAuth()" class="w-full bg-mkBlue text-black py-5 rounded-2xl font-black text-xs uppercase shadow-2xl shadow-mkBlue/20 mt-6">Démarrer la Session</button>
+                <button onclick="closeModal('modal-auth')" class="text-[10px] font-black opacity-30 uppercase tracking-widest mt-4">Annuler</button>
             </div>
         </div>
     </div>
 
     <script>
-        // -- CONFIGURATION SUPABASE --
+        // CONFIG
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co"; 
         const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
-        const sb = supabase.createClient(SB_URL, SB_KEY);
+        const db = supabase.createClient(SB_URL, SB_KEY);
 
-        // -- VARIABLES GLOBALES --
-        let currentUser = null;
-        let activeStatView = 'cash'; 
-        let syncLoop = null;
+        let user = null;
+        let statMode = 'cash';
 
-        // -- SYSTEME DE NOTIFICATION --
-        function notify(msg, type = 'mkBlue') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast animate-slide';
-            toast.style.background = '#000';
-            toast.style.borderLeft = `8px solid var(--${type})`;
-            toast.innerHTML = `<span class="mr-3">🔔</span> ${msg}`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3500);
+        // NOTIFICATIONS
+        function toast(msg, type = 'mkBlue') {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.style.background = '#000';
+            t.style.borderLeft = `8px solid var(--${type})`;
+            t.innerHTML = `<span class="text-white font-black uppercase text-xs">${msg}</span>`;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
         }
 
-        // -- CORE UI FUNCTIONS --
+        // NAVIGATION & UI
         function toggleTheme() {
-            const isDark = document.body.classList.toggle('dark');
-            document.body.classList.toggle('light', !isDark);
-            notify(isDark ? "Thème Sombre Activé" : "Thème Clair Activé", isDark ? 'mkBlue' : 'mkPurple');
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+        }
+
+        function toggleStatMode(m) {
+            statMode = m;
+            document.getElementById('btn-mode-cash').className = m === 'cash' ? 'px-5 py-2 rounded-xl text-[10px] font-black bg-mkGreen text-black transition' : 'px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition';
+            document.getElementById('btn-mode-xp').className = m === 'xp' ? 'px-5 py-2 rounded-xl text-[10px] font-black bg-mkYellow text-black transition' : 'px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition';
+            syncUI();
         }
 
         function showSection(id) {
-            document.querySelectorAll('.view-panel').forEach(v => v.classList.add('hidden'));
-            document.getElementById('section-' + id).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            if(id === 'leaderboard') loadLeaderboard();
-            if(id === 'admin') refreshAdminData();
-            if(id === 'profile') renderUserUI(currentUser);
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('sect-' + id).classList.remove('hidden');
+            if(id === 'leaderboard') fetchLeaderboard();
+            if(id === 'admin') loadAdminData();
+            if(id === 'profile') renderProfile(user);
         }
 
-        function changeActiveStat(mode) {
-            activeStatView = mode;
-            document.getElementById('nav-btn-cash').className = mode === 'cash' ? 'px-5 py-2 rounded-xl text-[10px] font-black bg-mkGreen text-black transition-all' : 'px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition-all';
-            document.getElementById('nav-btn-xp').className = mode === 'xp' ? 'px-5 py-2 rounded-xl text-[10px] font-black bg-mkYellow text-black transition-all' : 'px-5 py-2 rounded-xl text-[10px] font-black opacity-30 hover:opacity-100 transition-all';
-            syncNavbarStats();
-        }
+        // AUTHENTIFICATION (LE TRUC D'AVANT)
+        async function handleAuth() {
+            const e = document.getElementById('auth-email').value.trim();
+            const u = document.getElementById('auth-user').value.trim();
+            const p = document.getElementById('auth-pass').value.trim();
 
-        // -- AUTHENTIFICATION --
-        async function processAuth() {
-            const email = document.getElementById('auth-e').value.trim();
-            const user = document.getElementById('auth-u').value.trim();
-            const pass = document.getElementById('auth-p').value.trim();
+            if(!e || !p) return toast("Email et Passe requis !", "mkRed");
 
-            if(!email || !pass) return notify("Champs obligatoires manquants !", "mkRed");
-
-            let { data: profile, error } = await sb.from('profiles').select('*').eq('email', email).maybeSingle();
+            // Check existant
+            let { data: profile } = await db.from('profiles').select('*').eq('email', e).maybeSingle();
 
             if(!profile) {
-                const { data, error: insError } = await sb.from('profiles').insert([{
-                    email: email, username: user || ("MK_" + Math.floor(Math.random()*9999)),
-                    password: pass, balance: 10, xp: 0, 
-                    pfp: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${email}`,
+                // Création si nouveau
+                const { data, error } = await db.from('profiles').insert([{
+                    email: e, username: u || "User" + Math.floor(Math.random()*1000),
+                    password: p, balance: 10.00, xp: 0,
+                    pfp: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${e}`,
                     tv_access: false, banned: false
                 }]).select().single();
-                if(insError) return notify("Erreur d'inscription", "mkRed");
+                if(error) return toast("Erreur création", "mkRed");
                 profile = data;
+                toast("Compte créé ! +10€ offerts", "mkGreen");
             } else {
-                if(profile.password !== pass) return notify("Mot de passe incorrect", "mkRed");
+                // Verif pass
+                if(profile.password !== p) return toast("Mot de passe incorrect", "mkRed");
+                toast(`Bon retour, ${profile.username}`);
             }
 
-            if(profile.banned) return notify("ACCÈS REFUSÉ : BANNI", "mkRed");
+            if(profile.banned) return toast("VOUS ÊTES BANNI", "mkRed");
 
-            currentUser = profile;
-            localStorage.setItem('mk_session_v65', JSON.stringify(currentUser));
-            closeModal('auth-modal');
-            bootSession();
-            notify(`Content de vous revoir, ${currentUser.username} !`, "mkGreen");
+            user = profile;
+            localStorage.setItem('mk_session', JSON.stringify(user));
+            closeModal('modal-auth');
+            initUser();
         }
 
-        function bootSession() {
-            if(!currentUser) return;
+        function initUser() {
+            if(!user) return;
             document.getElementById('auth-trigger').classList.add('hidden');
-            document.getElementById('logged-ui').classList.remove('hidden');
-            document.getElementById('nav-avatar').src = currentUser.pfp;
+            document.getElementById('user-panel').classList.remove('hidden');
+            document.getElementById('nav-pfp').src = user.pfp;
             
-            syncNavbarStats();
-
-            if(currentUser.username.toLowerCase() === 'admin') {
-                document.getElementById('nav-admin').classList.remove('hidden');
+            if(user.username.toLowerCase() === 'admin') {
+                document.getElementById('adm-nav').classList.remove('hidden');
             }
-
-            if(currentUser.tv_access) {
-                document.getElementById('tv-control-area').innerHTML = `<button onclick="showSection('tv')" class="w-full bg-mkGreen text-black py-5 rounded-[1.5rem] font-black text-xs uppercase animate-pulse">Entrer dans la salle TV</button>`;
+            if(user.tv_access) {
+                document.getElementById('tv-ui-logic').innerHTML = `<button onclick="showSection('tv')" class="w-full bg-mkGreen text-black py-5 rounded-2xl font-black text-xs uppercase animate-pulse">Entrer au Cinéma</button>`;
             }
-
-            startRealtimeChat();
+            syncUI();
+            startChatLoop();
         }
 
-        function syncNavbarStats() {
-            if(!currentUser) return;
-            const display = document.getElementById('nav-stat-display');
-            if(activeStatView === 'cash') {
-                display.innerText = currentUser.balance.toFixed(2) + "€";
-                display.className = "font-black text-lg text-mkGreen animate-pulse";
+        function syncUI() {
+            if(!user) return;
+            const display = document.getElementById('nav-val');
+            if(statMode === 'cash') {
+                display.innerText = user.balance.toFixed(2) + "€";
+                display.className = "font-black text-lg text-mkGreen";
             } else {
-                display.innerText = currentUser.xp + " XP";
+                display.innerText = user.xp + " XP";
                 display.className = "font-black text-lg text-mkYellow";
             }
         }
 
-        // -- SYSTÈME DE JEUX (CASINO) --
-        async function updateUserData(newBalance, xpGain = 10) {
-            const { data, error } = await sb.from('profiles').update({ 
-                balance: newBalance, xp: currentUser.xp + xpGain 
-            }).eq('id', currentUser.id).select().single();
-            
-            if(!error) {
-                currentUser = data;
-                syncNavbarStats();
-                renderUserUI(currentUser);
-            }
+        // CASINO
+        async function updateBalance(newBal, xpAdd = 10) {
+            const { data, error } = await db.from('profiles').update({ balance: newBal, xp: user.xp + xpAdd }).eq('id', user.id).select().single();
+            if(!error) { user = data; syncUI(); }
         }
 
-        async function playCoinFlip(side) {
+        async function gambleCoin(side) {
             const bet = parseFloat(document.getElementById('bet-coin').value);
-            if(bet > currentUser.balance || bet <= 0) return notify("Fonds insuffisants !", "mkRed");
+            if(!user || bet > user.balance || bet <= 0) return toast("Mise impossible", "mkRed");
 
-            const win = Math.random() > 0.55; 
-            const result = win ? side : (side === 'pile' ? 'face' : 'pile');
+            const win = Math.random() > 0.55;
+            const res = win ? side : (side === 'pile' ? 'face' : 'pile');
             
-            notify(`Pièce lancée... Résultat : ${result.toUpperCase()}`);
-            const finalBal = win ? currentUser.balance + bet : currentUser.balance - bet;
-            await updateUserData(finalBal, 20);
-            
-            notify(win ? "GAGNÉ ! Gain doublé" : "PERDU... La maison gagne", win ? "mkGreen" : "mkRed");
-        }
-
-        async function startSlots() {
-            const bet = parseFloat(document.getElementById('bet-slots').value);
-            if(bet > currentUser.balance || bet <= 0) return notify("Cash insuffisant", "mkRed");
-
-            const slots = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3')];
-            slots.forEach(s => s.classList.add('slot-spin'));
-            
-            const icons = ['💎', '🍒', '🍋', '🍇', '⭐', '🍀'];
-            
+            document.getElementById('coin-visual').style.transform = "rotateY(1080deg)";
             setTimeout(async () => {
-                slots.forEach(s => s.classList.remove('slot-spin'));
-                const results = [icons[Math.floor(Math.random()*icons.length)], icons[Math.floor(Math.random()*icons.length)], icons[Math.floor(Math.random()*icons.length)]];
-                
-                slots[0].innerText = results[0]; slots[1].innerText = results[1]; slots[2].innerText = results[2];
-                
+                document.getElementById('coin-visual').style.transform = "rotateY(0deg)";
+                const final = win ? user.balance + bet : user.balance - bet;
+                await updateBalance(final, 20);
+                toast(win ? "GAGNÉ !" : "PERDU", win ? "mkGreen" : "mkRed");
+            }, 600);
+        }
+
+        async function spinSlots() {
+            const bet = parseFloat(document.getElementById('bet-slots').value);
+            if(!user || bet > user.balance || bet <= 0) return toast("Fonds insuffisants", "mkRed");
+
+            const machine = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3')];
+            machine.forEach(s => s.classList.add('slot-rolling'));
+
+            setTimeout(async () => {
+                machine.forEach(s => s.classList.remove('slot-rolling'));
+                const items = ['💎', '🍒', '🍋', '🍇', '⭐'];
+                const res = [items[Math.floor(Math.random()*5)], items[Math.floor(Math.random()*5)], items[Math.floor(Math.random()*5)]];
+                machine[0].innerText = res[0]; machine[1].innerText = res[1]; machine[2].innerText = res[2];
+
                 let mult = 0;
-                if(results[0] === results[1] && results[1] === results[2]) mult = 15;
-                else if(results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) mult = 3;
-                
-                const winAmount = bet * mult;
-                const newBal = (currentUser.balance - bet) + winAmount;
-                await updateUserData(newBal, 30);
-                
-                if(mult > 0) notify(`JACKPOT x${mult} ! +${winAmount}€`, "mkPurple");
-                else notify("Pas de chance cette fois.", "mkRed");
-            }, 1200);
+                if(res[0] === res[1] && res[1] === res[2]) mult = 10;
+                else if(res[0] === res[1] || res[1] === res[2] || res[0] === res[2]) mult = 2;
+
+                const winAmt = bet * mult;
+                await updateBalance((user.balance - bet) + winAmt, 30);
+                if(mult > 0) toast(`JACKPOT x${mult} !`, "mkPurple");
+            }, 1000);
         }
 
-        async function playRPS(userChoice) {
-            const bet = parseFloat(document.getElementById('bet-rps').value);
-            if(bet > currentUser.balance || bet <= 0) return notify("Mise impossible", "mkRed");
+        // CODES & TICKETS
+        async function redeemCode(inputId) {
+            const c = document.getElementById(inputId).value.trim().toUpperCase();
+            if(!c || !user) return;
 
-            const choices = ['pierre', 'feuille', 'ciseaux'];
-            const botChoice = choices[Math.floor(Math.random()*3)];
-            let res = "lose";
-
-            if(userChoice === botChoice) res = "draw";
-            else if((userChoice === 'pierre' && botChoice === 'ciseaux') || (userChoice === 'feuille' && botChoice === 'pierre') || (userChoice === 'ciseaux' && botChoice === 'feuille')) res = "win";
-            
-            const newBal = res === 'win' ? currentUser.balance + bet : (res === 'lose' ? currentUser.balance - bet : currentUser.balance);
-            await updateUserData(newBal, 15);
-            
-            notify(`BOT : ${botChoice.toUpperCase()} -> ${res === 'win' ? 'TU GAGNES !' : (res === 'lose' ? 'TU PERDS' : 'ÉGALITÉ')}`, res === 'win' ? 'mkGreen' : (res === 'lose' ? 'mkRed' : 'mkBlue'));
-        }
-
-        // -- PROFIL & RECOMMANDES --
-        async function claimReward(inputId) {
-            const code = document.getElementById(inputId).value.trim().toUpperCase();
-            if(!code) return;
-
-            if(code === "LXS-1") {
-                const { data } = await sb.from('profiles').update({ balance: currentUser.balance + 10 }).eq('id', currentUser.id).select().single();
-                currentUser = data;
-                notify("🎁 CODE ACTIF : +10.00€ offerts !", "mkGreen");
-            } else if(code === "TVVIP") {
-                const { data } = await sb.from('profiles').update({ tv_access: true }).eq('id', currentUser.id).select().single();
-                currentUser = data;
-                bootSession();
-                notify("📺 CINÉMA DÉBLOQUÉ : Bon visionnage !", "mkPurple");
+            if(c === 'LXS-1') {
+                await updateBalance(user.balance + 15, 50);
+                toast("Code : +15€ !", "mkGreen");
+            } else if(c === 'TVVIP') {
+                const { data } = await db.from('profiles').update({ tv_access: true }).eq('id', user.id).select().single();
+                user = data;
+                initUser();
+                toast("Cinéma débloqué !", "mkPurple");
             } else {
-                notify("Code invalide ou déjà utilisé.", "mkRed");
+                toast("Code erroné", "mkRed");
             }
-            syncNavbarStats();
             document.getElementById(inputId).value = "";
         }
 
-        async function updateUserAvatar() {
-            const url = document.getElementById('new-pfp-url').value;
-            if(!url.startsWith('http')) return notify("Lien d'image invalide", "mkRed");
-            
-            const { data, error } = await sb.from('profiles').update({ pfp: url }).eq('id', currentUser.id).select().single();
-            if(!error) {
-                currentUser = data;
-                bootSession();
-                renderUserUI(currentUser);
-                notify("Avatar synchronisé avec succès !");
-            }
+        async function createSupportTicket(type) {
+            if(!user) return toast("Connectez-vous", "mkRed");
+            await db.from('tickets').insert([{ username: user.username, type: type, status: 'open' }]);
+            toast("Ticket ouvert !", "mkGreen");
         }
 
-        function renderUserUI(u) {
+        // PROFIL
+        function renderProfile(u) {
             if(!u) return;
-            document.getElementById('prof-img').src = u.pfp;
-            document.getElementById('prof-user').innerText = u.username;
-            document.getElementById('prof-cash').innerText = u.balance.toFixed(2) + "€";
-            document.getElementById('prof-xp').innerText = u.xp + " XP";
+            document.getElementById('p-img').src = u.pfp;
+            document.getElementById('p-user').innerText = u.username;
+            document.getElementById('p-cash').innerText = u.balance.toFixed(2) + "€";
+            document.getElementById('p-xp').innerText = u.xp + " XP";
+            document.getElementById('profile-edit').classList.remove('hidden');
         }
 
-        async function findUserProfile() {
-            const name = document.getElementById('search-input').value.trim();
-            const { data } = await sb.from('profiles').select('*').eq('username', name).maybeSingle();
+        async function searchProfile() {
+            const q = document.getElementById('find-user').value.trim();
+            const { data } = await db.from('profiles').select('*').eq('username', q).maybeSingle();
             if(data) {
-                renderUserUI(data);
-                document.getElementById('self-actions').classList.add('hidden');
-                notify(`Profil de ${name} chargé`);
-            } else notify("Joueur introuvable", "mkRed");
+                renderProfile(data);
+                document.getElementById('profile-edit').classList.add('hidden');
+            } else toast("Inconnu", "mkRed");
         }
 
-        // -- SYSTÈME DE TICKETS (SUPPORT) --
-        async function openSupportTicket(subject) {
-            if(!currentUser) return notify("Connexion requise", "mkRed");
-            const { error } = await sb.from('tickets').insert([{
-                username: currentUser.username,
-                type: subject,
-                status: 'open',
-                created_at: new Date()
-            }]);
-            if(!error) notify("Ticket envoyé ! Le staff vous répondra bientôt.", "mkGreen");
+        async function updatePfp() {
+            const url = document.getElementById('p-new-pfp').value;
+            if(!url) return;
+            const { data } = await db.from('profiles').update({ pfp: url }).eq('id', user.id).select().single();
+            user = data;
+            initUser();
+            renderProfile(user);
+            toast("Photo mise à jour");
         }
 
-        // -- ADMINISTRATION --
-        async function refreshAdminData() {
-            // CHARGEMENT USERS
-            const { data: users } = await sb.from('profiles').select('*');
-            const userList = document.getElementById('admin-user-list');
-            userList.innerHTML = users.map(u => `
-                <div class="glass p-6 rounded-3xl text-[11px] space-y-4 border-l-4 ${u.banned ? 'border-mkRed' : 'border-mkBlue'}">
-                    <div class="flex justify-between items-center">
-                        <b class="text-sm uppercase tracking-tighter">${u.username}</b>
-                        <span class="opacity-40">${u.email}</span>
-                    </div>
-                    <div class="bg-black/30 p-3 rounded-xl font-mono text-mkBlue flex justify-between">
-                        <span>PASS: ${u.password}</span>
-                        <span>CASH: ${u.balance.toFixed(2)}€</span>
+        // ADMIN
+        async function loadAdminData() {
+            const { data: users } = await db.from('profiles').select('*');
+            const { data: tickets } = await db.from('tickets').select('*').eq('status', 'open');
+
+            document.getElementById('adm-tickets').innerHTML = (tickets||[]).map(t => `
+                <div class="glass p-6 rounded-2xl flex justify-between items-center border-l-4 border-mkRed">
+                    <div class="text-[11px] font-black uppercase tracking-widest">${t.type} <br> <span class="opacity-40">${t.username}</span></div>
+                    <button onclick="closeT('${t.id}')" class="bg-mkRed text-white px-5 py-2 rounded-xl text-[10px] font-black">OK</button>
+                </div>
+            `).join('');
+
+            document.getElementById('adm-users').innerHTML = users.map(u => `
+                <div class="glass p-5 rounded-2xl space-y-3 border border-white/5">
+                    <div class="flex justify-between font-black text-[10px] uppercase">
+                        <span>${u.username}</span> <span class="text-mkBlue">${u.password}</span>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="adminExecute('${u.id}', 'cash', 10)" class="bg-mkGreen/20 text-mkGreen px-3 py-2 rounded-lg flex-1 font-black">+10€</button>
-                        <button onclick="adminExecute('${u.id}', 'cash', -10)" class="bg-mkRed/20 text-mkRed px-3 py-2 rounded-lg flex-1 font-black">-10€</button>
-                        <button onclick="adminExecute('${u.id}', 'ban', ${!u.banned})" class="bg-white/10 px-3 py-2 rounded-lg flex-1 font-black">${u.banned ? 'UNBAN' : 'BAN'}</button>
+                        <button onclick="admAct('${u.id}', {balance: ${u.balance+10}})" class="flex-1 bg-mkGreen/20 text-mkGreen p-2 rounded-lg text-[10px] font-black">+10€</button>
+                        <button onclick="admAct('${u.id}', {banned: ${!u.banned}})" class="flex-1 bg-white/10 p-2 rounded-lg text-[10px] font-black">BAN</button>
                     </div>
                 </div>
             `).join('');
-
-            // CHARGEMENT TICKETS
-            const { data: tickets } = await sb.from('tickets').select('*').eq('status', 'open');
-            document.getElementById('admin-tix-list').innerHTML = tickets.map(t => `
-                <div class="bg-mkRed/5 border border-mkRed/20 p-6 rounded-3xl flex justify-between items-center animate-slide">
-                    <div>
-                        <b class="text-mkRed uppercase text-xs">${t.type}</b>
-                        <p class="text-[10px] opacity-50 mt-1 font-bold">Client: ${t.username}</p>
-                    </div>
-                    <button onclick="resolveTicket('${t.id}')" class="bg-mkRed text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase">Terminer</button>
-                </div>
-            `).join('');
         }
 
-        async function adminExecute(uid, act, val) {
-            const { data: userToMod } = await sb.from('profiles').select('*').eq('id', uid).single();
-            let patch = {};
-            if(act === 'cash') patch = { balance: userToMod.balance + val };
-            if(act === 'ban') patch = { banned: val };
+        async function admAct(id, o) { await db.from('profiles').update(o).eq('id', id); loadAdminData(); }
+        async function closeT(id) { await db.from('tickets').update({status:'closed'}).eq('id', id); loadAdminData(); }
 
-            await sb.from('profiles').update(patch).eq('id', uid);
-            refreshAdminData();
-            notify("Modification effectuée");
+        // CHAT LOOP
+        async function sendMessage() {
+            const i = document.getElementById('chat-input');
+            if(!user || !i.value) return;
+            await db.from('messages').insert([{ 
+                username: user.username, content: i.value, 
+                pfp: user.pfp, level: Math.floor(user.xp/100) 
+            }]);
+            i.value = "";
+            fetchChat();
         }
 
-        async function resolveTicket(id) {
-            await sb.from('tickets').update({ status: 'closed' }).eq('id', id);
-            refreshAdminData();
-            notify("Ticket clôturé");
-        }
-
-        // -- CHAT GLOBAL LIVE --
-        async function startRealtimeChat() {
-            if(syncLoop) clearInterval(syncLoop);
-            refreshChatFeed();
-            syncLoop = setInterval(refreshChatFeed, 3500);
-        }
-
-        async function refreshChatFeed() {
-            const { data } = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(25);
+        async function fetchChat() {
+            const { data } = await db.from('messages').select('*').order('created_at', { ascending: false }).limit(20);
             if(!data) return;
-
-            const feed = document.getElementById('chat-feed');
-            const atBottom = feed.scrollTop + feed.offsetHeight >= feed.scrollHeight - 60;
-
-            feed.innerHTML = data.reverse().map(m => {
-                const isStaff = m.username.toLowerCase() === 'admin';
-                const tagCol = isStaff ? 'mkAdmin' : (m.level > 10 ? 'mkPurple' : 'mkBlue');
-                
+            const container = document.getElementById('chat-content');
+            container.innerHTML = data.reverse().map(m => {
+                const isAdmin = m.username.toLowerCase() === 'admin';
                 return `
-                <div class="flex gap-4 items-start animate-slide">
-                    <img src="${m.pfp || 'https://api.dicebear.com/7.x/pixel-art/svg?seed='+m.username}" class="w-10 h-10 rounded-xl shadow-lg">
-                    <div class="flex-1">
+                <div class="chat-msg flex gap-3 items-start">
+                    <img src="${m.pfp}" class="w-9 h-9 rounded-xl shadow-lg">
+                    <div class="flex flex-col">
                         <div class="flex items-center gap-2">
-                            <span class="chat-tag bg-${tagCol} text-white">LVL ${m.level || 0}</span>
-                            <b class="text-[11px] uppercase tracking-tighter">${m.username}</b>
+                            ${isAdmin ? '<span class="badge-admin">STAFF</span>' : `<span class="text-[8px] bg-mkBlue/20 text-mkBlue px-2 rounded">LVL ${m.level}</span>`}
+                            <b class="text-[10px] uppercase">${m.username}</b>
                         </div>
-                        <p class="text-[12px] opacity-80 mt-1.5 leading-relaxed font-medium">${m.content}</p>
+                        <p class="text-[11px] opacity-70 mt-1">${m.content}</p>
                     </div>
                 </div>`;
             }).join('');
-            
-            if(atBottom) feed.scrollTop = feed.scrollHeight;
+            container.scrollTop = container.scrollHeight;
         }
 
-        async function sendUserMessage() {
-            const input = document.getElementById('chat-msg-input');
-            const txt = input.value.trim();
-            if(!currentUser || !txt) return;
-
-            await sb.from('messages').insert([{
-                username: currentUser.username,
-                content: txt,
-                pfp: currentUser.pfp,
-                level: Math.floor(currentUser.xp / 100),
-                created_at: new Date()
-            }]);
-
-            input.value = "";
-            refreshChatFeed();
-        }
-
-        // -- CLASSEMENT --
-        async function loadLeaderboard() {
-            const { data } = await sb.from('profiles').select('*').order('balance', { ascending: false }).limit(15);
-            const container = document.getElementById('leader-list');
-            container.innerHTML = data.map((u, i) => `
-                <div class="flex justify-between items-center p-8 border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <div class="flex items-center gap-8">
-                        <span class="text-3xl font-black italic opacity-10 w-10">#${i+1}</span>
-                        <img src="${u.pfp}" class="w-12 h-12 rounded-2xl border border-white/10">
-                        <b class="uppercase italic text-lg tracking-tighter">${u.username}</b>
+        async function fetchLeaderboard() {
+            const { data } = await db.from('profiles').select('*').order('balance', { ascending: false }).limit(10);
+            document.getElementById('lead-container').innerHTML = data.map((u, i) => `
+                <div class="p-6 border-b border-white/5 flex justify-between items-center hover:bg-white/5 transition">
+                    <div class="flex items-center gap-6">
+                        <span class="text-2xl font-black italic opacity-10">#${i+1}</span>
+                        <img src="${u.pfp}" class="w-10 h-10 rounded-xl">
+                        <b class="uppercase italic text-sm tracking-tighter">${u.username}</b>
                     </div>
-                    <div class="text-right">
-                        <p class="text-mkGreen font-black text-xl">${u.balance.toFixed(2)}€</p>
-                        <p class="text-[10px] opacity-40 font-extrabold uppercase tracking-widest">${u.xp} POINTS XP</p>
-                    </div>
+                    <b class="text-mkGreen text-lg">${u.balance.toFixed(2)}€</b>
                 </div>
             `).join('');
         }
 
-        // -- UTILITAIRES UI --
-        function changeMovie(url) {
-            document.getElementById('cinema-frame').src = url;
-            notify("Chargement du média VIP...", "mkPurple");
-        }
+        function startChatLoop() { fetchChat(); setInterval(fetchChat, 4000); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function logout() { localStorage.removeItem('mk_session_v65'); location.reload(); }
+        function loadTV(u) { document.getElementById('tv-player').src = u; toast("Lancement VIP..."); }
+        function logout() { localStorage.clear(); location.reload(); }
 
-        // -- INITIALISATION --
         window.onload = () => {
-            const saved = localStorage.getItem('mk_session_v65');
+            const saved = localStorage.getItem('mk_session');
             if(saved) {
-                currentUser = JSON.parse(saved);
-                // Refresh local data with DB
-                sb.from('profiles').select('*').eq('id', currentUser.id).single().then(({data}) => {
-                    if(data) {
-                        currentUser = data;
-                        bootSession();
-                    }
+                user = JSON.parse(saved);
+                db.from('profiles').select('*').eq('id', user.id).single().then(({data}) => {
+                    if(data) { user = data; initUser(); }
                 });
             }
-            refreshChatFeed();
-            setInterval(refreshChatFeed, 5000);
         };
     </script>
 </body>
