@@ -105,13 +105,11 @@
     <button onclick="document.getElementById('support-chat-ui').classList.toggle('hidden')" class="fixed left-8 bottom-8 w-16 h-16 bg-mkRed rounded-[2rem] flex items-center justify-center text-3xl z-[60] shadow-2xl border-2 border-white/10">🎧</button>
 
     <main class="max-w-7xl mx-auto px-8 py-16 lg:pr-[380px]">
-        
         <div id="section-shop" class="content-section space-y-16">
             <header class="space-y-4">
                 <h2 class="text-6xl font-black italic uppercase tracking-tighter leading-none">MK <span class="text-mkBlue">SHOP</span></h2>
                 <div class="h-1.5 w-24 bg-mkBlue rounded-full"></div>
             </header>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="shop-card glass p-10 rounded-[4rem] border-t-8 border-mkBlue">
                     <span class="bg-mkBlue/10 text-mkBlue px-5 py-1.5 rounded-full text-[10px] font-black uppercase border border-mkBlue/20">Streaming 📺</span>
@@ -120,7 +118,6 @@
                     <div class="text-3xl font-black mb-8">2.50€/Mois</div>
                     <button onclick="startSupport('STREAM')" class="w-full bg-white text-black py-5 rounded-[2rem] font-black text-[12px] uppercase">Commander/Acceder</button>
                 </div>
-
                 <div class="shop-card glass p-10 rounded-[4rem] border-t-8 border-mkPurple">
                     <span class="bg-mkPurple/10 text-mkPurple px-5 py-1.5 rounded-full text-[10px] font-black uppercase border border-mkPurple/20">Roblox 🎮</span>
                     <h3 class="text-4xl font-black uppercase italic mt-6 tracking-tighter text-mkPurple">Roblox Market</h3>
@@ -128,7 +125,6 @@
                     <div class="text-3xl font-black mb-8">5.00€ - 30.00€</div>
                     <button onclick="startSupport('ROBLOX')" class="w-full bg-mkPurple text-white py-5 rounded-[2rem] font-black text-[12px] uppercase">Commander</button>
                 </div>
-
                 <div class="shop-card glass p-10 rounded-[4rem] border-t-8 border-mkYellow">
                     <span class="bg-mkYellow/10 text-mkYellow px-5 py-1.5 rounded-full text-[10px] font-black uppercase border border-mkYellow/20">Comptes ⭐</span>
                     <h3 class="text-4xl font-black uppercase italic mt-6 tracking-tighter text-mkYellow">Premium Subs</h3>
@@ -136,7 +132,6 @@
                     <div class="text-3xl font-black mb-8">3.00€ - 20.00€</div>
                     <button onclick="startSupport('SUBS')" class="w-full bg-mkYellow text-black py-5 rounded-[2rem] font-black text-[12px] uppercase">Commander</button>
                 </div>
-
                 <div class="shop-card glass p-10 rounded-[4rem] border-t-8 border-mkRed">
                     <span class="bg-mkRed/10 text-mkRed px-5 py-1.5 rounded-full text-[10px] font-black uppercase border border-mkRed/20">Software 🎯</span>
                     <h3 class="text-4xl font-black uppercase italic mt-6 tracking-tighter text-mkRed">Scripts & Hubs</h3>
@@ -185,7 +180,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="bg-white/5 p-8 rounded-[2.5rem] border border-white/10 mb-8">
                     <p class="text-[10px] font-black uppercase opacity-40 mb-4 tracking-widest italic">🎟️ Code Promo</p>
                     <div class="flex gap-4">
@@ -193,7 +187,6 @@
                         <button onclick="redeemPromo()" class="bg-mkGreen text-black px-8 rounded-2xl font-black text-[10px] uppercase">Valider</button>
                     </div>
                 </div>
-
                 <input id="input-pfp" type="text" placeholder="URL Image Profil" class="w-full bg-black/40 p-5 rounded-2xl outline-none text-[11px] font-bold border border-white/5">
                 <button onclick="updatePFP()" class="w-full bg-mkBlue text-black py-5 rounded-2xl mt-4 font-black uppercase text-[10px]">Sauvegarder</button>
             </div>
@@ -221,6 +214,7 @@
     </div>
 
     <script>
+        // INITIALISATION SUPABASE (URL & PUBLISHABLE KEY)
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co"; 
         const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
         const db = supabase.createClient(SB_URL, SB_KEY);
@@ -229,7 +223,8 @@
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
-            document.getElementById('section-' + id).classList.remove('hidden');
+            const target = document.getElementById('section-' + id);
+            if(target) target.classList.remove('hidden');
             if(document.getElementById('nav-' + id)) document.getElementById('nav-' + id).classList.add('active-link');
             if(id === 'leaderboard') fetchLeaderboard();
             if(id === 'admin') fetchAdminUsers();
@@ -240,10 +235,10 @@
             const pass = document.getElementById('in-pass').value.trim();
             const email = document.getElementById('in-email').value.trim();
             
-            if(!username || !pass) return alert("Remplis les champs !");
+            if(!username || !pass) return alert("Remplis le pseudo et le mot de passe !");
 
             try {
-                // On cherche l'utilisateur. maybeSingle() ne crash pas si rien n'est trouvé.
+                // 1. Recherche du profil
                 let { data: profile, error: searchError } = await db
                     .from('profiles')
                     .select('*')
@@ -253,43 +248,49 @@
                 if (searchError) throw searchError;
 
                 if (!profile) {
-                    // INSCRIPTION : Si le profil n'existe pas, on le crée
+                    // 2. INSCRIPTION (On force 5.0 et 0.0 pour le type float8 de ta DB)
                     const { data: newP, error: insertError } = await db
                         .from('profiles')
                         .insert([{ 
                             username: username, 
                             password: pass, 
-                            email: email, 
-                            balance: 5.00, 
-                            xp: 0, 
-                            messages: [] 
+                            email: email || null, 
+                            balance: 5.0, 
+                            xp: 0.0, 
+                            messages: [],
+                            pfp: 'https://via.placeholder.com/150'
                         }])
                         .select()
                         .single();
                     
                     if (insertError) throw insertError;
                     profile = newP;
-                    alert("Compte créé avec succès !");
+                    alert("Bienvenue ! Compte créé avec 5.00€ offerts.");
                 } else {
-                    // CONNEXION : Si le profil existe, on check le mot de passe
+                    // 3. CONNEXION
                     if(profile.password !== pass) {
-                        return alert("Mauvais mot de passe pour ce pseudo !");
+                        return alert("Mauvais mot de passe !");
                     }
                 }
 
-                // Une fois connecté
+                // 4. CONNEXION RÉUSSIE
                 user = profile;
-                if(user.username.toLowerCase() === 'admin') document.getElementById('nav-admin').classList.remove('hidden');
+                if(user.username.toLowerCase() === 'admin') {
+                    document.getElementById('nav-admin').classList.remove('hidden');
+                }
+                
                 syncUser(); 
                 closeModal('auth-modal'); 
                 fetchPublicMessages();
                 
-                // Souscription au chat
-                db.channel('public_chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages).subscribe();
+                // Realtime
+                db.channel('public_chat')
+                  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages)
+                  .subscribe();
 
             } catch (err) {
-                console.error(err);
-                alert("Erreur Supabase : Vérifie tes Policies RLS !");
+                console.error("Erreur complète:", err);
+                alert("Erreur de connexion : " + err.message);
             }
         }
 
@@ -307,35 +308,55 @@
             document.getElementById('prof-balance').innerText = user.balance.toFixed(2) + "€";
             document.getElementById('prof-xp').innerText = Math.floor(user.xp) + " XP";
             
-            if(user.pfp) { document.getElementById('user-pfp-nav').src = user.pfp; document.getElementById('prof-pfp').src = user.pfp; }
+            if(user.pfp) { 
+                document.getElementById('user-pfp-nav').src = user.pfp; 
+                document.getElementById('prof-pfp').src = user.pfp; 
+            }
             renderSupport();
         }
 
         async function redeemPromo() {
             const code = document.getElementById('in-promo').value.trim().toUpperCase();
             if(code === "LXS-1") { 
-                const { data } = await db.from('profiles').update({ balance: user.balance + 10.00 }).eq('id', user.id).select().single();
+                const { data, error } = await db.from('profiles').update({ balance: user.balance + 10.00 }).eq('id', user.id).select().single();
+                if(error) return alert("Erreur promo");
                 user = data; syncUser(); alert("Code validé ! +10€");
             } else { alert("Code invalide !"); }
         }
 
         async function playCoin(side) {
-            const bet = parseFloat(document.getElementById('bet-coin').value);
-            if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant");
+            const betInput = document.getElementById('bet-coin').value;
+            const bet = parseFloat(betInput);
+            if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant ou mise invalide");
+            
             const win = Math.random() > 0.55;
             const newBal = win ? user.balance + bet : user.balance - bet;
-            const { data } = await db.from('profiles').update({ balance: newBal, xp: user.xp + (bet*0.5) }).eq('id', user.id).select().single();
-            user = data; syncUser();
+            
+            const { data, error } = await db.from('profiles')
+                .update({ balance: newBal, xp: user.xp + (bet * 0.5) })
+                .eq('id', user.id)
+                .select()
+                .single();
+            
+            if(!error) { user = data; syncUser(); alert(win ? "GAGNÉ !" : "PERDU..."); }
         }
 
         async function playDice() {
-            const bet = parseFloat(document.getElementById('bet-dice').value);
+            const betInput = document.getElementById('bet-dice').value;
+            const bet = parseFloat(betInput);
             if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant");
+            
             const roll = Math.floor(Math.random() * 6) + 1;
             const win = roll >= 4;
             const newBal = win ? user.balance + bet : user.balance - bet;
-            const { data } = await db.from('profiles').update({ balance: newBal, xp: user.xp + (bet*0.5) }).eq('id', user.id).select().single();
-            user = data; syncUser();
+            
+            const { data, error } = await db.from('profiles')
+                .update({ balance: newBal, xp: user.xp + (bet * 0.5) })
+                .eq('id', user.id)
+                .select()
+                .single();
+                
+            if(!error) { user = data; syncUser(); alert("Dé: " + roll + (win ? " - GAGNÉ !" : " - PERDU...")); }
         }
 
         async function sendPublicMessage() {
@@ -347,11 +368,13 @@
 
         async function fetchPublicMessages() {
             const { data } = await db.from('public_chat').select('*').order('created_at', { ascending: false }).limit(20);
-            if(data) document.getElementById('public-messages').innerHTML = data.reverse().map(m => `
-                <div class="flex flex-col gap-1 items-start">
-                    <span class="text-[9px] font-black text-mkBlue uppercase">${m.username}</span>
-                    <div class="bg-white/5 px-4 py-2 rounded-2xl border border-white/5 text-[11px]">${m.text}</div>
-                </div>`).join('');
+            if(data) {
+                document.getElementById('public-messages').innerHTML = data.reverse().map(m => `
+                    <div class="flex flex-col gap-1 items-start">
+                        <span class="text-[9px] font-black text-mkBlue uppercase">${m.username}</span>
+                        <div class="bg-white/5 px-4 py-2 rounded-2xl border border-white/5 text-[11px]">${m.text}</div>
+                    </div>`).join('');
+            }
         }
 
         function startSupport(tag) {
@@ -369,6 +392,7 @@
 
         function renderSupport() {
             const box = document.getElementById('support-messages');
+            if(!box) return;
             box.innerHTML = (user.messages || []).map(m => `<div class="${m.from === 'me' ? 'text-right' : 'text-left'}">
                 <div class="msg-bubble inline-block ${m.from === 'me' ? 'bg-mkRed text-white' : 'bg-white/10'}">${m.txt}</div>
             </div>`).join('');
@@ -377,27 +401,36 @@
 
         async function fetchLeaderboard() {
             const { data } = await db.from('profiles').select('*').order('xp', { ascending: false }).limit(10);
-            document.getElementById('leader-list').innerHTML = data.map((u, i) => `
-                <div class="glass p-6 rounded-[2rem] flex justify-between items-center border-l-8 ${i===0?'border-mkYellow':'border-white/5'}">
-                    <div class="flex items-center gap-4"><span>#${i+1}</span><span>${u.username}</span></div>
-                    <span class="text-mkYellow font-black">${Math.floor(u.xp)} XP</span>
-                </div>`).join('');
+            if(data) {
+                document.getElementById('leader-list').innerHTML = data.map((u, i) => `
+                    <div class="glass p-6 rounded-[2rem] flex justify-between items-center border-l-8 ${i===0?'border-mkYellow':'border-white/5'}">
+                        <div class="flex items-center gap-4"><span>#${i+1}</span><span>${u.username}</span></div>
+                        <span class="text-mkYellow font-black">${Math.floor(u.xp)} XP</span>
+                    </div>`).join('');
+            }
         }
 
         async function fetchAdminUsers() {
             const { data } = await db.from('profiles').select('*').order('username');
-            document.getElementById('admin-user-list').innerHTML = data.map(u => `
-                <tr class="border-b border-white/5"><td class="py-4">${u.username} (Pass: ${u.password})</td><td class="text-mkGreen">${u.balance}€</td>
-                <td class="text-right"><button onclick="adminAction('${u.id}', 10)" class="bg-mkGreen text-black p-2 rounded-lg text-[10px]">+10€</button></td></tr>`).join('');
+            if(data) {
+                document.getElementById('admin-user-list').innerHTML = data.map(u => `
+                    <tr class="border-b border-white/5">
+                        <td class="py-4">${u.username} (P: ${u.password})</td>
+                        <td class="text-mkGreen">${u.balance.toFixed(2)}€</td>
+                        <td class="text-right"><button onclick="adminAction('${u.id}', 10)" class="bg-mkGreen text-black p-2 rounded-lg text-[10px]">+10€</button></td>
+                    </tr>`).join('');
+            }
         }
 
         async function adminAction(id, cash) {
             const { data: target } = await db.from('profiles').select('*').eq('id', id).single();
-            await db.from('profiles').update({ balance: target.balance + cash }).eq('id', id); fetchAdminUsers();
+            await db.from('profiles').update({ balance: target.balance + cash }).eq('id', id); 
+            fetchAdminUsers();
         }
 
         async function updatePFP() {
             const url = document.getElementById('input-pfp').value;
+            if(!url) return;
             const { data } = await db.from('profiles').update({ pfp: url }).eq('id', user.id).select().single();
             user = data; syncUser();
         }
@@ -412,5 +445,6 @@
     </script>
 </body>
 </html>
+
 
 
