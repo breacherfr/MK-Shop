@@ -1,726 +1,354 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK SHOP | TITANIUM OLYMPUS V76</title>
-    
+    <title>MK SHOP - V34 CLOUD ULTIMATE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        mkBlue: '#00d2ff', mkRed: '#ff4b5c', mkPurple: '#a363ff',
-                        mkYellow: '#fbbf24', mkGreen: '#22c55e', mkAdmin: '#ff00ff',
-                        mkDark: '#050506', mkCard: '#0d0d0f'
-                    },
-                    scale: { '102': '1.02' }
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: { mkBlue: '#00d2ff', mkRed: '#ff4b5c', mkPurple: '#a363ff', mkYellow: '#fbbf24' }
                 }
             }
         }
     </script>
-
     <style>
-        :root { --accent: #00d2ff; --titan: #ff00ff; }
-        body { 
-            font-family: 'Space Grotesk', sans-serif; 
-            background-color: #020203; 
-            color: #ffffff; 
-            margin: 0; 
-            overflow: hidden;
-            font-size: 13px; /* DÉZOOM OPTIMISÉ POUR ULTRA-WIDE */
-        }
-
-        /* TITAN LAYOUT */
-        #titan-root {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        #main-viewport {
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            background: radial-gradient(circle at 10% 10%, #0a0a0f 0%, #020203 100%);
-        }
-
-        /* SIDEBAR CHAT */
-        #sidebar-right {
-            background: #060608;
-            border-left: 1px solid rgba(255,255,255,0.04);
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        /* COMPONENTS */
-        .glass-header { 
-            backdrop-filter: blur(30px); 
-            background: rgba(2, 2, 3, 0.8); 
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .olympus-card {
-            background: #0d0d0f;
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .olympus-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        /* ANIMATIONS "TOURNIQUET" */
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .spin-load { animation: spin-slow 10s linear infinite; }
-        
-        @keyframes bounce-titan { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .win-anim { animation: bounce-titan 0.5s ease infinite; }
-
-        /* GAMES GRID & UTILS */
-        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .mine-btn { aspect-ratio: 1; border-radius: 0.75rem; background: #15151a; transition: 0.2s; font-size: 1.5rem; }
-        .mine-btn:hover { background: #1e1e24; }
-        .mine-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
-        .mine-btn.dead { background: var(--mkRed); }
-
-        /* CINEMA GRID */
-        .anime-card {
-            position: relative;
-            height: 350px;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-        .anime-card img { width: 100%; height: 100%; object-cover: cover; transition: 0.5s; }
-        .anime-card:hover img { transform: scale(1.1); filter: brightness(0.4); }
-        .anime-overlay { 
-            position: absolute; inset: 0; display: flex; flex-direction: column; 
-            justify-content: flex-end; padding: 20px; opacity: 0; transition: 0.4s;
-        }
-        .anime-card:hover .anime-overlay { opacity: 1; }
-
-        /* NO SCROLLBAR */
+        .card-shadow { box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
+        .netflix-bg { background: #050505; }
+        .btn-black { background: #111827; color: white; transition: all 0.3s; }
+        .btn-black:hover { background: #1f2937; transform: translateY(-2px); }
+        .chat-bubble-other { background: #f1f5f9; border-radius: 18px 18px 18px 0; }
+        .dark .chat-bubble-other { background: #334155; color: white; }
+        .chat-bubble-me { background: #111827; color: white; border-radius: 18px 18px 0 18px; }
+        .dark .chat-bubble-me { background: #00d2ff; color: #000; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .ep-card:hover img { transform: scale(1.05); }
     </style>
 </head>
-<body>
+<body class="font-sans text-slate-800 bg-[#f8fafc] dark:bg-[#0f172a] dark:text-white transition-colors duration-300">
 
-    <div id="titan-lock" class="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center hidden">
-        <div class="text-center">
-            <div class="w-16 h-16 border-4 border-mkBlue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p class="font-bold text-mkBlue uppercase tracking-widest text-xs">Synchronisation Olympus...</p>
+    <nav class="bg-white dark:bg-[#1e293b] border-b border-gray-100 dark:border-white/5 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081840.png" class="w-9 h-9" alt="logo">
+            <h1 class="text-2xl font-black italic tracking-tighter text-slate-900 dark:text-white uppercase">MK <span class="text-mkBlue">SHOP</span></h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="startChat('Support')" class="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-full text-[10px] font-bold uppercase hover:bg-mkBlue hover:text-white transition">
+                <span>🎧</span> Support 24/7
+            </button>
+            <button onclick="toggleTheme()" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-full hover:scale-110 transition text-xl">
+                <span id="theme-icon">🌙</span>
+            </button>
+            <div id="user-display" class="hidden flex items-center gap-3">
+                <span id="user-name" class="text-xs font-bold bg-mkBlue/10 text-mkBlue px-5 py-2.5 rounded-full border border-mkBlue/20 uppercase"></span>
+                <button onclick="logout()" class="text-[10px] font-black text-mkRed uppercase hover:underline">Déconnexion</button>
+            </div>
+            <div id="auth-btns" class="flex gap-3">
+                <button onclick="openModal('auth-modal')" class="text-xs font-bold px-4 hover:text-mkBlue transition uppercase">Connexion</button>
+                <button onclick="openModal('auth-modal')" class="bg-mkBlue text-white text-xs font-bold px-6 py-3 rounded-full shadow-xl uppercase">S'inscrire</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="main-shop">
+        <header class="text-center py-20">
+            <h2 class="text-7xl font-black italic text-slate-900 dark:text-white tracking-tighter uppercase mb-4">Catalogue Officiel</h2>
+            <p class="text-mkBlue font-bold text-sm tracking-[0.5em] uppercase opacity-80">V34 • SUPABASE CLOUD EDITION</p>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-6 pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkBlue flex flex-col">
+                    <div class="text-6xl mb-8">🎮</div>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Roblox</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Comptes Optimisés</p>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
+                        <li>• 0 - 1000 Robux aléatoire</li>
+                        <li>• Compte Full (Blox Fruits, Da Hood)</li>
+                        <li>• Voice Chat / Age Verified (+13)</li>
+                    </ul>
+                    <button onclick="startChat('Achat Compte Roblox')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter — 10€</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-cyan-400 flex flex-col">
+                    <div class="text-6xl mb-8">📺</div>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">TV & Animés</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Streaming Illimité</p>
+                    <div class="bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 rounded-2xl p-5 mb-8">
+                        <input id="tv-code-field" type="text" placeholder="CODE-ACHETÉ-..." class="bg-transparent text-xs font-mono outline-none w-full text-mkBlue font-bold uppercase">
+                    </div>
+                    <button id="tv-main-btn" onclick="checkTvCode()" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Vérifier — 2.50€</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkRed flex flex-col">
+                    <div class="text-6xl mb-8">🎯</div>
+                    <h3 class="text-3xl font-black mb-1 italic text-mkRed uppercase tracking-tighter">Cheat Roblox</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Scripts & Tools</p>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
+                        <li>• Roblox Executors (PC/Mobile)</li>
+                        <li>• Scripts Privés Indétectables</li>
+                    </ul>
+                    <button onclick="startChat('Achat Cheat')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter — 5€</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkYellow flex flex-col">
+                    <div class="text-6xl mb-8">⭐</div>
+                    <h3 class="text-3xl font-black mb-1 italic uppercase tracking-tighter text-slate-900 dark:text-white">Comptes Premium</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Abonnements</p>
+                    <ul class="text-sm space-y-4 text-slate-500 dark:text-slate-400 mb-12 flex-1 font-medium">
+                        <li>• Spotify & Deezer à vie</li>
+                        <li>• Netflix / Disney+ / Crunchyroll</li>
+                    </ul>
+                    <button onclick="startChat('Premium')" class="btn-black dark:bg-white dark:text-black px-10 py-4 rounded-full font-black text-xs uppercase italic">Acheter — Dès 3€</button>
+                </div>
+
+                <div class="bg-white dark:bg-[#1e293b] rounded-[2.5rem] p-10 card-shadow border-t-[10px] border-mkPurple md:col-span-2 flex flex-col md:flex-row items-center gap-10">
+                    <div class="text-8xl">✨</div>
+                    <div class="flex-1">
+                        <h3 class="text-3xl font-black mb-2 text-mkPurple uppercase italic tracking-tighter">Demande Spéciale</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 italic font-bold uppercase">Chat Direct avec le staff</p>
+                    </div>
+                    <button onclick="startChat('Demande Perso')" class="bg-mkPurple text-white px-12 py-5 rounded-full font-black text-xs uppercase italic shadow-xl">Ouvrir Chat</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="py-10 text-center">
+            <button onclick="openModal('admin-auth-modal')" class="text-[10px] text-slate-300 dark:text-slate-600 font-bold uppercase hover:text-mkRed transition">Accès Administration</button>
+        </footer>
+    </div>
+
+    <div id="tv-section" class="hidden fixed inset-0 z-[60] netflix-bg overflow-y-auto">
+        <nav class="p-8 flex justify-between items-center sticky top-0 bg-black/95 backdrop-blur-xl z-20 border-b border-white/5">
+            <h2 class="text-3xl font-black italic text-mkBlue uppercase tracking-tighter">MK <span class="text-white">STREAM</span></h2>
+            <button onclick="closeTv()" class="text-white bg-mkRed px-8 py-3 rounded-full text-xs font-black uppercase italic">Quitter</button>
+        </nav>
+        <div id="catalog-view" class="p-10 space-y-20 pb-40">
+            <section><h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-mkBlue uppercase italic">Mangas & Animés</h3><div id="row-shonen" class="flex gap-6 overflow-x-auto no-scrollbar"></div></section>
+            <section><h3 class="text-2xl font-black text-white mb-8 pl-5 border-l-4 border-yellow-500 uppercase italic">Dessins Animés</h3><div id="row-cartoons" class="flex gap-6 overflow-x-auto no-scrollbar"></div></section>
+        </div>
+        <div id="episode-view" class="hidden p-10 max-w-7xl mx-auto">
+            <button onclick="backToCatalog()" class="text-mkBlue font-black mb-10 uppercase text-xs tracking-widest">← Retour</button>
+            <h2 id="ep-title" class="text-6xl font-black text-white uppercase italic mb-10">---</h2>
+            <div id="ep-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
         </div>
     </div>
 
-    <div id="titan-root">
-        
-        <div id="main-viewport" class="no-scrollbar">
-            
-            <nav class="glass-header sticky top-0 z-50 px-10 py-6 flex justify-between items-center">
-                <div class="flex items-center gap-12">
-                    <div class="flex items-center gap-4 cursor-pointer" onclick="go('home')">
-                        <div class="w-12 h-12 bg-white text-black rounded-xl flex items-center justify-center font-black text-xl">MK</div>
-                        <h1 class="font-black text-xl italic font-sync">TITANIUM <span class="text-mkBlue">V76</span></h1>
-                    </div>
-                    <div class="flex gap-8">
-                        <button onclick="go('home')" class="nav-link active" id="l-home">Shop</button>
-                        <button onclick="go('games')" class="nav-link" id="l-games">Casino</button>
-                        <button onclick="go('cinema')" class="nav-link" id="l-cinema">Cinema</button>
-                        <button onclick="go('profile')" class="nav-link" id="l-profile">Profil</button>
-                        <button id="adm-nav" onclick="go('admin')" class="nav-link hidden !text-mkAdmin">Titan</button>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-6">
-                    <div class="flex bg-black/40 rounded-xl p-1 border border-white/5">
-                        <button onclick="setCurrency('cash')" id="btn-c" class="px-5 py-2 rounded-lg text-[10px] font-bold bg-mkGreen text-black">CASH</button>
-                        <button onclick="setCurrency('xp')" id="btn-x" class="px-5 py-2 rounded-lg text-[10px] font-bold opacity-30">LEVEL</button>
-                    </div>
-                    <div class="bg-mkCard px-8 py-3 rounded-xl border border-white/10">
-                        <span id="bal-val" class="text-2xl font-black text-mkGreen italic">0.00€</span>
-                    </div>
-                    <div id="auth-ui">
-                        <button onclick="openM('modal-auth')" class="bg-white text-black px-8 py-3 rounded-xl font-bold text-xs uppercase">Connexion</button>
-                    </div>
-                    <div id="user-ui" class="hidden flex items-center gap-4">
-                        <img id="u-avatar" src="" class="w-11 h-11 rounded-lg border border-mkBlue object-cover">
-                        <button onclick="logout()" class="text-mkRed font-bold text-lg">✕</button>
-                    </div>
-                </div>
-            </nav>
-
-            <main class="p-10 max-w-[1600px] mx-auto">
-
-                <section id="v-home" class="space-y-12">
-                    <div class="py-10">
-                        <h2 class="text-7xl font-black italic uppercase leading-none">MK OLYMPUS <br><span class="text-mkBlue">MARKETPLACE</span></h2>
-                        <p class="mt-6 text-lg opacity-40 max-w-2xl">La plateforme de référence pour le digital premium. Automatisé, sécurisé, titanisé.</p>
-                    </div>
-
-                    <div class="grid grid-cols-4 gap-8">
-                        <div class="olympus-card p-8 group">
-                            <div class="w-12 h-12 bg-mkBlue/10 rounded-lg flex items-center justify-center text-2xl mb-6">📦</div>
-                            <h3 class="text-xl font-black uppercase italic">Nitro Full</h3>
-                            <p class="text-xs opacity-40 mt-3 leading-relaxed">Abonnement 1 an sans révocation. Garantie MK.</p>
-                            <div class="mt-8 flex justify-between items-center">
-                                <span class="text-xl font-black text-mkBlue">19.99€</span>
-                                <button onclick="buy('Nitro')" class="bg-white text-black px-6 py-3 rounded-lg font-black text-[10px] uppercase">Acheter</button>
-                            </div>
-                        </div>
-                        <div class="olympus-card p-8 border-b-4 border-mkPurple">
-                            <div class="w-12 h-12 bg-mkPurple/10 rounded-lg flex items-center justify-center text-2xl mb-6">⚡</div>
-                            <h3 class="text-xl font-black uppercase italic">Executor V5</h3>
-                            <p class="text-xs opacity-40 mt-3 leading-relaxed">Bypass kernel total pour Roblox et Fortnite.</p>
-                            <div class="mt-8 flex justify-between items-center">
-                                <span class="text-xl font-black text-mkPurple">9.99€</span>
-                                <button onclick="buy('Executor')" class="bg-mkPurple text-white px-6 py-3 rounded-lg font-black text-[10px] uppercase">Acheter</button>
-                            </div>
-                        </div>
-                        <div class="olympus-card p-8 border-b-4 border-mkAdmin">
-                            <div class="w-12 h-12 bg-mkAdmin/10 rounded-lg flex items-center justify-center text-2xl mb-6">🛡️</div>
-                            <h3 class="text-xl font-black uppercase italic">Admin Access</h3>
-                            <p class="text-xs opacity-40 mt-3 leading-relaxed">Privilèges spéciaux sur le chat et badges.</p>
-                            <div class="mt-8 flex justify-between items-center">
-                                <span class="text-xl font-black text-mkAdmin">49.99€</span>
-                                <button onclick="buy('Admin')" class="bg-mkAdmin text-white px-6 py-3 rounded-lg font-black text-[10px] uppercase">Acheter</button>
-                            </div>
-                        </div>
-                        <div class="olympus-card p-8 border-b-4 border-mkYellow">
-                            <div class="w-12 h-12 bg-mkYellow/10 rounded-lg flex items-center justify-center text-2xl mb-6">📺</div>
-                            <h3 class="text-xl font-black uppercase italic">IPTV Titan</h3>
-                            <p class="text-xs opacity-40 mt-3 leading-relaxed">4000 chaînes 4K + VOD illimitée.</p>
-                            <div class="mt-8 flex justify-between items-center">
-                                <span class="text-xl font-black text-mkYellow">24.99€</span>
-                                <button onclick="buy('IPTV')" class="bg-mkYellow text-black px-6 py-3 rounded-lg font-black text-[10px] uppercase">Acheter</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="olympus-card p-10 flex flex-col md:flex-row items-center gap-10 bg-gradient-to-r from-mkCard to-black border-2 border-white/5">
-                        <div class="flex-1">
-                            <h4 class="text-3xl font-black uppercase italic italic">CODE PROMO <span class="text-mkBlue">OLYMPUS</span></h4>
-                            <p class="opacity-40 text-sm mt-2">Inscrivez votre code titan pour recevoir des bonus immédiats.</p>
-                        </div>
-                        <div class="flex gap-4">
-                            <input id="promo-input" type="text" placeholder="CODE-XXXX" class="bg-black border border-white/10 p-5 rounded-xl outline-none focus:border-mkBlue transition w-64 text-center font-black uppercase">
-                            <button onclick="redeem()" class="bg-white text-black px-10 py-5 rounded-xl font-black text-xs uppercase hover:bg-mkBlue">Activer</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="v-games" class="hidden space-y-16">
-                    <div class="text-center py-10">
-                        <h2 class="text-6xl font-black italic uppercase font-sync">Olympus <span class="text-mkRed">Casino</span></h2>
-                        <p class="text-[10px] opacity-20 tracking-[1em] uppercase mt-4">Safe • Provably Fair • Instant</p>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-10">
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-8">Coinflip 3D</p>
-                            <div id="g-coin-visual" class="text-8xl mb-10 transition-all duration-500">🪙</div>
-                            <input id="b-coin" type="number" value="10" class="w-full bg-black/50 p-4 rounded-xl text-center font-black border border-white/5 mb-6">
-                            <div class="flex gap-3">
-                                <button onclick="gameCoin('pile')" class="flex-1 bg-mkBlue text-black py-4 rounded-xl font-black text-[10px] uppercase">PILE</button>
-                                <button onclick="gameCoin('face')" class="flex-1 bg-white text-black py-4 rounded-xl font-black text-[10px] uppercase">FACE</button>
-                            </div>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-6">Mines Pro</p>
-                            <div id="g-mines-grid" class="grid-mines mb-8"></div>
-                            <div class="flex gap-2">
-                                <input id="b-mines" type="number" value="10" class="flex-1 bg-black/50 p-4 rounded-xl text-center font-black border border-white/5 text-xs">
-                                <button id="g-mines-btn" onclick="startMines()" class="bg-mkGreen text-black px-6 py-4 rounded-xl font-black text-[10px] uppercase">Jouer</button>
-                                <button id="g-mines-cash" onclick="cashoutMines()" class="hidden bg-mkYellow text-black px-6 py-4 rounded-xl font-black text-[10px] uppercase italic">Cash</button>
-                            </div>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-10">MK Crash</p>
-                            <div id="g-crash-val" class="text-6xl font-black text-mkBlue mb-10 italic">1.00x</div>
-                            <input id="b-crash" type="number" value="10" class="w-full bg-black/50 p-4 rounded-xl text-center font-black border border-white/5 mb-6">
-                            <button id="g-crash-btn" onclick="playCrash()" class="w-full bg-mkPurple text-white py-4 rounded-xl font-black text-[10px] uppercase">Parier</button>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-8">Royal Dice</p>
-                            <div id="g-dice-visual" class="text-8xl mb-10">🎲</div>
-                            <button onclick="gameDice()" class="w-full bg-mkYellow text-black py-5 rounded-xl font-black text-[10px] uppercase">Lancer (4+ Gagne)</button>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-8">Titan Wheel</p>
-                            <div id="g-wheel-visual" class="w-32 h-32 bg-mkDark rounded-full border-4 border-white/5 mx-auto mb-10 flex items-center justify-center text-4xl">💎</div>
-                            <button onclick="gameWheel()" class="w-full bg-white text-black py-5 rounded-xl font-black text-[10px] uppercase">Tourner</button>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-8">Crystal Towers</p>
-                            <div id="g-tower-grid" class="flex flex-col-reverse gap-2 mb-8">
-                                <div class="h-4 bg-white/5 rounded"></div>
-                                <div class="h-4 bg-white/5 rounded"></div>
-                                <div class="h-4 bg-white/5 rounded"></div>
-                            </div>
-                            <button onclick="gameTower()" class="w-full bg-mkBlue text-black py-5 rounded-xl font-black text-[10px] uppercase">Grimper</button>
-                        </div>
-
-                        <div class="olympus-card p-10 text-center lg:col-span-3">
-                            <p class="text-[10px] font-bold opacity-20 uppercase mb-8">Olympus Slots</p>
-                            <div class="flex justify-center gap-10 text-7xl mb-10 italic font-black">
-                                <span id="s1">🍒</span><span id="s2">🍒</span><span id="s3">🍒</span>
-                            </div>
-                            <button onclick="gameSlots()" class="max-w-xs mx-auto w-full bg-gradient-to-r from-mkRed to-mkPurple py-6 rounded-xl font-black text-xs uppercase shadow-xl">Tirer le levier</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="v-cinema" class="hidden space-y-16">
-                    <div class="flex justify-between items-end">
-                        <h2 class="text-7xl font-black italic uppercase leading-none">MK <span class="text-mkBlue">CINEMA</span></h2>
-                        <p class="text-mkBlue font-bold animate-pulse text-xs tracking-widest">LIVE STREAMING ACTIF</p>
-                    </div>
-
-                    <div class="grid grid-cols-5 gap-6">
-                        <div class="anime-card" onclick="alert('Lancement de Naruto...')">
-                            <img src="https://image.api.playstation.com/vulcan/ap/rnd/202305/1114/40d43a6d4826d9c7456d34e2b0241e7f6771b953457f59d2.png">
-                            <div class="anime-overlay bg-gradient-to-t from-orange-600 to-transparent">
-                                <h4 class="font-black text-xl italic uppercase">Naruto Shippuden</h4>
-                                <p class="text-[10px] font-bold opacity-80">INTÉGRALITÉ • HD</p>
-                            </div>
-                        </div>
-                        <div class="anime-card" onclick="alert('Lancement de HxH...')">
-                            <img src="https://m.media-amazon.com/images/I/8157G87pT5L._AC_UF894,1000_QL80_.jpg">
-                            <div class="anime-overlay bg-gradient-to-t from-blue-600 to-transparent">
-                                <h4 class="font-black text-xl italic uppercase">Hunter x Hunter</h4>
-                                <p class="text-[10px] font-bold opacity-80">ARC CHIMERA ANT</p>
-                            </div>
-                        </div>
-                        <div class="anime-card" onclick="alert('Lancement de JJK...')">
-                            <img src="https://fr.web.img6.acsta.net/pictures/23/07/04/15/43/3358941.jpg">
-                            <div class="anime-overlay bg-gradient-to-t from-blue-900 to-transparent">
-                                <h4 class="font-black text-xl italic uppercase">Jujutsu Kaisen</h4>
-                                <p class="text-[10px] font-bold opacity-80">SAISON 2 • SHIBUYA</p>
-                            </div>
-                        </div>
-                        <div class="anime-card" onclick="alert('Lancement de DBZ...')">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMGMyOThiMGUtYmFmZi00YWM0LWFiOWQtMWYwZTE1N2Y3NzhkXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg">
-                            <div class="anime-overlay bg-gradient-to-t from-yellow-600 to-transparent">
-                                <h4 class="font-black text-xl italic uppercase">Dragon Ball Z</h4>
-                                <p class="text-[10px] font-bold opacity-80">SAGA CELL & BUU</p>
-                            </div>
-                        </div>
-                        <div class="anime-card" onclick="alert('Lancement de One Piece...')">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMTNjNGU4NTUtY2VjNC00Y2E0LTk2N2ItYmU1OTAyZTI5YTM2XkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg">
-                            <div class="anime-overlay bg-gradient-to-t from-red-700 to-transparent">
-                                <h4 class="font-black text-xl italic uppercase">One Piece</h4>
-                                <p class="text-[10px] font-bold opacity-80">ARC EGGHEAD • GEAR 5</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="v-profile" class="hidden max-w-4xl mx-auto space-y-12">
-                    <div class="olympus-card p-20 text-center relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-2 bg-mkBlue"></div>
-                        <img id="prof-img" src="" class="w-44 h-44 rounded-3xl mx-auto border-8 border-mkDark shadow-2xl mb-8 object-cover">
-                        <h3 id="prof-name" class="text-5xl font-black italic uppercase">Utilisateur</h3>
-                        <div id="prof-titan-tag" class="hidden inline-block mt-4 bg-mkAdmin text-white px-6 py-1 rounded-full text-[10px] font-black uppercase italic">Titan Admin</div>
-                        
-                        <div class="grid grid-cols-2 gap-8 mt-16">
-                            <div class="bg-black/40 p-10 rounded-3xl border border-white/5">
-                                <p class="text-[10px] opacity-30 font-black uppercase mb-2">Balance Cash</p>
-                                <p id="prof-cash" class="text-4xl font-black text-mkGreen italic">0.00€</p>
-                            </div>
-                            <div class="bg-black/40 p-10 rounded-3xl border border-white/5">
-                                <p class="text-[10px] opacity-30 font-black uppercase mb-2">Points XP</p>
-                                <p id="prof-xp" class="text-4xl font-black text-mkYellow italic">0 XP</p>
-                            </div>
-                        </div>
-
-                        <div id="prof-settings" class="mt-16 pt-16 border-t border-white/5 hidden">
-                            <div class="flex gap-4">
-                                <input id="new-avatar" type="text" placeholder="Lien vers image..." class="flex-1 bg-mkDark p-5 rounded-xl border border-white/5 outline-none focus:border-mkBlue">
-                                <button onclick="updateAvatar()" class="bg-white text-black px-10 rounded-xl font-black text-xs uppercase">Sauver</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="v-admin" class="hidden space-y-12">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-5xl font-black italic text-mkAdmin uppercase">Titan Control Panel</h2>
-                        <div class="text-right">
-                            <p id="server-status" class="text-[10px] font-black text-mkGreen uppercase">Serveur: Actif</p>
-                            <p class="text-[10px] opacity-40 uppercase">V76 Kernel Stable</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-10">
-                        <div class="olympus-card p-8">
-                            <h4 class="text-xs font-black uppercase text-mkRed mb-6">Logs de Transactions</h4>
-                            <div id="adm-logs" class="h-[400px] overflow-y-auto no-scrollbar space-y-2 text-[10px] font-mono opacity-50">
-                                </div>
-                        </div>
-                        <div class="olympus-card p-8">
-                            <h4 class="text-xs font-black uppercase text-mkBlue mb-6">Gestion des Utilisateurs</h4>
-                            <div id="adm-users" class="h-[400px] overflow-y-auto no-scrollbar space-y-4">
-                                </div>
-                        </div>
-                    </div>
-                </section>
-
-            </main>
+    <div id="player-overlay" class="hidden fixed inset-0 z-[100] bg-black flex flex-col">
+        <div class="p-5 flex justify-between bg-black text-white items-center border-b border-white/10">
+            <span class="font-black text-xs uppercase text-mkBlue italic">Lecture HD</span>
+            <button onclick="stopVideo()" class="bg-white/10 w-10 h-10 rounded-full flex items-center justify-center font-bold">✕</button>
         </div>
-
-        <div id="sidebar-right">
-            <div class="p-10 border-b border-white/5">
-                <h3 class="font-black italic text-sm tracking-widest uppercase">Global <span class="text-mkBlue">Chat</span></h3>
-            </div>
-            
-            <div id="chat-flow" class="flex-1 p-8 overflow-y-auto space-y-6 no-scrollbar">
-                </div>
-
-            <div class="p-8 border-t border-white/5 bg-black/20">
-                <div class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-mkDark p-4 rounded-xl outline-none border border-white/5 focus:border-mkBlue transition text-xs font-bold">
-                    <button onclick="sendChat()" class="w-12 h-12 bg-mkBlue text-black rounded-xl font-black">></button>
-                </div>
-            </div>
-        </div>
-
+        <div class="flex-1 bg-black"><iframe id="ifr-player" class="w-full h-full" allow="autoplay; fullscreen" frameborder="0"></iframe></div>
     </div>
 
-    <div id="modal-auth" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center hidden p-6">
-        <div class="olympus-card w-full max-w-md p-12 text-center border-t-4 border-mkBlue">
-            <h3 class="text-3xl font-black italic uppercase font-sync">MK <span class="text-mkBlue">Titan</span></h3>
-            <p class="text-[10px] opacity-20 uppercase tracking-[0.5em] mt-4 mb-10">Identification Requise</p>
-            <div class="space-y-4">
-                <input id="auth-u" type="text" placeholder="PSEUDO" class="w-full bg-mkDark p-5 rounded-xl border border-white/5 outline-none uppercase font-black tracking-widest text-xs focus:border-mkBlue transition">
-                <input id="auth-p" type="password" placeholder="MOT DE PASSE" class="w-full bg-mkDark p-5 rounded-xl border border-white/5 outline-none uppercase font-black tracking-widest text-xs focus:border-mkBlue transition">
-                <button onclick="processAuth()" class="w-full bg-mkBlue text-black py-5 rounded-xl font-black text-xs uppercase shadow-xl hover:bg-white transition">Accéder au Système</button>
-                <button onclick="closeM('modal-auth')" class="text-[10px] font-black opacity-20 uppercase mt-6 block mx-auto">Retour</button>
+    <div id="auth-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1e293b] p-12 rounded-[3rem] w-full max-w-md text-center">
+            <h3 class="text-3xl font-black mb-10 italic uppercase text-slate-900 dark:text-white">Accès Cloud</h3>
+            <input id="in-user" type="text" placeholder="Utilisateur" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-5 outline-none font-bold">
+            <input id="in-pass" type="password" placeholder="Mot de passe" class="w-full bg-slate-50 dark:bg-black/40 border p-5 rounded-2xl mb-10 outline-none font-bold">
+            <button onclick="handleAuth()" class="w-full bg-mkBlue text-white font-black py-5 rounded-full uppercase italic">Valider</button>
+            <button onclick="closeModal('auth-modal')" class="mt-6 text-[10px] font-black text-slate-300 uppercase">Fermer</button>
+        </div>
+    </div>
+
+    <div id="chat-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-lg h-[650px] rounded-[3rem] flex flex-col overflow-hidden">
+            <div class="bg-slate-900 p-7 text-white flex justify-between items-center font-black italic uppercase text-sm">
+                <span>Support Direct</span> <button onclick="closeModal('chat-modal')">✕</button>
             </div>
+            <div id="chat-body" class="flex-1 p-8 overflow-y-auto space-y-6"></div>
+            <div class="p-6 flex gap-4 border-t border-white/5">
+                <input id="chat-input" type="text" placeholder="Écrivez ici..." class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-8 outline-none text-sm font-bold">
+                <button onclick="sendMessage()" class="bg-mkBlue text-white w-14 h-14 rounded-full font-black">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-auth-modal" class="hidden fixed inset-0 z-[110] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#1e293b] p-10 rounded-[2.5rem] w-full max-w-sm text-center">
+            <h3 class="text-2xl font-black mb-8 italic text-mkRed uppercase">Staff Panel</h3>
+            <input id="admin-pass-input" type="password" placeholder="Pass Code" class="w-full bg-slate-100 dark:bg-black/40 p-5 rounded-2xl mb-6 outline-none font-bold text-center">
+            <button onclick="verifyAdmin()" class="w-full bg-mkRed text-white font-black py-5 rounded-full uppercase italic transition">Entrer</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="hidden fixed inset-0 z-[120] bg-[#0f172a] text-white p-6 md:p-12 overflow-y-auto">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+                <h2 class="text-mkBlue font-black italic text-3xl uppercase tracking-tighter">Gestion Cloud</h2>
+                <button onclick="closeModal('admin-panel')" class="bg-mkRed px-6 py-2 rounded-full font-black text-[10px] uppercase italic">Quitter</button>
+            </div>
+            <div id="admin-user-list" class="space-y-4"></div>
         </div>
     </div>
 
     <script>
-        // INIT DATABASE
+        // CONFIG SUPABASE
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co";
-        const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
-        const sb = supabase.createClient(SB_URL, SB_KEY);
+        const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn"; // <--- TA CLÉ ICI
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-        let user = null;
-        let currency = 'cash';
-        let lock = false;
-        let lastMsg = null;
+        const TV_CODE = "ACCES-ACHETER-0001";
+        const ADMIN_PASS = "admin123";
 
-        // AUTH CORE
-        async function processAuth() {
-            const u = document.getElementById('auth-u').value.trim();
-            const p = document.getElementById('auth-p').value.trim();
-            if(!u || !p) return;
+        // CATALOGUE (REPRIS EXACTEMENT)
+        const content = [
+            { id: 0, category: "shonen", title: "One Piece", poster: "https://image.animationdigitalnetwork.fr/license/onepiece/arc5/web/affiche_350x500.jpg", episodes: [{t:"Épisode 1", u:"BxuMkEvNagQ"}] },
+            { id: 1, category: "shonen", title: "Naruto", poster: "https://zqwqz.org/img/naruto-classic-1622930404.jpg", episodes: [{t:"Épisode 1", u:"FoVvpkMlTqM"}, {t:"Épisode 2", u:"_4QyggTP16U"}, {t:"Épisode 3", u:"hbxJQVOHzZU"}, {t:"Épisode 4", u:"gArjTI16pjc"}, {t:"Épisode 5", u:"4c0CGatLKAc"}, {t:"Épisode 6", u:"u3X6b101irw"}, {t:"Épisode 7", u:"RCeW_mlNcm0"}, {t:"Épisode 8", u:"iLur5aSGNbw"}, {t:"Épisode 9", u:"7v430m5HwiE"}, {t:"Épisode 10", u:"ajSrH4LWmy0"}]},
+            { id: 2, category: "shonen", title: "Dragon Ball Z", poster: "https://s-media-cache-ak0.pinimg.com/736x/ed/08/3f/ed083f9a7fa6a588e31324260801eed7--dbz-gt-dragonball-z.jpg", episodes: [{t:"Épisode 1", u:"vtj-9j2Pgzw"}] },
+            { id: 3, category: "shonen", title: "HunterXHunter", poster: "https://static1.srcdn.com/wordpress/wp-content/uploads/2024/04/hunter-x-hunter-2011.jpg", episodes: [{t:"Épisode 1", u:"6dEPCqfGKWA"}, {t:"Épisode 2", u:"aOGnEgn5lpk"}, {t:"Épisode 3", u:"AuX0wf6tgfQ"}, {t:"Épisode 4", u:"mIm-wRXSgWE"}, {t:"Épisode 5", u:"_I1bFVlZnrQ"}, {t:"Épisode 6", u:"C3c9IozSsMg"}, {t:"Épisode 7", u:"_NzbL7iLrAg"}, {t:"Épisode 8", u:"JmjRym2offY"}, {t:"Épisode 9", u:"1faDKF6IXCg"}, {t:"Épisode 10", u:"fD-oH86iOOY"}]},
+            { id: 4, category: "shonen", title: "Jujutsu Kaisen", poster: "https://tse2.mm.bing.net/th/id/OIP.B307_rJrUNCA7Fb8mc9S8gHaLH?rs=1&pid=ImgDetMain&o=7&rm=3", episodes: [{t:"Épisode 1", u:"cqTN1AQ09Yg"}] },
+            { id: 6, category: "cartoons", title: "Bob l'Éponge", poster: "https://www.topkool.com/fr/wp-content/uploads/2013/04/bob-l-eponge-022.jpg", episodes: [{t:"Épisode 1", u:"dhJtWThO5kw"}, {t:"Épisode 2", u:"0iLmzIPVspE"}, {t:"Épisode 3", u:"UqRogpOSLs8"}, {t:"Épisode 4", u:"sgz21E-RjhM"}, {t:"Épisode 5", u:"q__NQc6kDks"}, {t:"Épisode 6", u:"5NrJPyNI9GE"}, {t:"Épisode 7", u:"SzqqEB8S4Yo"}, {t:"Épisode 8", u:"IAJ1JUCm79g"}, {t:"Épisode 9", u:"kDt1YQUSU2s"}, {t:"Épisode 10", u:"us8WlC6UoKc"}]},
+            { id: 7, category: "cartoons", title: "Gumball", isComingSoon: true, poster: "https://quotecatalog.imgix.net/assets/title-sbTftntUdiZ67GmtaPYjAjyX/original.jpg?w=400&h=600&fit=crop", episodes: [] }
+        ];
 
-            let { data: profile } = await sb.from('profiles').select('*').eq('username', u).maybeSingle();
+        let user = JSON.parse(localStorage.getItem('mk_session')) || null;
+        let allUsers = [];
 
-            if(!profile) {
-                const { data } = await sb.from('profiles').insert([{
-                    username: u, password: p, balance: 25.0, xp: 0,
-                    pfp: `https://api.dicebear.com/7.x/identicon/svg?seed=${u}`,
-                    role: u.toLowerCase() === 'admin' ? 'admin' : 'user', banned: false
-                }]).select().single();
-                profile = data;
+        window.onload = () => { if(user) { applySession(); syncLoop(); } renderCatalog(); if(localStorage.getItem('theme') === 'dark') toggleTheme(true); };
+
+        async function handleAuth() {
+            const u = document.getElementById('in-user').value.trim(), p = document.getElementById('in-pass').value;
+            if(!u || !p) return alert("Remplis tout !");
+            const { data: profile } = await supabaseClient.from('profiles').select('*').eq('username', u).single();
+            if (profile) {
+                if(profile.is_banned) return alert("COMPTE BANNI !");
+                if (profile.password === p) { user = { u: profile.username, hasTv: profile.has_tv, messages: profile.messages || [] }; saveLocal(); applySession(); closeModal('auth-modal'); }
+                else alert("Mot de passe incorrect");
             } else {
-                if(profile.password !== p) return alert("MDP Faux");
-                if(profile.banned) return alert("BAN");
-            }
-
-            user = profile;
-            localStorage.setItem('mk_v76', JSON.stringify(user));
-            closeM('modal-auth');
-            initApp();
-        }
-
-        function initApp() {
-            if(!user) return;
-            document.getElementById('auth-ui').classList.add('hidden');
-            document.getElementById('user-ui').classList.remove('hidden');
-            document.getElementById('u-avatar').src = user.pfp;
-            if(user.role === 'admin') document.getElementById('adm-nav').classList.remove('hidden');
-            
-            syncUI();
-            loopChat();
-            initMinesGrid();
-            setInterval(loopChat, 4000);
-        }
-
-        // TRANSACTIONAL MUTEX (NO GLITCH)
-        async function runTx(amount, xp = 15) {
-            if(lock) return false;
-            lock = true;
-            document.getElementById('titan-lock').classList.remove('hidden');
-
-            try {
-                const { data: fresh } = await sb.from('profiles').select('balance, xp').eq('id', user.id).single();
-                const nextBal = fresh.balance + amount;
-                if(nextBal < 0) throw new Error("SOLDE BAS");
-
-                const { data: up, error } = await sb.from('profiles')
-                    .update({ balance: nextBal, xp: fresh.xp + xp })
-                    .eq('id', user.id)
-                    .select().single();
-
-                if(error) throw error;
-                user = up;
-                syncUI();
-                return true;
-            } catch (e) {
-                console.error(e);
-                return false;
-            } finally {
-                lock = false;
-                document.getElementById('titan-lock').classList.add('hidden');
+                await supabaseClient.from('profiles').insert([{ username: u, password: p, has_tv: false, is_banned: false, messages: [] }]);
+                user = { u, hasTv: false, messages: [] }; saveLocal(); applySession(); closeModal('auth-modal');
+                alert("Compte créé avec succès !");
             }
         }
 
-        function syncUI() {
-            if(!user) return;
-            const el = document.getElementById('bal-val');
-            if(currency === 'cash') {
-                el.innerText = user.balance.toFixed(2) + "€";
-                el.className = "text-2xl font-black text-mkGreen italic";
-            } else {
-                el.innerText = user.xp + " XP";
-                el.className = "text-2xl font-black text-mkYellow italic";
+        async function syncLoop() {
+            const { data } = await supabaseClient.from('profiles').select('*').eq('username', user.u).single();
+            if(data) {
+                if(data.is_banned) { alert("Tu as été banni !"); logout(); return; }
+                user.messages = data.messages || [];
+                user.hasTv = data.has_tv;
+                if(!document.getElementById('chat-modal').classList.contains('hidden')) renderMessages();
+                if(user.hasTv) { document.getElementById('tv-main-btn').innerText = "ACCÉDER"; document.getElementById('tv-main-btn').onclick = openTv; }
             }
+            setTimeout(syncLoop, 4000);
         }
 
-        // NAVIGATION
-        function go(id) {
-            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active', 'text-mkBlue'));
-            document.getElementById('v-'+id).classList.remove('hidden');
-            document.getElementById('l-'+id).classList.add('active', 'text-mkBlue');
-            
-            if(id === 'admin') loadAdmin();
-            if(id === 'profile') renderProfile(user);
+        // CHAT ENGINE
+        function startChat(p) {
+            if(!user) return openModal('auth-modal');
+            if(user.messages.length === 0) { user.messages.push({from:'support', txt:`Salut ${user.u} ! Je t'écoute pour ta demande : ${p}`}); saveRemote(); }
+            openModal('chat-modal'); renderMessages();
         }
 
-        // 7 CASINO GAMES LOGIC
-        async function gameCoin(side) {
-            const bet = parseFloat(document.getElementById('b-coin').value);
-            const vis = document.getElementById('g-coin-visual');
-            vis.style.transform = "rotateY(720deg)";
-            setTimeout(async () => {
-                vis.style.transform = "rotateY(0deg)";
-                const win = Math.random() > 0.52;
-                if(win) {
-                    await runTx(bet * 0.95, 20);
-                    vis.innerText = side === 'pile' ? '🪙' : '🟡';
-                } else {
-                    await runTx(-bet, 5);
-                    vis.innerText = side === 'pile' ? '🟡' : '🪙';
-                }
-            }, 600);
+        function renderMessages() {
+            const b = document.getElementById('chat-body');
+            b.innerHTML = (user.messages || []).map(m => `<div class="flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}"><div class="${m.from === 'me' ? 'chat-bubble-me' : 'chat-bubble-other'} p-4 text-xs max-w-[85%] font-bold">${m.txt}</div></div>`).join('');
+            b.scrollTop = b.scrollHeight;
         }
 
-        let mineData = { active: false, bombs: [], found: [], bet: 0 };
-        function initMinesGrid() {
-            const g = document.getElementById('g-mines-grid');
-            g.innerHTML = "";
-            for(let i=0; i<25; i++) {
-                g.innerHTML += `<button onclick="hitMine(${i})" id="mi-${i}" class="mine-btn" disabled>?</button>`;
-            }
+        async function sendMessage() {
+            const i = document.getElementById('chat-input'); if(!i.value) return;
+            user.messages.push({ from: 'me', txt: i.value });
+            i.value = ""; renderMessages(); await saveRemote();
         }
 
-        async function startMines() {
-            const bet = parseFloat(document.getElementById('b-mines').value);
-            if(bet > user.balance) return;
-            const ok = await runTx(-bet, 10);
-            if(!ok) return;
+        async function saveRemote() { await supabaseClient.from('profiles').update({ messages: user.messages }).eq('username', user.u); }
 
-            mineData = { active: true, bombs: [], found: [], bet: bet };
-            while(mineData.bombs.length < 3) {
-                let r = Math.floor(Math.random()*25);
-                if(!mineData.bombs.includes(r)) mineData.bombs.push(r);
-            }
-            document.querySelectorAll('.mine-btn').forEach(b => { b.disabled = false; b.innerText = "?"; b.className = "mine-btn"; });
-            document.getElementById('g-mines-btn').classList.add('hidden');
-            document.getElementById('g-mines-cash').classList.remove('hidden');
+        // ADMIN ENGINE
+        async function verifyAdmin() {
+            if(document.getElementById('admin-pass-input').value === ADMIN_PASS) {
+                closeModal('admin-auth-modal'); openModal('admin-panel');
+                loadAllUsers();
+            } else alert("Accès réservé");
         }
 
-        async function hitMine(i) {
-            if(!mineData.active || mineData.found.includes(i)) return;
-            const b = document.getElementById('mi-'+i);
-            if(mineData.bombs.includes(i)) {
-                b.innerText = "💥"; b.classList.add('dead');
-                mineData.active = false;
-                setTimeout(() => {
-                    document.getElementById('g-mines-btn').classList.remove('hidden');
-                    document.getElementById('g-mines-cash').classList.add('hidden');
-                }, 1000);
-            } else {
-                mineData.found.push(i);
-                b.innerText = "💎"; b.classList.add('active');
-                const m = 1 + (mineData.found.length * 0.3);
-                document.getElementById('g-mines-cash').innerText = (mineData.bet * m).toFixed(2) + "€";
-            }
+        async function loadAllUsers() {
+            const { data } = await supabaseClient.from('profiles').select('*');
+            allUsers = data; renderAdmin();
         }
 
-        async function cashoutMines() {
-            const m = 1 + (mineData.found.length * 0.3);
-            await runTx(mineData.bet * m, 40);
-            mineData.active = false;
-            document.getElementById('g-mines-btn').classList.remove('hidden');
-            document.getElementById('g-mines-cash').classList.add('hidden');
-            document.querySelectorAll('.mine-btn').forEach(b => b.disabled = true);
-        }
-
-        async function gameDice() {
-            const r = Math.floor(Math.random()*6)+1;
-            document.getElementById('g-dice-visual').innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][r-1];
-            if(r >= 4) await runTx(5, 20); else await runTx(-5, 5);
-        }
-
-        async function gameWheel() {
-            const vis = document.getElementById('g-wheel-visual');
-            vis.classList.add('spin-load');
-            setTimeout(async () => {
-                vis.classList.remove('spin-load');
-                const win = Math.random() > 0.7;
-                if(win) { await runTx(20, 50); vis.innerText = "💰"; } else { await runTx(-5, 5); vis.innerText = "💀"; }
-            }, 2000);
-        }
-
-        async function gameSlots() {
-            const items = ['🍒','💎','7️⃣','🍋','🍀'];
-            const r1 = items[Math.floor(Math.random()*5)];
-            const r2 = items[Math.floor(Math.random()*5)];
-            const r3 = items[Math.floor(Math.random()*5)];
-            document.getElementById('s1').innerText = r1;
-            document.getElementById('s2').innerText = r2;
-            document.getElementById('s3').innerText = r3;
-            if(r1 === r2 && r2 === r3) await runTx(100, 200); else await runTx(-5, 5);
-        }
-
-        // TOWER & CRASH SIMPLIFIED
-        async function gameTower() {
-            const win = Math.random() > 0.5;
-            if(win) await runTx(5, 10); else await runTx(-10, 0);
-        }
-        async function playCrash() {
-            const crash = 1 + Math.random() * 3;
-            document.getElementById('g-crash-val').innerText = crash.toFixed(2) + "x";
-            if(crash > 1.5) await runTx(10, 20); else await runTx(-10, 0);
-        }
-
-        // CHAT LOOP
-        async function loopChat() {
-            const { data } = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(20);
-            if(!data || (data[0] && data[0].id === lastMsg)) return;
-            lastMsg = data[0].id;
-            const flow = document.getElementById('chat-flow');
-            flow.innerHTML = data.reverse().map(m => `
-                <div class="flex gap-4 items-start">
-                    <img src="${m.pfp}" class="w-10 h-10 rounded-lg border border-white/10">
-                    <div>
-                        <p class="text-[9px] font-black uppercase text-mkBlue">${m.username}</p>
-                        <div class="bg-white/5 p-4 rounded-xl mt-1 border border-white/5">
-                            <p class="text-xs">${m.content}</p>
+        function renderAdmin() {
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = allUsers.map((u, i) => `
+                <div class="bg-[#1e293b] p-6 rounded-2xl border ${u.is_banned ? 'border-red-500/50' : 'border-white/5'} flex flex-col md:flex-row justify-between gap-6">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-mkBlue text-black font-black px-2 py-0.5 rounded text-[9px] uppercase">User</span>
+                            <h4 class="text-lg font-bold ${u.is_banned ? 'line-through text-red-500' : ''}">${u.username}</h4>
                         </div>
+                        <div class="p-3 bg-black/30 rounded-xl max-h-32 overflow-y-auto mb-4">
+                            ${(u.messages || []).map(m => `<p class="text-[10px] ${m.from === 'me' ? 'text-white' : 'text-mkYellow'}"><b>${m.from === 'me' ? u.username : 'MK'}:</b> ${m.txt}</p>`).join('') || 'Aucun message'}
+                        </div>
+                        <input id="reply-${i}" type="text" placeholder="Répondre..." class="w-full bg-black/50 p-3 rounded-xl text-xs outline-none border border-white/10 text-white mb-2">
+                        <button onclick="adminReply(${i})" class="w-full bg-mkBlue text-black font-black py-2 rounded-xl text-[10px] uppercase italic">Envoyer Réponse</button>
                     </div>
-                </div>
-            `).join('');
-            flow.scrollTop = flow.scrollHeight;
-        }
-
-        async function sendChat() {
-            const inp = document.getElementById('chat-input');
-            const val = inp.value.trim();
-            if(!val || !user) return;
-            inp.value = "";
-            await sb.from('messages').insert([{ username: user.username, pfp: user.pfp, content: val }]);
-            loopChat();
-        }
-
-        // ADMIN PANEL
-        async function loadAdmin() {
-            const { data: users } = await sb.from('profiles').select('*').order('balance', { ascending: false });
-            document.getElementById('adm-users').innerHTML = users.map(u => `
-                <div class="olympus-card p-4 flex justify-between items-center">
-                    <span class="text-xs font-bold uppercase">${u.username}</span>
-                    <div class="flex gap-2">
-                        <button onclick="admCash('${u.id}', 10)" class="bg-mkGreen text-black px-3 py-1 rounded text-[9px] font-black">+10</button>
-                        <button onclick="admCash('${u.id}', -10)" class="bg-mkRed text-white px-3 py-1 rounded text-[9px] font-black">-10</button>
+                    <div class="flex flex-col gap-2 min-w-[120px]">
+                        <button onclick="adminToggleTv(${i})" class="px-4 py-3 rounded-xl text-[10px] font-black uppercase ${u.has_tv ? 'bg-green-500' : 'bg-slate-600'}">TV: ${u.has_tv ? 'OUI' : 'NON'}</button>
+                        <button onclick="adminToggleBan(${i})" class="px-4 py-3 rounded-xl text-[10px] font-black uppercase ${u.is_banned ? 'bg-white text-black' : 'bg-mkRed text-white'}">${u.is_banned ? 'DÉBANNIR' : 'BANNIR'}</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function admCash(uid, val) {
-            const { data: target } = await sb.from('profiles').select('balance').eq('id', uid).single();
-            await sb.from('profiles').update({ balance: target.balance + val }).eq('id', uid);
-            loadAdmin();
+        async function adminReply(i) {
+            const txt = document.getElementById(`reply-${i}`).value; if(!txt) return;
+            allUsers[i].messages.push({ from: 'support', txt: txt });
+            await supabaseClient.from('profiles').update({ messages: allUsers[i].messages }).eq('username', allUsers[i].username);
+            document.getElementById(`reply-${i}`).value = ""; loadAllUsers();
         }
 
-        // PROMO CODES
-        async function redeem() {
-            const c = document.getElementById('promo-input').value.trim();
-            if(c === "TITAN-FREE" || c === "MK-V76") {
-                const ok = await runTx(50, 100);
-                if(ok) alert("CODE VALIDÉ : +50€ !");
-            } else { alert("CODE INVALIDE"); }
+        async function adminToggleBan(i) {
+            const target = allUsers[i];
+            await supabaseClient.from('profiles').update({ is_banned: !target.is_banned }).eq('username', target.username);
+            loadAllUsers();
         }
 
-        // UTILS
-        function setCurrency(m) {
-            currency = m;
-            document.getElementById('btn-c').className = m === 'cash' ? 'px-5 py-2 rounded-lg text-[10px] font-bold bg-mkGreen text-black' : 'px-5 py-2 rounded-lg text-[10px] font-bold opacity-30';
-            document.getElementById('btn-x').className = m === 'xp' ? 'px-5 py-2 rounded-lg text-[10px] font-bold bg-mkYellow text-black' : 'px-5 py-2 rounded-lg text-[10px] font-bold opacity-30';
-            syncUI();
+        async function adminToggleTv(i) {
+            await supabaseClient.from('profiles').update({ has_tv: !allUsers[i].has_tv }).eq('username', allUsers[i].username);
+            loadAllUsers();
         }
 
-        function renderProfile(u) {
-            document.getElementById('prof-img').src = u.pfp;
-            document.getElementById('prof-name').innerText = u.username;
-            document.getElementById('prof-cash').innerText = u.balance.toFixed(2) + "€";
-            document.getElementById('prof-xp').innerText = u.xp + " XP";
-            if(u.role === 'admin') document.getElementById('prof-titan-tag').classList.remove('hidden');
-            if(user && u.id === user.id) document.getElementById('prof-settings').classList.remove('hidden');
+        // TV / DESIGN TOOLS (MÊME QUE V34)
+        function renderCatalog() {
+            document.getElementById('row-shonen').innerHTML = "";
+            document.getElementById('row-cartoons').innerHTML = "";
+            content.forEach(item => {
+                const label = item.isComingSoon ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-[2rem]"><span class="bg-mkRed text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Coming Soon</span></div>' : '';
+                const clickAction = item.isComingSoon ? '' : `onclick="showEpisodes(${item.id})"`;
+                const html = `<div ${clickAction} class="relative min-w-[220px] h-[320px] bg-slate-800 rounded-[2rem] bg-cover bg-center cursor-pointer hover:scale-105 transition shadow-2xl border-2 border-transparent hover:border-mkBlue" style="background-image: url('${item.poster}')">${label}</div>`;
+                document.getElementById(`row-${item.category}`).innerHTML += html;
+            });
         }
-
-        async function updateAvatar() {
-            const url = document.getElementById('new-avatar').value.trim();
-            if(!url) return;
-            const { data } = await sb.from('profiles').update({ pfp: url }).eq('id', user.id).select().single();
-            user = data; renderProfile(user); document.getElementById('u-avatar').src = user.pfp;
+        function showEpisodes(id) {
+            const item = content.find(x => x.id === id);
+            document.getElementById('catalog-view').classList.add('hidden');
+            document.getElementById('episode-view').classList.remove('hidden');
+            document.getElementById('ep-title').innerText = item.title;
+            const list = document.getElementById('ep-list'); list.innerHTML = "";
+            item.episodes.forEach((ep) => {
+                list.innerHTML += `<div onclick="playVideo('${ep.u}')" class="ep-card cursor-pointer group"><div class="relative overflow-hidden rounded-2xl mb-3 border-2 border-white/5 group-hover:border-mkBlue transition"><img src="https://img.youtube.com/vi/${ep.u}/mqdefault.jpg" class="w-full h-40 object-cover transition duration-300"><div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"><span class="text-white text-3xl">▶</span></div></div><h4 class="text-white font-bold text-sm uppercase italic">${ep.t}</h4></div>`;
+            });
         }
-
-        async function buy(item) {
-            if(!user) return;
-            alert(`Demande d'achat pour : ${item}. Un ticket support va être créé.`);
-            await sb.from('tickets').insert([{ username: user.username, type: 'ACHAT: '+item, status: 'open' }]);
-        }
-
-        function openM(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeM(id) { document.getElementById(id).classList.add('hidden'); }
-        function logout() { localStorage.removeItem('mk_v76'); location.reload(); }
-
-        window.onload = () => {
-            const s = localStorage.getItem('mk_v76');
-            if(s) { user = JSON.parse(s); initApp(); }
-        }
+        function toggleTheme(forceDark = false) { const isDark = forceDark || document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙'; }
+        function applySession() { document.getElementById('auth-btns').classList.add('hidden'); document.getElementById('user-display').classList.remove('hidden'); document.getElementById('user-name').innerText = user.u; }
+        function logout() { localStorage.removeItem('mk_session'); location.reload(); }
+        function saveLocal() { localStorage.setItem('mk_session', JSON.stringify(user)); }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openTv() { document.getElementById('tv-section').classList.remove('hidden'); document.body.style.overflow="hidden"; }
+        function closeTv() { document.getElementById('tv-section').classList.add('hidden'); document.body.style.overflow="auto"; }
+        function backToCatalog() { document.getElementById('episode-view').classList.add('hidden'); document.getElementById('catalog-view').classList.remove('hidden'); }
+        function playVideo(u) { document.getElementById('player-overlay').classList.remove('hidden'); document.getElementById('ifr-player').src = `https://www.youtube.com/embed/${u}?autoplay=1&rel=0`; }
+        function stopVideo() { document.getElementById('player-overlay').classList.add('hidden'); document.getElementById('ifr-player').src = ""; }
+        function checkTvCode() { if(document.getElementById('tv-code-field').value === TV_CODE || (user && user.hasTv)) openTv(); else alert("Code invalide"); }
     </script>
 </body>
 </html>
