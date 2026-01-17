@@ -239,21 +239,58 @@
             const username = document.getElementById('in-user').value.trim();
             const pass = document.getElementById('in-pass').value.trim();
             const email = document.getElementById('in-email').value.trim();
+            
             if(!username || !pass) return alert("Remplis les champs !");
 
-            let { data: profile } = await db.from('profiles').select('*').eq('username', username).single();
+            try {
+                // On cherche l'utilisateur. maybeSingle() ne crash pas si rien n'est trouvé.
+                let { data: profile, error: searchError } = await db
+                    .from('profiles')
+                    .select('*')
+                    .eq('username', username)
+                    .maybeSingle();
 
-            if (!profile) {
-                const { data: newP } = await db.from('profiles').insert([{ 
-                    username: username, password: pass, email: email, balance: 5.00, xp: 0, messages: [] 
-                }]).select().single();
-                profile = newP;
-            } else if(profile.password !== pass) return alert("Mauvais mot de passe !");
+                if (searchError) throw searchError;
 
-            user = profile;
-            if(user.username.toLowerCase() === 'admin') document.getElementById('nav-admin').classList.remove('hidden');
-            syncUser(); closeModal('auth-modal'); fetchPublicMessages();
-            db.channel('public_chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages).subscribe();
+                if (!profile) {
+                    // INSCRIPTION : Si le profil n'existe pas, on le crée
+                    const { data: newP, error: insertError } = await db
+                        .from('profiles')
+                        .insert([{ 
+                            username: username, 
+                            password: pass, 
+                            email: email, 
+                            balance: 5.00, 
+                            xp: 0, 
+                            messages: [] 
+                        }])
+                        .select()
+                        .single();
+                    
+                    if (insertError) throw insertError;
+                    profile = newP;
+                    alert("Compte créé avec succès !");
+                } else {
+                    // CONNEXION : Si le profil existe, on check le mot de passe
+                    if(profile.password !== pass) {
+                        return alert("Mauvais mot de passe pour ce pseudo !");
+                    }
+                }
+
+                // Une fois connecté
+                user = profile;
+                if(user.username.toLowerCase() === 'admin') document.getElementById('nav-admin').classList.remove('hidden');
+                syncUser(); 
+                closeModal('auth-modal'); 
+                fetchPublicMessages();
+                
+                // Souscription au chat
+                db.channel('public_chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages).subscribe();
+
+            } catch (err) {
+                console.error(err);
+                alert("Erreur Supabase : Vérifie tes Policies RLS !");
+            }
         }
 
         function syncUser() {
@@ -262,12 +299,10 @@
             document.getElementById('nav-stats').classList.remove('hidden');
             document.getElementById('auth-btn').classList.add('hidden');
             
-            // Sync Nav
             document.getElementById('user-name').innerText = user.username;
             document.getElementById('nav-balance-val').innerText = user.balance.toFixed(2) + "€";
             document.getElementById('nav-xp-val').innerText = Math.floor(user.xp);
             
-            // Sync Profile
             document.getElementById('prof-user').innerText = user.username;
             document.getElementById('prof-balance').innerText = user.balance.toFixed(2) + "€";
             document.getElementById('prof-xp').innerText = Math.floor(user.xp) + " XP";
