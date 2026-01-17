@@ -193,9 +193,13 @@
         </div>
 
         <div id="section-admin" class="content-section hidden">
-            <div class="glass p-12 rounded-[4rem] border-t-8 border-mkAdmin">
-                <h2 class="text-4xl font-black text-mkAdmin italic uppercase mb-12">Gestion MK</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left text-xs font-bold"><tbody id="admin-user-list"></tbody></table></div>
+            <div class="glass p-12 rounded-[4rem] border-t-8 border-mkAdmin bg-black/40 shadow-2xl">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-4xl font-black text-mkAdmin italic uppercase leading-none">MK <span class="text-white">HUB</span></h2>
+                    <button onclick="fetchAdminUsers()" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-xl text-[10px] font-black uppercase border border-white/5 transition-all">🔄 Refresh</button>
+                </div>
+                <div id="admin-user-list" class="space-y-6">
+                    </div>
             </div>
         </div>
     </main>
@@ -206,19 +210,38 @@
             <div class="space-y-4">
                 <input id="in-user" type="text" placeholder="PSEUDO" class="w-full bg-white/5 p-6 rounded-[2rem] outline-none font-black text-center text-xl border border-white/10">
                 <input id="in-pass" type="password" placeholder="MOT DE PASSE" class="w-full bg-white/5 p-6 rounded-[2rem] outline-none font-black text-center text-xl border border-white/10">
-                <input id="in-email" type="email" placeholder="EMAIL (OPTIONNEL)" class="w-full bg-white/5 p-6 rounded-[2rem] outline-none font-black text-center text-lg border border-white/10 opacity-60">
-                <button onclick="handleAuth()" class="w-full bg-mkBlue text-black font-black py-6 rounded-[2rem] uppercase mt-4">Connexion / Inscription</button>
+                <input id="in-email" type="email" placeholder="EMAIL (OBLIGATOIRE)" class="w-full bg-white/5 p-6 rounded-[2rem] outline-none font-black text-center text-lg border border-white/10 opacity-60">
+                <button onclick="handleAuth()" class="w-full bg-mkBlue text-black font-black py-6 rounded-[2rem] uppercase mt-4 active:scale-95 transition-transform">Connexion / Inscription</button>
             </div>
             <button onclick="closeModal('auth-modal')" class="mt-8 text-[10px] font-black opacity-20 uppercase">Retour</button>
         </div>
     </div>
 
     <script>
-        // INITIALISATION SUPABASE (URL & PUBLISHABLE KEY)
+        // CONFIG SUPABASE
         const SB_URL = "https://eeiuxfcgysrarctokuyg.supabase.co"; 
         const SB_KEY = "sb_publishable_0fuup_i-vDgKHozqpz706A_4tGWghxn";
         const db = supabase.createClient(SB_URL, SB_KEY);
         let user = null;
+
+        // --- PERSISTANCE ---
+        window.onload = async () => {
+            const saved = localStorage.getItem('mk_session');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                const { data, error } = await db.from('profiles').select('*').eq('id', parsed.id).single();
+                if (data && !data.is_banned) {
+                    user = data;
+                    syncUser();
+                    fetchPublicMessages();
+                    // Canal Temps Réel
+                    db.channel('public_chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages).subscribe();
+                } else if (data?.is_banned) {
+                    alert("Ce compte est banni.");
+                    logout();
+                }
+            }
+        };
 
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
@@ -235,63 +258,30 @@
             const pass = document.getElementById('in-pass').value.trim();
             const email = document.getElementById('in-email').value.trim();
             
-            if(!username || !pass) return alert("Remplis le pseudo et le mot de passe !");
+            if(!username || !pass) return alert("Remplis le pseudo et le mdp !");
 
             try {
-                // 1. Recherche du profil
-                let { data: profile, error: searchError } = await db
-                    .from('profiles')
-                    .select('*')
-                    .eq('username', username)
-                    .maybeSingle();
-
-                if (searchError) throw searchError;
+                let { data: profile } = await db.from('profiles').select('*').eq('username', username).maybeSingle();
 
                 if (!profile) {
-                    // 2. INSCRIPTION (On force 5.0 et 0.0 pour le type float8 de ta DB)
-                    const { data: newP, error: insertError } = await db
-                        .from('profiles')
-                        .insert([{ 
-                            username: username, 
-                            password: pass, 
-                            email: email || null, 
-                            balance: 5.0, 
-                            xp: 0.0, 
-                            messages: [],
-                            pfp: 'https://via.placeholder.com/150'
-                        }])
-                        .select()
-                        .single();
-                    
+                    if(!email) return alert("Email requis pour inscription !");
+                    const { data: newP, error: insertError } = await db.from('profiles').insert([{ 
+                        username, password: pass, email, balance: 5.0, xp: 0.0, 
+                        messages: [], pfp: 'https://via.placeholder.com/150', is_banned: false
+                    }]).select().single();
                     if (insertError) throw insertError;
                     profile = newP;
-                    alert("Bienvenue ! Compte créé avec 5.00€ offerts.");
                 } else {
-                    // 3. CONNEXION
-                    if(profile.password !== pass) {
-                        return alert("Mauvais mot de passe !");
-                    }
+                    if(profile.password !== pass) return alert("Mot de passe incorrect.");
+                    if(profile.is_banned) return alert("COMPTE BANNI.");
                 }
 
-                // 4. CONNEXION RÉUSSIE
                 user = profile;
-                if(user.username.toLowerCase() === 'admin') {
-                    document.getElementById('nav-admin').classList.remove('hidden');
-                }
-                
+                localStorage.setItem('mk_session', JSON.stringify(user));
                 syncUser(); 
                 closeModal('auth-modal'); 
-                fetchPublicMessages();
-                
-                // Realtime
-                db.channel('public_chat')
-                  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'public_chat' }, fetchPublicMessages)
-                  .subscribe();
-
-            } catch (err) {
-                console.error("Erreur complète:", err);
-                alert("Erreur de connexion : " + err.message);
-            }
+                location.reload(); // Refresh pour init le chat proprement
+            } catch (err) { alert(err.message); }
         }
 
         function syncUser() {
@@ -312,9 +302,88 @@
                 document.getElementById('user-pfp-nav').src = user.pfp; 
                 document.getElementById('prof-pfp').src = user.pfp; 
             }
+            // ADMIN NAV
+            if(user.username.toLowerCase() === 'admin') {
+                document.getElementById('nav-admin').classList.remove('hidden');
+            }
             renderSupport();
         }
 
+        // --- ADMIN HUB LOGIC ---
+        async function fetchAdminUsers() {
+            const { data } = await db.from('profiles').select('*').order('created_at', { ascending: false });
+            const container = document.getElementById('admin-user-list');
+            container.innerHTML = '';
+
+            data.forEach(u => {
+                container.innerHTML += `
+                    <div class="glass p-8 rounded-[3rem] border-b-4 ${u.is_banned ? 'border-mkRed' : 'border-white/10'} bg-black/40">
+                        <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-6 mb-8">
+                            <div class="flex items-center gap-4">
+                                <img src="${u.pfp}" class="w-12 h-12 rounded-xl border border-white/10">
+                                <div>
+                                    <h4 class="text-xl font-black uppercase italic">${u.username}</h4>
+                                    <p class="text-[9px] opacity-40 font-bold uppercase tracking-widest">${u.email || 'Pas d\'email'}</p>
+                                    <p class="text-[9px] text-mkBlue opacity-100 font-bold">Pass: ${u.password}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="bg-black/40 px-5 py-2 rounded-2xl border border-white/5">
+                                    <p class="text-[8px] font-black opacity-40 uppercase">Solde</p>
+                                    <p class="text-mkGreen font-black">${u.balance.toFixed(2)}€</p>
+                                </div>
+                                <div class="bg-black/40 px-5 py-2 rounded-2xl border border-white/5">
+                                    <p class="text-[8px] font-black opacity-40 uppercase">XP</p>
+                                    <p class="text-mkYellow font-black">${u.xp} XP</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <input id="money-${u.id}" type="number" placeholder="+ Argent" class="bg-black/60 p-3 rounded-xl text-[10px] outline-none border border-white/10">
+                                <button onclick="adminUpdateVal('${u.id}', 'balance', 'money-${u.id}')" class="bg-mkGreen text-black py-2 rounded-xl text-[9px] font-black uppercase">Ajouter Cash</button>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <input id="xp-${u.id}" type="number" placeholder="+ XP" class="bg-black/60 p-3 rounded-xl text-[10px] outline-none border border-white/10">
+                                <button onclick="adminUpdateVal('${u.id}', 'xp', 'xp-${u.id}')" class="bg-mkYellow text-black py-2 rounded-xl text-[9px] font-black uppercase">Ajouter XP</button>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <input id="newpass-${u.id}" type="text" placeholder="Nouveau MDP" class="bg-black/60 p-3 rounded-xl text-[10px] outline-none border border-white/10">
+                                <button onclick="adminChangePass('${u.id}', 'newpass-${u.id}')" class="bg-white/10 text-white py-2 rounded-xl text-[9px] font-black uppercase">Changer MDP</button>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="adminToggleBan('${u.id}', ${u.is_banned})" class="h-full ${u.is_banned ? 'bg-mkGreen' : 'bg-mkRed'} text-white py-3 rounded-xl text-[10px] font-black uppercase">
+                                    ${u.is_banned ? 'Débannir' : 'Bannir'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        async function adminUpdateVal(id, field, inputId) {
+            const val = parseFloat(document.getElementById(inputId).value);
+            if(isNaN(val)) return;
+            const { data: target } = await db.from('profiles').select(field).eq('id', id).single();
+            await db.from('profiles').update({ [field]: target[field] + val }).eq('id', id);
+            fetchAdminUsers();
+        }
+
+        async function adminToggleBan(id, currentStatus) {
+            await db.from('profiles').update({ is_banned: !currentStatus }).eq('id', id);
+            fetchAdminUsers();
+        }
+
+        async function adminChangePass(id, inputId) {
+            const newPass = document.getElementById(inputId).value;
+            if(!newPass) return;
+            await db.from('profiles').update({ password: newPass }).eq('id', id);
+            alert("Mot de passe modifié.");
+            fetchAdminUsers();
+        }
+
+        // --- AUTRES LOGIQUES (RESTE DU SCRIPT) ---
         async function redeemPromo() {
             const code = document.getElementById('in-promo').value.trim().toUpperCase();
             if(code === "LXS-1") { 
@@ -325,38 +394,22 @@
         }
 
         async function playCoin(side) {
-            const betInput = document.getElementById('bet-coin').value;
-            const bet = parseFloat(betInput);
-            if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant ou mise invalide");
-            
+            const bet = parseFloat(document.getElementById('bet-coin').value);
+            if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant");
             const win = Math.random() > 0.55;
             const newBal = win ? user.balance + bet : user.balance - bet;
-            
-            const { data, error } = await db.from('profiles')
-                .update({ balance: newBal, xp: user.xp + (bet * 0.5) })
-                .eq('id', user.id)
-                .select()
-                .single();
-            
-            if(!error) { user = data; syncUser(); alert(win ? "GAGNÉ !" : "PERDU..."); }
+            const { data } = await db.from('profiles').update({ balance: newBal, xp: user.xp + (bet * 0.5) }).eq('id', user.id).select().single();
+            if(data) { user = data; syncUser(); alert(win ? "GAGNÉ !" : "PERDU..."); }
         }
 
         async function playDice() {
-            const betInput = document.getElementById('bet-dice').value;
-            const bet = parseFloat(betInput);
+            const bet = parseFloat(document.getElementById('bet-dice').value);
             if(!user || bet > user.balance || bet <= 0) return alert("Solde insuffisant");
-            
             const roll = Math.floor(Math.random() * 6) + 1;
             const win = roll >= 4;
             const newBal = win ? user.balance + bet : user.balance - bet;
-            
-            const { data, error } = await db.from('profiles')
-                .update({ balance: newBal, xp: user.xp + (bet * 0.5) })
-                .eq('id', user.id)
-                .select()
-                .single();
-                
-            if(!error) { user = data; syncUser(); alert("Dé: " + roll + (win ? " - GAGNÉ !" : " - PERDU...")); }
+            const { data } = await db.from('profiles').update({ balance: newBal, xp: user.xp + (bet * 0.5) }).eq('id', user.id).select().single();
+            if(data) { user = data; syncUser(); alert("Dé: " + roll + (win ? " - GAGNÉ !" : " - PERDU...")); }
         }
 
         async function sendPublicMessage() {
@@ -374,6 +427,8 @@
                         <span class="text-[9px] font-black text-mkBlue uppercase">${m.username}</span>
                         <div class="bg-white/5 px-4 py-2 rounded-2xl border border-white/5 text-[11px]">${m.text}</div>
                     </div>`).join('');
+                const chat = document.getElementById('public-messages');
+                chat.scrollTop = chat.scrollHeight;
             }
         }
 
@@ -404,28 +459,10 @@
             if(data) {
                 document.getElementById('leader-list').innerHTML = data.map((u, i) => `
                     <div class="glass p-6 rounded-[2rem] flex justify-between items-center border-l-8 ${i===0?'border-mkYellow':'border-white/5'}">
-                        <div class="flex items-center gap-4"><span>#${i+1}</span><span>${u.username}</span></div>
+                        <div class="flex items-center gap-4"><span>#${i+1}</span><span class="font-bold">${u.username}</span></div>
                         <span class="text-mkYellow font-black">${Math.floor(u.xp)} XP</span>
                     </div>`).join('');
             }
-        }
-
-        async function fetchAdminUsers() {
-            const { data } = await db.from('profiles').select('*').order('username');
-            if(data) {
-                document.getElementById('admin-user-list').innerHTML = data.map(u => `
-                    <tr class="border-b border-white/5">
-                        <td class="py-4">${u.username} (P: ${u.password})</td>
-                        <td class="text-mkGreen">${u.balance.toFixed(2)}€</td>
-                        <td class="text-right"><button onclick="adminAction('${u.id}', 10)" class="bg-mkGreen text-black p-2 rounded-lg text-[10px]">+10€</button></td>
-                    </tr>`).join('');
-            }
-        }
-
-        async function adminAction(id, cash) {
-            const { data: target } = await db.from('profiles').select('*').eq('id', id).single();
-            await db.from('profiles').update({ balance: target.balance + cash }).eq('id', id); 
-            fetchAdminUsers();
         }
 
         async function updatePFP() {
@@ -437,7 +474,7 @@
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function logout() { location.reload(); }
+        function logout() { localStorage.removeItem('mk_session'); location.reload(); }
         function toggleTheme() { 
             document.documentElement.classList.toggle('light');
             document.getElementById('theme-icon').innerText = document.documentElement.classList.contains('light') ? '☀️' : '🌙';
@@ -445,6 +482,3 @@
     </script>
 </body>
 </html>
-
-
-
